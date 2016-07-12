@@ -179,6 +179,7 @@
     <Content Include="img\post-bg.jpg" />
     <Content Include="img\post-sample-image.jpg" />
     <Content Include="img\whisky.jpg" />
+    <Content Include="Proc.sql" />
     <Content Include="Scripts\clean-blog.js" />
     <Content Include="Scripts\clean-blog.min.js" />
     <Content Include="Scripts\contact_me.js" />
@@ -235,6 +236,7 @@
     <Content Include="startbootstrap-clean-blog-1.1.0\vendor\font-awesome\fonts\fontawesome-webfont.svg" />
     <Content Include="startbootstrap-clean-blog-1.1.0\vendor\jquery\jquery.js" />
     <Content Include="startbootstrap-clean-blog-1.1.0\vendor\jquery\jquery.min.js" />
+    <Content Include="TABLE.sql" />
     <Content Include="vendor\bootstrap\css\bootstrap.css" />
     <Content Include="vendor\bootstrap\css\bootstrap.min.css" />
     <Content Include="vendor\bootstrap\fonts\glyphicons-halflings-regular.svg" />
@@ -346,6 +348,7 @@
     <Content Include="Views\Test\Index.cshtml" />
     <Content Include="Views\Shared\_AdminLayout.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="더바틀샵16.07%28koolnicky%40hanmail.net%29.xls" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
