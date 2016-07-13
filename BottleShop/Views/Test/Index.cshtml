@@ -3,4 +3,12 @@
         <input type="text" value="@ViewBag.pwd" />
     </div>
 </div>
-
+<div>
+    @(773300 / 6)
+    @{
+        
+        string sss = "123456789";
+        sss = sss.Substring(0, sss.Length - 3) + "000";
+    }
+    @sss
+</div>

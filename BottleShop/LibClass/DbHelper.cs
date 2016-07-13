@@ -50,6 +50,7 @@ namespace BottleShop
             return row;
         }
 
+
         public int ExcuteNonQueryTran(List<string> qry, List<List<Parameter>> paramList)
         {
             int row = 0;

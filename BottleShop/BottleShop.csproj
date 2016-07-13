@@ -137,6 +137,7 @@
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Dac\Dac_Product.cs" />
     <Compile Include="Dac\Dac_User.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -146,6 +147,8 @@
     <Compile Include="LibClass\DataType.cs" />
     <Compile Include="LibClass\DbHelper.cs" />
     <Compile Include="LibClass\Security.cs" />
+    <Compile Include="Models\ProductModel.cs" />
+    <Compile Include="Models\StringModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -198,6 +201,7 @@
     <Content Include="Scripts\jquery-3.0.0.slim.min.js" />
     <Content Include="Scripts\jquery-ui-1.11.4.js" />
     <Content Include="Scripts\jquery-ui-1.11.4.min.js" />
+    <Content Include="Scripts\jquery.bootpag.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -349,9 +353,11 @@
     <Content Include="Views\Shared\_AdminLayout.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="더바틀샵16.07%28koolnicky%40hanmail.net%29.xls" />
+    <Content Include="Views\Admin\ProductList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Excel\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
