@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
 
@@ -53,6 +54,13 @@ namespace BottleShop.Controllers
            int cout = new Dac_Cart().AddCart(pr_idx, AUser().USERID);
            return Json(cout);
         }
+
+        public JsonResult SpOrder(string message = "")
+        {
+            int cout = new Dac_Cart().OrderSp(message, AUser().USERID);
+            return Json(cout);
+        }
+
 
     }
 }

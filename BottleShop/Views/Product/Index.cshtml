@@ -2,6 +2,8 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
+@if (ViewBag.bc_idx != 4)
+{
             <div class="panel panel-default">
                 <div class="panel-heading">@ViewBag.bc_name</div>
                 <div class="panel-body">
@@ -15,6 +17,7 @@
                 </div>
             </div>
             <div class="col-md-12">
+                
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -49,7 +52,7 @@
                         else
                         {
                             <tr>
-                                <td colspan="4">Sorry.. No data.</td>
+                                <td colspan="5">Sorry.. No data.</td>
                             </tr>
                         }
                     </tbody>
@@ -58,6 +61,31 @@
             <div class="col-md-12" style="text-align:center;">
                 <div id="page-selection"></div>
             </div>
+}
+else
+{
+            <div class="col-md-12">
+                  <h3>Specal Order</h3>
+            </div>
+            <div class="col-md-12">
+                <form name="sentMessage" id="contactForm" method="post" action="@Url.Action("SpOrder")">
+                    <div class="row control-group">
+                        <div class="form-group col-xs-12 floating-label-form-group controls">
+                            <label>내용</label>
+                            <textarea class="form-control" rows="3" placeholder="특별 주문 내용을 입력하세요." id="spOrder" required data-validation-required-message="Please Write your special Order."></textarea>
+                            <p class="help-block text-danger"></p>
+                        </div>
+                    </div>
+                    <br>
+                    <div id="success"></div>
+                    <div class="row">
+                        <div class="form-group col-xs-12">
+                            <button type="button" id="btnSp" class="btn btn-default">주문(Order)</button>
+                        </div>
+                    </div>
+                </form>
+            </div>  
+}
         </div>
     </div>
 </div>
@@ -110,12 +138,31 @@
             else{
                 alert('error');
             }
-
-
-           
         });
 
-
+        $("#btnSp").click(function(){
+            var data = Common.Ajax("@Url.Action("SpOrder")", { message: $("#spOrder").val()});
+            if(data > 0){
+                BootstrapDialog.show({
+                    title: 'Notify',
+                    message: '상품 주문이 되었습니다.',
+                    buttons: [{
+                        label: 'Order Info',
+                        action: function(dialog) {
+                            loation.href = '@Url.Action("Cart", "User")';
+                        }
+                    }, {
+                        label: 'Close',
+                        action: function(dialog) {
+                            dialog.close();
+                        }
+                    }]
+                });
+            }
+            else{
+                alert('error');
+            }
+        });
     });
     </script>
 }

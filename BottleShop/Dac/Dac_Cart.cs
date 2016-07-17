@@ -16,6 +16,14 @@ namespace BottleShop.Dac
             return ExcuteNonQuery("SP_MEMBER_CART_I", paramlist);
         }
 
+        public int OrderSp(string message, string userid)
+        {
+            List<Parameter> paramlist = new List<Parameter>();
+            paramlist.Add(new Parameter(message, "@MESSAGE", SqlDbType.VarChar));
+            paramlist.Add(new Parameter(userid, "@USERID", SqlDbType.VarChar));
+            return ExcuteNonQuery("SP_ORDER_PRODUCT_I", paramlist);
+        }
+
         public DataSet SelectCart(string userid)
         {
             List<Parameter> paramlist = new List<Parameter>();

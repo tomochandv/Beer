@@ -115,5 +115,20 @@ namespace BottleShop.Controllers
              DataTable dt = new Dac_Cart().SelectCart(AUser().USERID).Tables[0];
              return View(dt);
          }
+        public JsonResult PwdFind(string id = "")
+        {
+            if(id != "")
+            {
+                List<UserModel> list = DataType.ConvertToList<UserModel>(new Dac_User().Login(id));
+                if(list.Count > 0)
+                {
+                    string title = "The bottleshop 비밀번호 찾기";
+                    string body = string.Format("문의하신 비밀번호는 {0} 입니다.", new Security().Description(list[0].PWD));
+
+                    SendEmail(title, body, list[0].EMAIL);
+                }
+            }
+            return Json("");
+        }
     }
 }
