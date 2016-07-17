@@ -6,26 +6,20 @@ using System.Web.Mvc;
 
 namespace BottleShop.Controllers
 {
-    public class HomeController : BaseController
+    public class ErrorController : Controller
     {
         //
-        // GET: /Home/
+        // GET: /Error/
 
-        public ActionResult Index()
+        public ActionResult Error500()
         {
             return View();
         }
 
-        public ActionResult About()
+        public ActionResult Error404()
         {
             return View();
         }
-
-        public ActionResult coming()
-        {
-            return View();
-        }
-
 
     }
 }

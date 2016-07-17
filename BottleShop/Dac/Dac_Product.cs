@@ -75,5 +75,15 @@ namespace BottleShop
             }
             return r;
         }
+
+        public DataSet ProductSelectUser(int category, string pr_name, int sidx, int eidx)
+        {
+            List<Parameter> paramArray = new List<Parameter>();
+            paramArray.Add(new Parameter(category, "@BC_IDX", SqlDbType.Int));
+            paramArray.Add(new Parameter(pr_name, "@PR_NAME", SqlDbType.VarChar));
+            paramArray.Add(new Parameter(sidx, "@SIDX", SqlDbType.Int));
+            paramArray.Add(new Parameter(eidx, "@EIDX", SqlDbType.Int));
+            return ExcuteToDataSet("SP_PRODUCT_INFO_S1", paramArray);
+        }
     }
 }

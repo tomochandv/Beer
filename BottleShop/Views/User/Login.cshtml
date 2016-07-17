@@ -1,7 +1,7 @@
 ﻿<div class="container">
     <div class="row">
         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            <p id="p1">Want to Our Member? Join Us!</p>
+            <h3 id="p1" data-toggle="tooltip" data-placement="top" title="Click Me!">Want to Our Member? Join Us!</h3>
             <form name="sentMessage" id="contactForm" novalidate>
                 <div class="row control-group">
                     <div class="form-group col-xs-12 floating-label-form-group controls">
@@ -28,12 +28,13 @@
         </div>
     </div>
 </div>
-@section script_bottom
+@section script
 {
     <script type="text/javascript">
         $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
             $("#p1").css("cursor", "pointer").click(function () {
-                location.href = '@Url.Action("Join")';
+                location.href = '@Url.Action("JoinUs")';
             });
             $("#contactForm input").not("[type=submit]").jqBootstrapValidation({
                 preventSubmit: true,
@@ -53,7 +54,7 @@
                         $('#success').html("<div class='alert alert-danger'>");
                         $('#success > .alert-danger').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;")
                             .append("</button>");
-                        $('#success > .alert-danger').append("<strong>Sorry " + firstName + ", it seems that my mail server is not responding. Please try again later!");
+                        $('#success > .alert-danger').append("<strong>아이디 또는 비밀번호 확인하세요.");
                         $('#success > .alert-danger').append('</div>');
                     }
                 }

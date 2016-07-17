@@ -1,0 +1,121 @@
+﻿
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">@ViewBag.bc_name</div>
+                <div class="panel-body">
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <label for="exampleInputEmail2">Product Name</label>
+                            <input type="text" class="form-control" id="txtName" placeholder="Product Name">
+                        </div>
+                        <button type="button" id="btnSearch" class="btn btn-default"><i class="fa fa-search" aria-hidden="true"></i> Search</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+   
+                            <th style="width: 50%; text-align: center;">상품명</th>
+                            <th style="text-align:center;">용량(L)</th>
+                            <th style="text-align:center;">수입사</th>
+                            @if (@ViewBag.pay == "Y") { 
+                            <th style="text-align:center;">가격</th>
+                            <th>&nbsp;</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Count > 0)
+                        {
+                            foreach (var data in Model)
+                            {
+                                <tr>
+                                    <td>@data.PR_NAME</td>
+                                    <td>@data.PR_LITER</td>
+                                    <td>@data.PR_INCOME</td>
+                                    @if (@ViewBag.pay == "Y") {
+                                    <td>@string.Format("{0:###,###}", data.PR_PRICE)</td>
+                                    <td style="text-align:center;width:50px;">
+                                        <button type="button" name="btnAdd" class="btn btn-default btn-sm" value="@data.PR_IDX"><i class="fa fa-cart-arrow-down" aria-hidden="true"></i> Add</button>
+                                    </td>
+                                    }
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4">Sorry.. No data.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-12" style="text-align:center;">
+                <div id="page-selection"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section script{
+    <script type="text/javascript">
+    $(function () {
+        $("#txtName").val('@ViewBag.pr_name');
+        $('#page-selection').bootpag({
+            page:@ViewBag.page,
+            firstLastUse: true,
+            first: '←',
+            last: '→',
+            maxVisible: 10,
+            total: @ViewBag.Pages
+            }).on("page", function (event, num) {
+                var url = "@Url.Action("Index")?page=" + num;
+                url += "&bc_idx=@ViewBag.bc_idx";
+                url += "&pr_name=" + $("#txtName").val();
+                location.href = url;
+            });
+
+        $("#btnSearch").click(function () {
+            var url = "@Url.Action("Index")?page=1";
+            url += "&bc_idx=@ViewBag.bc_idx";
+            url += "&pr_name=" + $("#txtName").val();
+            location.href = url;
+        });
+        $("[name='btnAdd']").click(function(){
+
+            var pr_idx = $(this).val();
+            var data = Common.Ajax("@Url.Action("AddCart")", { pr_idx: pr_idx});
+            if(data > 0){
+                BootstrapDialog.show({
+                    title: 'Notify',
+                    message: 'This Item Add Cart. <br> 장바구니에 상품이 담겼습니다.',
+                    buttons: [{
+                        label: 'Cart',
+                        action: function(dialog) {
+                            loation.href = '@Url.Action("Cart", "User")';
+                        }
+                    }, {
+                        label: 'Close',
+                        action: function(dialog) {
+                            dialog.close();
+                        }
+                    }]
+                });
+            }
+            else{
+                alert('error');
+            }
+
+
+           
+        });
+
+
+    });
+    </script>
+}

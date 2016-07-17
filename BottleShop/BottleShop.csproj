@@ -40,6 +40,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Elmah">
+      <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
+    </Reference>
+    <Reference Include="Elmah.Mvc">
+      <HintPath>..\packages\Elmah.Mvc.2.1.2\lib\net40\Elmah.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -132,11 +138,13 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PayController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Dac\Dac_Cart.cs" />
     <Compile Include="Dac\Dac_Product.cs" />
     <Compile Include="Dac\Dac_User.cs" />
     <Compile Include="Global.asax.cs">
@@ -147,6 +155,7 @@
     <Compile Include="LibClass\DataType.cs" />
     <Compile Include="LibClass\DbHelper.cs" />
     <Compile Include="LibClass\Security.cs" />
+    <Compile Include="Models\PayInfoModel.cs" />
     <Compile Include="Models\ProductModel.cs" />
     <Compile Include="Models\StringModel.cs" />
     <Compile Include="Models\UserModel.cs" />
@@ -164,6 +173,7 @@
     <Content Include="coming\tools\960.css" />
     <Content Include="coming\tools\sifr.css" />
     <Content Include="coming\tools\style.css" />
+    <Content Include="Content\bootstrap-dialog.min.css" />
     <Content Include="Content\clean-blog.min.css" />
     <Content Include="Content\cover.css" />
     <Content Include="Content\ie10-viewport-bug-workaround.css" />
@@ -183,6 +193,7 @@
     <Content Include="img\post-sample-image.jpg" />
     <Content Include="img\whisky.jpg" />
     <Content Include="Proc.sql" />
+    <Content Include="Scripts\bootstrap-dialog.min.js" />
     <Content Include="Scripts\clean-blog.js" />
     <Content Include="Scripts\clean-blog.min.js" />
     <Content Include="Scripts\contact_me.js" />
@@ -215,7 +226,7 @@
     <Content Include="startbootstrap-clean-blog-1.1.0\.gitignore" />
     <Content Include="startbootstrap-clean-blog-1.1.0\about.html" />
     <Content Include="startbootstrap-clean-blog-1.1.0\contact.html" />
-    <Content Include="startbootstrap-clean-blog-1.1.0\css\clean-blog.css" />
+    <Content Include="Content\clean-blog.css" />
     <Content Include="startbootstrap-clean-blog-1.1.0\gulpfile.js" />
     <Content Include="startbootstrap-clean-blog-1.1.0\img\about-bg.jpg" />
     <Content Include="startbootstrap-clean-blog-1.1.0\img\contac1t-bg.jpg" />
@@ -346,7 +357,6 @@
     <Content Include="startbootstrap-clean-blog-1.1.0\vendor\font-awesome\scss\_stacked.scss" />
     <Content Include="startbootstrap-clean-blog-1.1.0\vendor\font-awesome\scss\_variables.scss" />
     <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\User\Join.cshtml" />
     <Content Include="Views\User\Login.cshtml" />
     <Content Include="Views\Pay\Retutrn.cshtml" />
     <Content Include="Views\Test\Index.cshtml" />
@@ -354,10 +364,18 @@
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="더바틀샵16.07%28koolnicky%40hanmail.net%29.xls" />
     <Content Include="Views\Admin\ProductList.cshtml" />
+    <Content Include="Views\Product\Index.cshtml" />
+    <Content Include="Views\Home\Error.cshtml" />
+    <Content Include="Views\Error\Error500.cshtml" />
+    <Content Include="Views\Error\Error404.cshtml" />
+    <Content Include="Views\User\Joinus.cshtml" />
+    <Content Include="Views\Pay\Pay.cshtml" />
+    <Content Include="Views\User\Cart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Excel\" />
+    <Folder Include="startbootstrap-clean-blog-1.1.0\css\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

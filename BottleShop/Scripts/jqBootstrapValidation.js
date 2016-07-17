@@ -17,9 +17,9 @@
 			prependExistingHelpBlock: false,
 			sniffHtml: true, // sniff for 'required', 'maxlength', etc
 			preventSubmit: true, // stop the form submit event from firing if validation fails
-			submitError: false, // function called if there is an error when trying to submit
+			submitError: true, // function called if there is an error when trying to submit
 			submitSuccess: false, // function called just before a successful submit event is sent to the server
-            semanticallyStrict: false, // set to true to tidy up generated HTML output
+			semanticallyStrict: true, // set to true to tidy up generated HTML output
 			autoAdd: {
 				helpBlocks: true
 			},
@@ -44,6 +44,7 @@
         );
 
         $(uniqueForms).bind("submit", function (e) {
+           
           var $form = $(this);
           var warningsFound = 0;
           var $inputs = $form.find("input,textarea,select").not("[type=submit],[type=image]").filter(settings.options.filter);
