@@ -1,0 +1,203 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model List<BottleShop.OrderInfoModel>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label for="txtName">이름</label>
+                        <input type="text" class="form-control" id="txtName" value="@ViewBag.name">
+                    </div>
+                    <div class="form-group">
+                        <label for="txtName">아이디</label>
+                        <input type="text" class="form-control" id="txtId" value="@ViewBag.id">
+                    </div>
+                    <div class="form-group">
+                        <label for="txtName">이메일</label>
+                        <input type="text" class="form-control" id="txtEmail" value="@ViewBag.email">
+                    </div>
+                    <div class="form-group">
+                        <label for="txtName">주문번호</label>
+                        <input type="number" class="form-control" id="txtOr" value="@ViewBag.od">
+                    </div>
+                    
+                </form>
+            </div>
+            <div class="panel-footer">
+                <button type="button" class="btn btn-default btn-sm" id="txtSearch">
+                    <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Search
+                </button>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="col-md-12">
+        <table class="table table-bordered">
+            <thead>
+                <tr class="info">
+                    <th style="width: 10%; text-align: center;">주문번호</th>
+                    <th style="width: 10%; text-align: center;">주문일</th>
+                    <th style="width: 10%; text-align: center;">총금액</th>
+                    <th style="width: 10%; text-align: center;">수령예정일</th>
+                    <th style="width: 10%; text-align: center;">상태</th>
+                    <th style="width: 10%; text-align: center;">이름</th>
+                    <th style="width: 10%; text-align: center;">아이디</th>
+                    <th style="width: 10%; text-align: center;">전화번호</th>
+                    <th style="text-align: center;">email</th>
+                </tr>
+                <tr class="info">
+                    <td style="text-align: center;" colspan="2">종류</td>
+                    <td style="text-align: center;" colspan="3">상품명</td>
+                    <td style="text-align: center;" colspan="2">가격</td>
+                    <td style="text-align: center;" colspan="2">수량</td>
+                </tr>
+            </thead>
+            <tbody>
+@if (Model != null && Model.Count > 0)
+{
+
+    foreach (var data in Model)
+    {
+        <tr>
+            <td style="text-align: center;">@data.OR_IDX</td>
+            <td style="text-align: center;">@data.INDT.ToShortDateString()</td>
+            <td style="text-align: center;">@string.Format("{0:###,###}", data.TOTAL_PRICE)</td>
+            <td style="text-align: center;">@data.END_DATE.ToShortDateString()</td>
+            <td style="text-align: center;">
+                @if (data.OR_STATUS == "0")
+                {
+                    <span>주문완료</span>
+                }
+                else if (data.OR_STATUS == "1")
+                {
+                    <span>준비중</span>
+                }
+                else if (data.OR_STATUS == "2")
+                {
+                    <span>재고없음</span>
+                }
+                else if (data.OR_STATUS == "3")
+                {
+                    <span>상품준비완료</span>
+                }
+                else if (data.OR_STATUS == "4")
+                {
+                    <span>판매완료</span>
+                }
+                <button type="button" class="btn btn-default btn-xs" name="txtNo" value="@data.OR_IDX">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> 재고없음
+                </button>
+                <button type="button" class="btn btn-default btn-xs" name="txtC" value="@data.OR_IDX">
+                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> 준비완료
+                </button>
+                <button type="button" class="btn btn-default btn-xs" name="txtS" value="@data.OR_IDX">
+                    <span class="glyphicon glyphicon-tag" aria-hidden="true"></span> 판매완료
+                </button>
+            </td>
+            <td>@data.NAME</td>
+            <td>@data.USERID</td>
+            <td>@data.TELL</td>
+            <td>@data.EMAIL</td>
+            @*<td>@data1.CATE_NAME</td>
+                <td>@data1.PR_NAME</td>
+                <td>@string.Format("{0:###,###}", data1.PRICE)</td>
+                <td>@string.Format("{0:###,###}", data1.QTY)</td>*@
+        </tr>
+        foreach (var data1 in data.ProductList)
+        {
+            <tr>
+                <td colspan="2">@data1.CATE_NAME</td>
+                <td colspan="3">@data1.PR_NAME</td>
+                <td colspan="2">@string.Format("{0:###,###}", data1.PRICE)</td>
+                <td colspan="2">@string.Format("{0:###,###}", data1.QTY)</td>
+            </tr>
+        }
+    }
+}
+            </tbody>
+        </table>
+
+
+    </div>
+
+    <div class="col-md-12" style="text-align:center;">
+        <div id="page-selection"></div>
+    </div>
+
+</div>
+    @section script{
+        <script type="text/javascript">
+            $(function () {
+                $('table').rowspan(0);
+                $("#txtSearch").click(function(){
+                    var url = "@Url.Action("Order")?page=" + 1;
+                    url += "&name=" + $("#txtName").val();
+                    url += "&id=" + $("#txtId").val();
+                    url += "&email=" + $("#txtEmail").val();
+                    url += "&od=" + $("#txtOr").val();
+                    location.href = url;
+                });
+                $('#page-selection').bootpag({
+                    page:@ViewBag.page,
+                    firstLastUse: true,
+                    first: '←',
+                    last: '→',
+                    maxVisible: 10,
+                    total: @ViewBag.Pages
+                }).on("page", function (event, num) {
+                    var url = "@Url.Action("Order")?page=" + num;
+                    url += "&name=" + $("#txtName").val();
+                    url += "&id=" + $("#txtId").val();
+                    url += "&email=" + $("#txtEmail").val();
+                    url += "&od=" + $("#txtOr").val();
+                    location.href = url;
+                });
+                $('[name="txtNo"]').click(function(){
+                    var data = Common.Ajax("@Url.Action("StatusUpdate")", {or_idx : $(this).val(), status : '2'});
+                    if(data > 0){
+                        var url = "@Url.Action("Order")?page=" + 1;
+                        url += "&name=" + $("#txtName").val();
+                        url += "&id=" + $("#txtId").val();
+                        url += "&email=" + $("#txtEmail").val();
+                        url += "&od=" + $("#txtOr").val();
+                        location.href = url;
+                    }
+                    else{
+                        alert('error');
+                    }
+                });
+                $('[name="txtC"]').click(function(){
+                    var data = Common.Ajax("@Url.Action("StatusUpdate")", {or_idx : $(this).val(), status : '3'});
+                    if(data > 0){
+                        var url = "@Url.Action("Order")?page=" + 1;
+                        url += "&name=" + $("#txtName").val();
+                        url += "&id=" + $("#txtId").val();
+                        url += "&email=" + $("#txtEmail").val();
+                        url += "&od=" + $("#txtOr").val();
+                        location.href = url;
+                    }
+                    else{
+                        alert('error');
+                    }
+                });
+                $('[name="txtS"]').click(function(){
+                    var data = Common.Ajax("@Url.Action("StatusUpdate")", {or_idx : $(this).val(), status : '4'});
+                    if(data > 0){
+                        var url = "@Url.Action("Order")?page=" + 1;
+                        url += "&name=" + $("#txtName").val();
+                        url += "&id=" + $("#txtId").val();
+                        url += "&email=" + $("#txtEmail").val();
+                        url += "&od=" + $("#txtOr").val();
+                        location.href = url;
+                    }
+                    else{
+                        alert('error');
+                    }
+                });
+            });
+        </script>
+    }

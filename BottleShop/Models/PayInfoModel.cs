@@ -20,6 +20,7 @@ namespace BottleShop
 
         public string ISUSE { get; set; }
 
-        public DateTime INDT { get; set; }
+        public DateTime INDT { get; set; }
+
     }
 }

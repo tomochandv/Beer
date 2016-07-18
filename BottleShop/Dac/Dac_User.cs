@@ -25,7 +25,8 @@ namespace BottleShop.Dac
             paramArray.Add(new Parameter(email, "@EMAIL", SqlDbType.VarChar));
             paramArray.Add(new Parameter(addr, "@ADDR", SqlDbType.VarChar));
             paramArray.Add(new Parameter(sms, "@ISSMS", SqlDbType.VarChar));
-            paramArray.Add(new Parameter(isemail, "@ISEMAIL", SqlDbType.VarChar));
+            paramArray.Add(new Parameter(isemail, "@ISEMAIL", SqlDbType.VarChar));
+
             return ExcuteNonQuery("SP_MEMBER_INFO_I", paramArray);
         }
 
@@ -57,6 +58,23 @@ namespace BottleShop.Dac
             List<Parameter> paramArray = new List<Parameter>();
             paramArray.Add(new Parameter(id, "@USERID", SqlDbType.VarChar));
             return ExcuteToDataSet("SP_MEMBER_PAYINFO_S", paramArray).Tables[0];
+        }
+
+        public int ChangePassword(string id, string password)
+        {
+            List<Parameter> paramArray = new List<Parameter>();
+            paramArray.Add(new Parameter(id, "@USERID", SqlDbType.VarChar));
+            paramArray.Add(new Parameter(password, "@PWD", SqlDbType.VarChar));
+
+            return ExcuteNonQuery("SP_PASSWORD_U", paramArray);
+        }
+
+        public int DeleteAllUSerInfo(string id)
+        {
+            List<Parameter> paramArray = new List<Parameter>();
+            paramArray.Add(new Parameter(id, "@USERID", SqlDbType.VarChar));
+
+            return ExcuteNonQuery("SP_USER_ALL_D", paramArray);
         }
     }
 }

@@ -147,3 +147,5 @@ C:\DEV\Beer\BottleShop\obj\Debug\BottleShop.dll
 C:\DEV\Beer\BottleShop\obj\Debug\BottleShop.pdb
 C:\DEV\Beer\BottleShop\bin\Elmah.dll
 C:\DEV\Beer\BottleShop\bin\Elmah.Mvc.dll
+O:\BOTTLSHOP\Beer\BottleShop\bin\Elmah.dll
+O:\BOTTLSHOP\Beer\BottleShop\bin\Elmah.Mvc.dll

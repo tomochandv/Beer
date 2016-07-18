@@ -5,20 +5,21 @@
     <div class="row">
         <div class="col-md-12">
             <h3>Cart</h3>
-            <div class="col-md-12">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
+            <form name="form1" action="@Url.Action("Order")" method="post">
+                <div class="col-md-12">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
 
-                            <th style="width: 20%; text-align: center;">카테고리</th>
-                            <th style="text-align:center;">상품명</th>
-                            <th style="text-align:center;">가격</th>
-                            <th style="width: 60px; text-align: center;">수량</th>
-                            <th style="width:60px;">&nbsp;</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model != null && Model.Rows.Count > 0)
+                                <th style="width: 20%; text-align: center;">카테고리</th>
+                                <th style="text-align:center;">상품명</th>
+                                <th style="text-align:center;">가격</th>
+                                <th style="width: 60px; text-align: center;">수량</th>
+                                <th style="width:60px;">&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Rows.Count > 0)
                         {
                             foreach (System.Data.DataRow data in Model.Rows)
                             {
@@ -27,26 +28,50 @@
                                     <td>@data["PR_NAME"]</td>
                                     <td>@string.Format("{0:###,###}", data["PR_PRICE"])</td>
                                     <td>
-                                        <input type="number" style="width:50px;" value="1" />
+                                        <input type="number" name="qty" style="width:50px;" value="@data["QTY"]" />
+                                        <input type="hidden" name="pr_idx" value="@data["PR_IDX"]" />
+                                        <input type="hidden" name="pr_price" value="@data["PR_PRICE"]" />
                                     </td>
                                     <td>
-                                        <button type="button" id="btnSearch" class="btn btn-default"><i class="fa fa-trash" aria-hidden="true"></i> 삭제</button>
+                                        <button type="button" name="btnDelete" class="btn btn-default" value="@data["PR_IDX"]"><i class="fa fa-trash" aria-hidden="true"></i> 삭제</button>
                                     </td>
                                 </tr>
                             }
                         }
                         else
                         {
-                            <tr>
-                                <td colspan="5">No data.</td>
-                            </tr>
+                                <tr>
+                                    <td colspan="5">No data.</td>
+                                </tr>
                         }
-                    </tbody>
-                </table>
-            </div>
-            <div class="col-md-12" style="text-align:center;">
-                <div id="page-selection"></div>
-            </div>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-xs-12">
+            <button type="button" id="btnOrder" class="btn btn-default btn-primary">Order</button>
         </div>
     </div>
 </div>
+
+@section script{
+    <script type="text/javascript">
+        $(function () {
+            $("[name='btnDelete']").click(function () {
+                var data = Common.Ajax("@Url.Action("DelteCart")", { pr_idx: $(this).val() });
+                if (data > 0) {
+                    location.href = "@Url.Action("Cart")";
+                }
+                else {
+                    alerrt('error');
+                }
+            });
+            $("#btnOrder").click(function () {
+                $("form").submit();
+            })
+        });
+    </script>
+}

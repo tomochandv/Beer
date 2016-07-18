@@ -155,6 +155,8 @@
     <Compile Include="LibClass\DataType.cs" />
     <Compile Include="LibClass\DbHelper.cs" />
     <Compile Include="LibClass\Security.cs" />
+    <Compile Include="Models\OrderInfoModel.cs" />
+    <Compile Include="Models\OrderProductModel.cs" />
     <Compile Include="Models\PayInfoModel.cs" />
     <Compile Include="Models\ProductModel.cs" />
     <Compile Include="Models\StringModel.cs" />
@@ -177,6 +179,22 @@
     <Content Include="Content\clean-blog.min.css" />
     <Content Include="Content\cover.css" />
     <Content Include="Content\ie10-viewport-bug-workaround.css" />
+    <Content Include="Content\images\ui-bg_diamond_10_4f4221_10x8.png" />
+    <Content Include="Content\images\ui-bg_diamond_20_372806_10x8.png" />
+    <Content Include="Content\images\ui-bg_diamond_25_675423_10x8.png" />
+    <Content Include="Content\images\ui-bg_diamond_25_d5ac5d_10x8.png" />
+    <Content Include="Content\images\ui-bg_diamond_8_261803_10x8.png" />
+    <Content Include="Content\images\ui-bg_diamond_8_443113_10x8.png" />
+    <Content Include="Content\images\ui-bg_highlight-hard_65_fee4bd_1x100.png" />
+    <Content Include="Content\images\ui-icons_070603_256x240.png" />
+    <Content Include="Content\images\ui-icons_e8e2b5_256x240.png" />
+    <Content Include="Content\images\ui-icons_e9cd86_256x240.png" />
+    <Content Include="Content\images\ui-icons_efec9f_256x240.png" />
+    <Content Include="Content\images\ui-icons_f2ec64_256x240.png" />
+    <Content Include="Content\images\ui-icons_f9f2bd_256x240.png" />
+    <Content Include="Content\images\ui-icons_ff7519_256x240.png" />
+    <Content Include="Content\jquery-ui.min.css" />
+    <Content Include="Content\jquery-ui.theme.css" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="less\clean-blog.less" />
@@ -371,6 +389,9 @@
     <Content Include="Views\User\Joinus.cshtml" />
     <Content Include="Views\Pay\Pay.cshtml" />
     <Content Include="Views\User\Cart.cshtml" />
+    <Content Include="Views\User\MyInfo.cshtml" />
+    <Content Include="Views\User\OrderHistory.cshtml" />
+    <Content Include="Views\Admin\Order.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

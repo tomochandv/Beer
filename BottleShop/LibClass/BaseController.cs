@@ -42,6 +42,8 @@ namespace BottleShop
                 info = serializer.Deserialize<UserModel>(id.Ticket.UserData);
                 ViewBag.NAME = info.NAME;
                 ViewBag.USERID = info.USERID;
+                ViewBag.EMAIL = info.EMAIL;
+                ViewBag.TELL = info.TELL;
             }
             return info;
         }

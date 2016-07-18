@@ -189,5 +189,55 @@ namespace BottleShop.Controllers
         } 
         #endregion
 
+        public ActionResult Order(int page = 1, string name = "", string id = "", int od = 0, string email="")
+        {
+            int rows = 20;
+            int sidx = ((page - 1) * rows) + 1;
+            int eidx = page * rows;
+
+            DataSet ds = new Dac_Cart().OrderHistory(sidx, eidx, name, id, od, email);
+            int totalRows = DataType.GetInt(ds.Tables[1].Rows[0][0]);
+            double dd = totalRows / rows;
+            ViewBag.page = page;
+            ViewBag.total = totalRows;
+            ViewBag.Pages = Math.Ceiling(dd);
+            ViewBag.name = name;
+            ViewBag.id = id;
+            ViewBag.od = od;
+            ViewBag.email = email;
+
+
+            List<OrderInfoModel> listModel = DataType.ConvertToList<OrderInfoModel>(ds.Tables[0]);
+            List<OrderProductModel> product = DataType.ConvertToList<OrderProductModel>(ds.Tables[2]);
+            if (listModel != null)
+            {
+                foreach (var data in listModel)
+                {
+                    if (product != null)
+                    {
+                        List<OrderProductModel> ppModel = new List<OrderProductModel>();
+                        foreach (var pp in product)
+                        {
+                            if (data.OR_IDX == pp.OR_IDX)
+                            {
+                                ppModel.Add(pp);
+                            }
+                        }
+                        data.ProductList = ppModel;
+                    }
+                }
+            }
+            return View(listModel);
+        }
+
+        public JsonResult StatusUpdate(int or_idx = 0, string status = "0")
+        {
+            int result = 0;
+            if (or_idx != 0)
+            {
+                result = new Dac_Cart().OrderStatusUpdate(or_idx, status);
+            }
+            return Json(result);
+        }
     }
 }

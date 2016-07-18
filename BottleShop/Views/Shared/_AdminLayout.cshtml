@@ -9,6 +9,8 @@
     <title>The Bottle Shop</title>
     <!-- Bootstrap Core CSS -->
     <link href="~/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Content/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/Content/jquery-ui.theme.css" rel="stylesheet" />
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -31,8 +33,9 @@
             </div>
             <div id="navbar" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Home</a></li>
+                    <li class="active"><a href="@Url.Action("Index")">Home</a></li>
                     <li><a href="@Url.Action("ProductList")">상품관리</a></li>
+                    <li><a href="@Url.Action("Order")">주문관리</a></li>
                 </ul>
             </div><!--/.nav-collapse -->
         </div>
@@ -44,9 +47,11 @@
 
 
     <script src="@Url.Content("~/vendor/jquery/jquery.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery-ui-1.11.4.min.js")"></script>
     <script src="@Url.Content("~/vendor/bootstrap/js/bootstrap.min.js")"></script>
     <script src="@Url.Content("~/Scripts/jquery.bootpag.min.js")"></script>
-    
+
+    <script src="@Url.Content("~/Scripts/contact_me.js")"></script>
     <script type="text/javascript">
         $(function () {
 

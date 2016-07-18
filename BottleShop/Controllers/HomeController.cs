@@ -26,6 +26,5 @@ namespace BottleShop.Controllers
             return View();
         }
 
-
     }
 }

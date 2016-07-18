@@ -130,5 +130,87 @@ namespace BottleShop.Controllers
             }
             return Json("");
         }
+        public ActionResult MyInfo()
+        {
+            List<PayInfoModel> list = DataType.ConvertToList<PayInfoModel>(new Dac_User().PayInfoUse(AUser().USERID));
+            return View(list);
+        }
+        public JsonResult PwdChange(string pwd = "")
+        {
+            int row = 0;
+            if (pwd != "")
+            {
+                row = new Dac_User().ChangePassword(AUser().USERID, new Security().Encription( pwd));
+            }
+            return Json(row);
+        }
+
+        public JsonResult DeleteAll()
+        {
+            int row = 0;
+            row = new Dac_User().DeleteAllUSerInfo(AUser().USERID);
+            if (row > 0)
+            {
+                FormsAuthentication.SignOut();
+            }
+            return Json(row);
+        }
+
+        public JsonResult DelteCart(int pr_idx)
+        {
+            int row = 0;
+            row = new Dac_Cart().DeleteCart(pr_idx, AUser().USERID);
+            return Json(row);
+        }
+
+        public RedirectResult Order()
+        {
+            string[] arrQty = Request["qty"].Split(',');
+            string[] arrIdx = Request["pr_idx"].Split(',');
+            string[] arrPrice = Request["pr_price"].Split(',');
+            if (arrIdx.Length == arrPrice.Length && arrIdx.Length  == arrQty.Length)
+            {
+                int total_price = 0;
+                for(int i=0; i < arrPrice.Length; i++)
+                {
+                    total_price += DataType.GetInt(arrPrice[i]) * DataType.GetInt(arrQty[i]);
+                }
+                int or_idx =  DataType.GetInt(new Dac_Cart().OrderInfo(AUser().USERID, total_price, DateTime.Now.AddDays(3)));
+                if(or_idx > 0)
+                {
+                    for (int i = 0; i < arrIdx.Length; i++)
+                    {
+                        new Dac_Cart().OrderProduct(or_idx, DataType.GetInt(arrIdx[i]), DataType.GetInt(arrQty[i]), DataType.GetInt(arrPrice[i]));
+                    }
+                }
+            }
+            return Redirect(Url.Action("OrderHistory","User"));
+        }
+        public ActionResult OrderHistory()
+        {
+            DataSet ds = new Dac_Cart().OrderHistory(AUser().USERID);
+            List<OrderInfoModel> listModel = DataType.ConvertToList<OrderInfoModel>(ds.Tables[0]);
+            List<OrderProductModel> product = DataType.ConvertToList<OrderProductModel>(ds.Tables[1]);
+            if(listModel != null)
+            {
+                foreach(var data in listModel)
+                {
+                    if(product != null)
+                    {
+                        List<OrderProductModel> ppModel = new List<OrderProductModel>();
+                        foreach(var pp in product)
+                        {
+                            if(data.OR_IDX == pp.OR_IDX)
+                            {
+                                ppModel.Add(pp);
+                            }
+                        }
+                        data.ProductList = ppModel;
+                    }
+                }
+            }
+            return View(listModel);
+        }
     }
 }
+
