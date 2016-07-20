@@ -62,7 +62,7 @@
 
     foreach (var data in Model)
     {
-        <tr>
+        <tr class="warning">
             <td style="text-align: center;">@data.OR_IDX</td>
             <td style="text-align: center;">@data.INDT.ToShortDateString()</td>
             <td style="text-align: center;">@string.Format("{0:###,###}", data.TOTAL_PRICE)</td>
@@ -107,11 +107,11 @@
                 <td>@string.Format("{0:###,###}", data1.PRICE)</td>
                 <td>@string.Format("{0:###,###}", data1.QTY)</td>*@
         </tr>
-        foreach (var data1 in data.ProductList)
-        {
+                foreach (var data1 in data.ProductList)
+                {
             <tr>
-                <td colspan="2">@data1.CATE_NAME</td>
-                <td colspan="3">@data1.PR_NAME</td>
+                <td colspan="2">@(data1.PR_IDX == 0 ? "특별주문" : data1.CATE_NAME)</td>
+                <td colspan="3">@(data1.PR_IDX == 0 ? data1.MESSAGE : data1.PR_NAME)</td>
                 <td colspan="2">@string.Format("{0:###,###}", data1.PRICE)</td>
                 <td colspan="2">@string.Format("{0:###,###}", data1.QTY)</td>
             </tr>

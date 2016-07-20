@@ -42,9 +42,9 @@
                                     { 
                                     <tr>
                                         <td style="text-align: center;">@data.OR_IDX</td>
-                                        <td style="text-align: center;">@data.INDT.ToShortDateString()</td>
+                                        <td style="text-align: center;">@data.INDT.ToShortDateString() </td>
                                         <td style="text-align: center;">@string.Format("{0:###,###}", data.TOTAL_PRICE)</td>
-                                        <td style="text-align: center;">@data.END_DATE.ToShortDateString()</td>
+                                        <td style="text-align: center;">@(data.END_DATE.ToShortDateString() == "0001-01-01" ? "미정" : data.END_DATE.ToShortDateString())</td>
                                         <td style="text-align: center;">
                                             @if(data.OR_STATUS == "0")
                                             {
@@ -67,8 +67,8 @@
                                                 <span>판매완료</span>
                                             }
                                         </td>
-                                        <td>@data1.CATE_NAME</td>
-                                        <td>@data1.PR_NAME</td>
+                                        <td>@(data1.PR_IDX == 0 ? "특별주문" : data1.CATE_NAME)</td>
+                                        <td>@(data1.PR_IDX == 0 ? data1.MESSAGE : data1.PR_NAME)</td>
                                         <td>@string.Format("{0:###,###}", data1.PRICE)</td>
                                         <td>@string.Format("{0:###,###}", data1.QTY)</td>
                                     </tr>
