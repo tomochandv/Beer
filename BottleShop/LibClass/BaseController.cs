@@ -74,6 +74,7 @@ namespace BottleShop
 
         public void SendEmail(string title, string body, string tomail)
         {
+
             SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
             client.UseDefaultCredentials = false; // 시스템에 설정된 인증 정보를 사용하지 않는다.
             client.EnableSsl = true;  // SSL을 사용한다.
@@ -103,5 +104,6 @@ namespace BottleShop
                 //MessageBox.Show(ex.ToString());
             }
         }
+
     }
 }

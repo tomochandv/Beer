@@ -17,20 +17,19 @@ namespace BottleShop
                 FormsIdentity id = (FormsIdentity)context.HttpContext.User.Identity;
                 if (context.HttpContext.User.Identity.IsAuthenticated)
                 {
-                    AUser();
-                    if(AUser().USERID != "admin")
+                    if(AUser().MEMTYPE != "A")
                     {
-                        context.Result = new RedirectResult("/User/Login");
+                        context.Result = new RedirectResult(@Url.Action("Index", "AdminLogin"));
                     }
                 }
                 else
                 {
-                    context.Result = new RedirectResult("/User/Login");
+                    context.Result = new RedirectResult(@Url.Action("Index", "AdminLogin"));
                 }
             }
             else
             {
-                context.Result = new RedirectResult("/User/Login");
+                context.Result = new RedirectResult(@Url.Action("Index", "AdminLogin"));
             }
         }
 

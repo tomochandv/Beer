@@ -76,5 +76,15 @@ namespace BottleShop.Dac
 
             return ExcuteNonQuery("SP_USER_ALL_D", paramArray);
         }
+
+        public DataSet SelectUSerList(int sidx, int eidx, string name, string id)
+        {
+            List<Parameter> paramArray = new List<Parameter>();
+            paramArray.Add(new Parameter(sidx, "@SINDEX", SqlDbType.Int));
+            paramArray.Add(new Parameter(eidx, "@EINDEX", SqlDbType.Int));
+            paramArray.Add(new Parameter(name, "@USERID", SqlDbType.VarChar));
+            paramArray.Add(new Parameter(id, "@NAME", SqlDbType.VarChar));
+            return ExcuteToDataSet("SP_MEMBER_INFO_S2", paramArray);
+        }
     }
 }

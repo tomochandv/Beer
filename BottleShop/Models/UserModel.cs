@@ -15,5 +15,6 @@ namespace BottleShop
         public string ADDR { get; set; }
         public string ISSMS { get; set; }
         public string ISEMAIL { get; set; }
+        public string MEMTYPE { get; set; }
     }
 }

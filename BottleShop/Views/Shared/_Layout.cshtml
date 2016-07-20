@@ -58,22 +58,32 @@
                     <li>
                         <a href="@Url.Action("About","Home")">About</a>
                     </li>
-                    <li>
-                        <a href="@Url.Action("Index","Product")?bc_idx=1">Wine</a>
+                    <li class="dropdown">
+                        <a id="logina1" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            Want Drink?
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="@Url.Action("Index","Product")?bc_idx=1" style="color:black;">Wine</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index","Product")?bc_idx=2" style="color:black;">Beer</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index","Product")?bc_idx=3" style="color:black;">Whisky</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index","Product")?bc_idx=4" style="color:black;">Special Order</a>
+                            </li>
+                        </ul> 
                     </li>
-                    <li>
-                        <a href="@Url.Action("Index","Product")?bc_idx=2">Beer</a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("Index","Product")?bc_idx=3">Whisky</a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("Index","Product")?bc_idx=4">Special Order</a>
-                    </li>
+                    
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li class="dropdown">
-                            <a id="logina1" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Logged in @ViewBag.NAME</a>
+                            <a id="logina1" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Logged in @ViewBag.NAME 
+                                <span class="caret"></span></a> 
                             <ul class="dropdown-menu">
                                 <li><a href="@Url.Action("MyInfo","User")" style="color:black;">My Info</a></li>
                                 <li><a href="@Url.Action("Cart","User")" style="color:black;">Cart</a></li>

@@ -21,9 +21,22 @@ namespace BottleShop.Controllers
             return View();
         }
 
-        public ActionResult UserList()
+        public ActionResult UserList(string name = "", string id = "", int page = 1)
         {
-            return View();
+            int rows = 20;
+            int sidx = ((page - 1) * rows) + 1;
+            int eidx = page * rows;
+            DataSet ds = new Dac_User().SelectUSerList(sidx, eidx, name, id);
+            int totalRows = DataType.GetInt(ds.Tables[1].Rows[0][0]);
+            List<UserModel> list = DataType.ConvertToList<UserModel>(ds.Tables[0]);
+            double dd = totalRows / rows;
+            ViewBag.page = page;
+            ViewBag.total = totalRows;
+            ViewBag.Pages = Math.Ceiling(dd);
+            ViewBag.name = name;
+            ViewBag.userids = id;
+
+            return View(list);
         }
         public ActionResult ProductList(int bc_idx = 0, string pr_name = "", int page = 1)
         {
@@ -238,6 +251,12 @@ namespace BottleShop.Controllers
                 result = new Dac_Cart().OrderStatusUpdate(or_idx, status);
             }
             return Json(result);
+        }
+
+        public ActionResult ViewPay(string userid = "")
+        {
+            List<PayInfoModel> list = DataType.ConvertToList<PayInfoModel>(new Dac_User().PayInfoUse(userid));
+            return View(list);
         }
     }
 }

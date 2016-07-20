@@ -1,0 +1,32 @@
+﻿@{
+    Layout = null;
+}
+@model List<BottleShop.PayInfoModel>
+<div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th style="text-align:center;">ID</th>
+                <th style="text-align:center;">결제일</th>
+                <th style="text-align:center;">금액</th>
+                <th style="text-align:center;">타입</th>
+                <th style="text-align:center;">사용여부</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                foreach(var data in Model)
+                {
+                    <tr>
+                        <td style="text-align:center;">@data.IDX</td>
+                        <td style="text-align:center;">@data.INDT.ToString("yyyy-MM-dd hh:mm:ss")</td>
+                        <td style="text-align:center;">@string.Format("{0:###,###}", data.PRICE)</td>
+                        <td style="text-align:center;">@data.PTYPE</td>
+                        <td style="text-align:center;">@data.ISUSE</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
