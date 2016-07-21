@@ -132,6 +132,8 @@
     @section script{
         <script type="text/javascript">
             $(function () {
+                $("#navbar > ul > li").removeClass("active");
+                $("#navbar > ul > li").eq(2).addClass("active");
                 $('table').rowspan(0);
                 $("#txtSearch").click(function(){
                     var url = "@Url.Action("Order")?page=" + 1;

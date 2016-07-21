@@ -1,4 +1,4 @@
-﻿
+﻿@model List<BottleShop.ProductModel>
 <div class="container">
     <div class="row">
         <div class="col-md-12">
@@ -27,6 +27,7 @@
                             <th style="text-align:center;">수입사</th>
                             @if (@ViewBag.pay == "Y") { 
                             <th style="text-align:center;">가격</th>
+                            <th style="text-align:center;">수량</th>
                             <th>&nbsp;</th>
                             }
                         </tr>
@@ -42,6 +43,7 @@
                                     <td>@data.PR_INCOME</td>
                                     @if (@ViewBag.pay == "Y") {
                                     <td>@string.Format("{0:###,###}", data.PR_PRICE)</td>
+                                    <td>@string.Format("{0:###,###}", data.SALE_QTY)</td>
                                     <td style="text-align:center;width:50px;">
                                         <button type="button" name="btnAdd" class="btn btn-default btn-sm" value="@data.PR_IDX"><i class="fa fa-cart-arrow-down" aria-hidden="true"></i> Add</button>
                                     </td>

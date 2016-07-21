@@ -9,18 +9,19 @@ namespace BottleShop
 {
     public class Dac_Product : DbHelper
     {
-        public DataSet ProductSelect(int category, string pr_name, int sidx, int eidx)
+        public DataSet ProductSelect(int category, string pr_name, int sidx, int eidx, string isSale )
         {
             List<Parameter> paramArray = new List<Parameter>();
             paramArray.Add(new Parameter(category, "@BC_IDX", SqlDbType.Int));
             paramArray.Add(new Parameter(pr_name, "@PR_NAME", SqlDbType.VarChar));
+            paramArray.Add(new Parameter(isSale, "@ISSALE", SqlDbType.VarChar));
             paramArray.Add(new Parameter(sidx, "@SIDX", SqlDbType.Int));
             paramArray.Add(new Parameter(eidx, "@EIDX", SqlDbType.Int));
             return ExcuteToDataSet("SP_PRODUCT_INFO_S", paramArray) ;
         }
 
         public List<Parameter>  Createparameter(object bc_idx, object pr_name, object pr_country, object pr_gubun, object pr_qty, object pr_liter
-            , object pr_income, object pr_in_price, object pr_price, object pr_sale, object issale, object pr_weight, object pe_desc)
+            , object pr_income, object pr_in_price, object pr_price, object pr_sale, object issale, object pr_weight, object pe_desc, object sale_qty)
         {
             List<Parameter> paramlist = new List<Parameter>();
             paramlist.Add(new Parameter(bc_idx, "@BC_IDX", SqlDbType.Int));
@@ -36,6 +37,7 @@ namespace BottleShop
             paramlist.Add(new Parameter(issale, "@ISSALE", SqlDbType.VarChar));
             paramlist.Add(new Parameter(pr_weight, "@PR_WEIGHT", SqlDbType.Int));
             paramlist.Add(new Parameter(pe_desc, "@PE_DESC", SqlDbType.VarChar));
+            paramlist.Add(new Parameter(sale_qty, "@SALE_QTY", SqlDbType.Int));
 
             return paramlist;
         }
@@ -53,11 +55,13 @@ namespace BottleShop
            }
         }
 
-        public List<Parameter> CreateUpdateParameter(object pr_idx, object issale)
+        public List<Parameter> CreateUpdateParameter(object pr_idx, object issale, object price, object qty)
         {
             List<Parameter> paramlist = new List<Parameter>();
             paramlist.Add(new Parameter(pr_idx, "@PR_IDX", SqlDbType.Int));
             paramlist.Add(new Parameter(issale, "@ISSALE", SqlDbType.VarChar));
+            paramlist.Add(new Parameter(price, "@PRICE", SqlDbType.Float));
+            paramlist.Add(new Parameter(qty, "@QTY", SqlDbType.Int));
             return paramlist;
         }
 

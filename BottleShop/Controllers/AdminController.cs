@@ -38,12 +38,12 @@ namespace BottleShop.Controllers
 
             return View(list);
         }
-        public ActionResult ProductList(int bc_idx = 0, string pr_name = "", int page = 1)
+        public ActionResult ProductList(int bc_idx = 0, string pr_name = "", int page = 1, string isSale = "")
         {
             int rows = 20;
             int sidx = ((page - 1) * rows) + 1;
             int eidx = page*rows;
-            DataSet ds = new Dac_Product().ProductSelect(bc_idx, pr_name, sidx, eidx);
+            DataSet ds = new Dac_Product().ProductSelect(bc_idx, pr_name, sidx, eidx, isSale);
             int totalRows = DataType.GetInt(ds.Tables[1].Rows[0][0]);
             List<ProductModel> list = DataType.ConvertToList<ProductModel>(ds.Tables[0]);
             double dd = totalRows / rows;
@@ -52,9 +52,10 @@ namespace BottleShop.Controllers
             ViewBag.Pages = Math.Ceiling(dd);
             ViewBag.pr_name = pr_name;
             ViewBag.bc_idx = bc_idx;
+            ViewBag.isSale = isSale;
             return View(list);
         }
-        public JsonResult SaleUpdate(string name = "" , string value = "")
+        public JsonResult SaleUpdate(string name = "" , string value = "", string price = "", string qty = "")
         {
             int result = 0;
             if(name != "")
@@ -62,9 +63,11 @@ namespace BottleShop.Controllers
                 List<List<Parameter>> list = new List<List<Parameter>>();
                 string[] arrName = name.Replace("[", "").Replace("]", "").Replace("\"", "").Split(',');
                 string[] arrValue = value.Replace("[", "").Replace("]", "").Replace("\"", "").Split(',');
+                string[] arrprice = price.Replace("[", "").Replace("]", "").Replace("\"", "").Split(',');
+                string[] arrqty = qty.Replace("[", "").Replace("]", "").Replace("\"", "").Split(',');
                 for(int i=0; i < arrName.Length; i++)
                 {
-                    list.Add(new Dac_Product().CreateUpdateParameter(arrName[i], arrValue[i]));
+                    list.Add(new Dac_Product().CreateUpdateParameter(arrName[i], arrValue[i], arrprice[i], arrqty[i]));
                 }
                 if (list.Count > 0)
                 {
@@ -156,7 +159,7 @@ namespace BottleShop.Controllers
                             dt.Rows[i]["수입사"],
                             dt.Rows[i]["공급가"],
                             Caculate(dt.Rows[i]["공급가"], dt.Rows[i]["본수"]),
-                            0, "N", dt.Rows[i]["용량"], ""));
+                            0, "N", dt.Rows[i]["용량"], "", 1));
                     }
                 }
 
@@ -168,7 +171,7 @@ namespace BottleShop.Controllers
                         list.Add(new Dac_Product().Createparameter(2, dt.Rows[i]["상품명"], dt.Rows[i]["국가"], dt.Rows[i]["구분"],
                             dt.Rows[i]["본수"].ToString() == "" ? "1" : dt.Rows[i]["본수"].ToString(),
                             dt.Rows[i]["용량"], dt.Rows[i]["수입사"],
-                            dt.Rows[i]["공급가"], Caculate(dt.Rows[i]["공급가"], dt.Rows[i]["본수"]), 0, "N", dt.Rows[i]["용량"], ""));
+                            dt.Rows[i]["공급가"], Caculate(dt.Rows[i]["공급가"], dt.Rows[i]["본수"]), 0, "N", dt.Rows[i]["용량"], "", 1));
                     }
                 }
 
@@ -180,7 +183,7 @@ namespace BottleShop.Controllers
                         list.Add(new Dac_Product().Createparameter(2, dt.Rows[i]["상품명"], "", "",
                             dt.Rows[i]["본수"].ToString() == "" ? "1" : dt.Rows[i]["본수"].ToString(),
                             dt.Rows[i]["용량"], dt.Rows[i]["수입사"],
-                            dt.Rows[i]["공급가"], Caculate(dt.Rows[i]["공급가"], dt.Rows[i]["본수"]), 0, "N", dt.Rows[i]["용량"], ""));
+                            dt.Rows[i]["공급가"], Caculate(dt.Rows[i]["공급가"], dt.Rows[i]["본수"]), 0, "N", dt.Rows[i]["용량"], "", 1));
                     }
                 }
 
@@ -257,6 +260,16 @@ namespace BottleShop.Controllers
         {
             List<PayInfoModel> list = DataType.ConvertToList<PayInfoModel>(new Dac_User().PayInfoUse(userid));
             return View(list);
+        }
+
+        public ActionResult Down()
+        {
+            Response.Buffer = true;
+            Response.Clear();
+            Response.AddHeader("content-disposition", "attachment; filename=DownForm.xls");
+            Response.ContentType = "application/unknown";   // 모든 파일 강제 다운로드
+            Response.WriteFile(Server.MapPath("/Down/") + "DownForm.xls");
+            return View();
         }
     }
 }

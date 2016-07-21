@@ -22,17 +22,34 @@
                             <option value="3">Whisky</option>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label for="selStatus">상태</label>
+                        <select id="selStatus" class="form-control">
+                            <option value="">전체</option>
+                            <option value="Y">판매상품</option>
+                            <option value="N">미판매상품</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-default btn-sm" id="txtSearch">
+                        <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Search
+                    </button>
                 </form>
             </div>
             <div class="panel-footer">
+                <button type="button" class="btn btn-default btn-sm" id="btnExcelDown">
+                    <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span> Excel Down
+                </button>
                 <button type="button" class="btn btn-default btn-sm" id="btnExcel">
-                    <span class="glyphicon glyphicon-floppy-open" aria-hidden="true"></span> Excel
+                    <span class="glyphicon glyphicon-floppy-open" aria-hidden="true"></span> Excel Upload
                 </button>
-                <button type="button" class="btn btn-default btn-sm" id="txtUpdate">
-                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Update
+                <button type="button" class="btn btn-default btn-sm btn-success" id="btnUpdate">
+                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> 수정
                 </button>
-                <button type="button" class="btn btn-default btn-sm" id="txtSearch">
-                    <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Search
+                <button type="button" class="btn btn-default btn-sm btn-warning" id="btnCancle" style="display:none;">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> 취소
+                </button>
+                <button type="button" class="btn btn-default btn-sm btn-primary" id="txtUpdate">
+                    <span class="glyphicon glyphicon-saved" aria-hidden="true"></span> 저장
                 </button>
             </div>
         </div>
@@ -42,16 +59,17 @@
         <table class="table table-bordered">
           <thead>
               <tr>
-                  <th style="text-align:center;">판매상품<br /><input type="checkbox" id="ckAll" /></th>
-                  <th style="text-align:center;">ID</th>
-                  <th style="text-align:center;">카테고리</th>
-                  <th style="width: 40%; text-align: center;">상품명</th>
-                  <th style="text-align:center;">구분</th>
-                  <th style="text-align:center;">수량</th>
-                  <th style="text-align:center;">용량</th>
-                  <th style="text-align:center;">수입사</th>
-                  <th style="text-align:center;">공급가</th>
-                  <th style="text-align:center;">판매가</th>
+                  <th style="text-align:center; width:80px;">판매상품<br /><input type="checkbox" id="ckAll" /></th>
+                  <th style="text-align:center; width:5%;">ID</th>
+                  <th style="text-align: center; width: 5%;">카테고리</th>
+                  <th style="text-align:center; width:auto;">상품명</th>
+                  <th style="text-align: center; width: 5%;">구분</th>
+                  <th style="text-align: center; width: 5%;">수량</th>
+                  <th style="text-align: center; width: 5%;">용량</th>
+                  <th style="text-align: center; width: 10%;">수입사</th>
+                  <th style="text-align: center; width: 5%;">공급가</th>
+                  <th style="text-align: center; width: 5%;">판매가</th>
+                  <th style="text-align: center; width: 5%;">판매수량</th>
               </tr>
           </thead>
             <tbody>
@@ -69,7 +87,14 @@
                             <td>@data.PR_LITER</td>
                             <td>@data.PR_INCOME</td>
                             <td>@string.Format("{0:###,###}",data.PR_IN_PRICE)</td>
-                            <td>@string.Format("{0:###,###}",data.PR_PRICE)</td>
+                            <td>
+                                @string.Format("{0:###,###}",data.PR_PRICE)
+                                <input type="text" name="txtPrice" value="@data.PR_PRICE" style="display:none;" />
+                            </td>
+                            <td>
+                                @string.Format("{0:###,###}", data.SALE_QTY)
+                                <input type="text" name="txtQty" value="@data.SALE_QTY" style="display:none;" />
+                            </td>
                         </tr>
                     }
                 }
@@ -113,6 +138,8 @@
 
         $("#selCate").val('@ViewBag.bc_idx');
         $("#txtName").val('@ViewBag.pr_name');
+        $("#selStatus").val('@ViewBag.isSale');
+
         $("#btnExcel").click(function () {
             $('#exampleModal').modal('toggle');
         });
@@ -130,6 +157,7 @@
                 var url = "@Url.Action("ProductList")?page=" + num;
                 url += "&bc_idx=" + $("#selCate").val();
                 url += "&pr_name=" + $("#txtName").val();
+                url += "&isSale=" + $("#selStatus").val();
                 location.href = url;
             });
 
@@ -137,6 +165,7 @@
             var url = "@Url.Action("ProductList")?page=1";
             url += "&bc_idx=" + $("#selCate").val();
             url += "&pr_name=" + $("#txtName").val();
+            url += "&isSale=" + $("#selStatus").val();
             location.href = url;
         });
         $("#ckAll").click(function(){
@@ -150,14 +179,18 @@
         $("#txtUpdate").click(function(){
             var paramName = new Array();
             var paramValue = new Array();
+            var paramPrice = new Array();
+            var paramQty = new Array();
             $("[name='ckSale']").each(function(index){
                 paramName.push($(this).val());
                 paramValue.push($(this).prop("checked") == true ? "Y" : "N");
+                paramPrice.push($(this).parent().parent().children().eq(9).find("[name='txtPrice']").val());
+                paramQty.push($(this).parent().parent().children().eq(10).find("[name='txtQty']").val());
             });
             console.log(paramValue);
             var data = $.ajax({
                 url :"@Url.Action("SaleUpdate")", 
-                data:{name :  JSON.stringify(paramName), value :  JSON.stringify(paramValue)},
+                data:{name :  JSON.stringify(paramName), value :  JSON.stringify(paramValue), price :  JSON.stringify(paramPrice), qty :  JSON.stringify(paramQty)},
                 type: 'POST',
                 success: function (data) {
                     console.log(data);
@@ -168,6 +201,15 @@
                     alert('error');
                 }
             });
+        });
+        $("#btnExcelDown").click(function(){
+            window.open("@Url.Action("Down")");
+        });
+        $("#btnUpdate").click(function(){
+            $("[name='txtPrice'] , [name='txtQty'], #btnCancle").toggle();
+        });
+        $("#btnCancle").click(function(){
+            $("[name='txtPrice'] , [name='txtQty'], #btnCancle").toggle();
         });
     });
 </script>

@@ -13,6 +13,7 @@ namespace BottleShop
         public string PR_GUBUN { get; set; }
         public int PR_QTY { get; set; }
         public int PR_LITER { get; set; }
+        public int SALE_QTY { get; set; }
         public string PR_INCOME { get; set; }
         public float PR_IN_PRICE { get; set; }
         public float PR_PRICE { get; set; }
