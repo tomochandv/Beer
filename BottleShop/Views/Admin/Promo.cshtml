@@ -1,0 +1,125 @@
+﻿@{
+    ViewBag.Title = "Promo";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@model List<BottleShop.PromoModel>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label for="txtCode">Code</label>
+                        <input type="text" class="form-control" id="txtCode" value="@ViewBag.poro_code">
+                    </div>
+                    <div class="form-group">
+                        <label for="txtName">사용자</label>
+                        <input type="text" class="form-control" id="txtName" value="@ViewBag.useid">
+                    </div>
+                    <div class="form-group">
+                        <label for="txtDate">사용일</label>
+                        <input type="text" class="form-control" id="txtDate" value="@ViewBag.usedate">
+                    </div>
+                    <div class="form-group">
+                        <label for="txtId">사용여부</label>
+                        <select class="form-control" id="selUse">
+                            <option value="">전체</option>
+                            <option value="Y">Y</option>
+                            <option value="N">N</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="panel-footer">
+                <button type="button" class="btn btn-default btn-sm" id="txtSearch">
+                    <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Search
+                </button>
+                <button type="button" class="btn btn-default btn-sm" id="txtCreate">
+                    <span class="glyphicon glyphicon-save" aria-hidden="true"></span> Create
+                </button>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="col-md-12">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th style="text-align:center;">Code</th>
+                    <th style="text-align:center;">사용여부</th>
+                    <th style="text-align:center;">생성자</th>
+                    <th style="text-align:center;">생성일</th>
+                    <th style="text-align:center;">사용자</th>
+                    <th style="text-align:center;">사용일</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count > 0)
+                {
+                    foreach (var data in Model)
+                    {
+                        <tr>
+                            <td>@data.PORO_CODE</td>
+                            <td>@data.ISUSE</td>
+                            <td>@data.CUSER</td>
+                            <td>@data.CDATE.ToString("yyyy-MM-dd hh:mm:ss")</td>
+                            <td>@data.USEID</td>
+                            <td>@data.USEDATE.ToString("yyyy-MM-dd hh:mm:ss")</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+
+    </div>
+    <div class="col-md-12" style="text-align:center;">
+        <div id="page-selection"></div>
+    </div>
+</div>
+
+
+@section script{
+    <script type="text/javascript">
+        $(function () {
+            $("#navbar > ul > li").removeClass("active");
+            $("#navbar > ul > li").eq(3).addClass("active");
+
+            $('#page-selection').bootpag({
+                page:@ViewBag.page,
+                firstLastUse: true,
+                first: '←',
+                last: '→',
+                maxVisible: 10,
+                total: @ViewBag.Pages
+                }).on("page", function (event, num) {
+                    var url = "@Url.Action("Promo")?page=" + num;
+                    url += "&poro_code=" + $("#txtCode").val();
+                    url += "&use=" + $("#selUse").val();
+                    url += "&useid=" + $("#txtName").val();
+                    url += "&usedate=" + $("#txtDate").val();
+                    location.href = url;
+                });
+
+            $("#txtSearch").click(function () {
+                var url = "@Url.Action("Promo")?page=1";
+                url += "&poro_code=" + $("#txtCode").val();
+                url += "&use=" + $("#selUse").val();
+                url += "&useid=" + $("#txtName").val();
+                url += "&usedate=" + $("#txtDate").val();
+                location.href = url;
+            });
+            $("#txtCreate").click(function(){
+                BootstrapDialog.show({
+                    title : 'Promotion Code 생성',
+                    size: BootstrapDialog.SIZE_LARGE,
+                    draggable: true,
+                    closable: true,
+                    type: BootstrapDialog.TYPE_SUCCESS,
+                    message: $('<div></div>').load('@Url.Action("CreatePromo")')
+                });
+            });
+        });
+    </script>
+}

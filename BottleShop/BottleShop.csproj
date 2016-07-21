@@ -147,6 +147,7 @@
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Dac\Dac_Cart.cs" />
     <Compile Include="Dac\Dac_Product.cs" />
+    <Compile Include="Dac\Dac_Promo.cs" />
     <Compile Include="Dac\Dac_User.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -160,6 +161,7 @@
     <Compile Include="Models\OrderProductModel.cs" />
     <Compile Include="Models\PayInfoModel.cs" />
     <Compile Include="Models\ProductModel.cs" />
+    <Compile Include="Models\PromoModel.cs" />
     <Compile Include="Models\StringModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -390,7 +392,6 @@
     <Content Include="Views\Error\Error500.cshtml" />
     <Content Include="Views\Error\Error404.cshtml" />
     <Content Include="Views\User\Joinus.cshtml" />
-    <Content Include="Views\Pay\Pay.cshtml" />
     <Content Include="Views\User\Cart.cshtml" />
     <Content Include="Views\User\MyInfo.cshtml" />
     <Content Include="Views\User\OrderHistory.cshtml" />
@@ -399,6 +400,10 @@
     <Content Include="Views\Admin\UserList.cshtml" />
     <Content Include="Views\Admin\ViewPay.cshtml" />
     <Content Include="Views\Admin\Down.cshtml" />
+    <Content Include="Views\Pay\Pay.cshtml" />
+    <Content Include="Views\Admin\Promo.cshtml" />
+    <Content Include="Views\Admin\CreatePromo.cshtml" />
+    <Content Include="Views\Pay\CardPayResult.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

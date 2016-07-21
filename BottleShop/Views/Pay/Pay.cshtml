@@ -2,4 +2,71 @@
     ViewBag.Title = "Pay";
 }
 
-<h2>Pay</h2>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header">
+                <h1>Membership Payment <small>맴버십 결제</small></h1>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">결제방법</label>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="rdoType" value="C" checked>
+                                    신용카드 (Credit Card)
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="rdoType" value="P">
+                                    프로모션코드 (Promotion Code)
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group" style="display:none;" id="divPromo">
+                            <label for="exampleInputPassword1">Promotion Code</label>
+                            <input type="text" class="form-control" id="txtPromo" placeholder="Code" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="panel-footer">
+                    <button type="button" class="btn btn-default" id="btnPay">Pay</button>
+                </div>
+            </div>
+
+            
+        </div>
+    </div>
+</div>
+@{
+    var data = Guid.NewGuid().ToString().Replace("-","");
+    var count = data.Length;
+}
+<p>@data</p>
+<p>@count</p>
+@section script{
+    <script type="text/javascript">
+        $(function () {
+            $("[name='rdoType']").click(function () {
+                if ($("[name='rdoType']:checked").val() == "P") {
+                    $("#divPromo").slideDown();
+                }
+                else {
+                    $("#divPromo").slideUp();
+                }
+            });
+            $("#btnPay").click(function () {
+                var type = $("[name='rdoType']:checked").val();
+                if (type == 'C') {
+                    location.href = "@Url.Action("CardPayResult")";
+                }
+                else {
+                    alert('준비중입니다.');
+                }
+            });
+        });
+    </script>
+}

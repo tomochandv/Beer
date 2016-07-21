@@ -271,5 +271,38 @@ namespace BottleShop.Controllers
             Response.WriteFile(Server.MapPath("/Down/") + "DownForm.xls");
             return View();
         }
+
+        public ActionResult Promo(int page = 1, string poro_code = "", string use = "", string useid = "", string usedate = "")
+        {
+            int rows = 20;
+            int sidx = ((page - 1) * rows) + 1;
+            int eidx = page * rows;
+
+            DataSet ds = new Dac_Promo().PromoList(sidx, eidx, poro_code, use, useid, usedate);
+            int totalRows = DataType.GetInt(ds.Tables[1].Rows[0][0]);
+            double dd = totalRows / rows;
+            ViewBag.page = page;
+            ViewBag.total = totalRows;
+            ViewBag.Pages = Math.Ceiling(dd);
+            ViewBag.poro_code = poro_code;
+            ViewBag.use = use;
+            ViewBag.useid = useid;
+            ViewBag.usedate = usedate;
+
+            List<PromoModel> listModel = DataType.ConvertToList<PromoModel>(ds.Tables[0]);
+
+            return View(listModel);
+        }
+
+        public ActionResult CreatePromo()
+        {
+            return View();
+        }
+
+        public JsonResult AddPromo(int count =0)
+        {
+            int rows = new Dac_Promo().CreatePromo(count, AUser().USERID);
+            return Json(rows);
+        }
     }
 }
