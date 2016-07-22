@@ -101,11 +101,11 @@
                     <table class="table table-bordered">
                        <thead>
                            <tr>
-                               <th>사용기간</th>
-                               <th>결재금액</th>
-                               <th>결재일</th>
-                               <th>결재상태</th>
-                               <th>활성화</th>
+                               <th style="text-align:center;">사용기간</th>
+                               <th style="text-align:center;">결재금액</th>
+                               <th style="text-align:center;">결재일</th>
+                               <th style="text-align:center;">결재상태</th>
+                               <th style="text-align:center;">자격여부</th>
                            </tr>
                        </thead>
                         <tbody>
@@ -119,8 +119,8 @@
                                          ~ 
                                         @data.EDATE.ToShortDateString()
                                     </td>
-                                    <td>@string.Format("{0:###,###}",data.PRICE)</td>
-                                    <td>@data.INDT.ToShortDateString()</td>
+                                    <td style="text-align:right;">@string.Format("{0:###,###}",data.PRICE)</td>
+                                    <td style="text-align:center;">@data.INDT.ToShortDateString()</td>
                                     <td>
                                         @if(data.PTYPE == "S")
                                         {
@@ -130,21 +130,32 @@
                                         {
                                             <span>결재취소</span>
                                         }
+                                        else if (data.PTYPE == "P")
+                                        {
+                                            <span>프로모션코드</span>
+                                        }
                                     </td>
                                     <td>
                                         @if (data.ISUSE == "S")
                                         {
-                                            <span>Y</span>
+                                            <span>사용중</span>
                                         }
-                                        else if (data.PTYPE == "N")
+                                        else if (data.ISUSE == "N")
                                         {
-                                            <span>N</span>
+                                            <span>기간만료</span>
                                         }
                                     </td>
                                 </tr>
                             }
                         }
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="5" style="text-align:right;">
+                                    <button type="button" id="btnPay" class="btn btn-default btn-sm btn-primary"><i class="fa fa-ticket" aria-hidden="true"></i> 맴버십결제</button>
+                                </td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>
@@ -206,6 +217,10 @@
                         }
                     }]
                 });
+            });
+
+            $("#btnPay").click(function () {
+                location.href = "@Url.Action("Pay","Pay")";
             });
         });
     </script>

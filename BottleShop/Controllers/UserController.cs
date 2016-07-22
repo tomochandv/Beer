@@ -39,7 +39,12 @@ namespace BottleShop.Controllers
             if (list.Count == 1)
             {
                 if(pwd == new Security().Description(list[0].PWD))
-                { 
+                {
+                    string userAgent = Request.UserAgent;
+                    string ip = Request.UserHostAddress;
+
+                    new Dac_User().UserLoginHistoryInsert(list[0].USERID, ip, userAgent);
+
                     JavaScriptSerializer serializer = new JavaScriptSerializer();
                     string data = serializer.Serialize(list[0]);
                     FormsAuthenticationTicket newticket = new FormsAuthenticationTicket(1,

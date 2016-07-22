@@ -15,6 +15,15 @@ namespace BottleShop.Dac
             return ExcuteToDataSet("SP_MEMBER_INFO_S", paramArray).Tables[0];
         }
 
+        public int UserLoginHistoryInsert(string id, string ip, string agent)
+        {
+            List<Parameter> paramArray = new List<Parameter>();
+            paramArray.Add(new Parameter(id, "@USERID", SqlDbType.VarChar));
+            paramArray.Add(new Parameter(ip, "@IP", SqlDbType.VarChar));
+            paramArray.Add(new Parameter(agent, "@AGENT", SqlDbType.VarChar));
+            return ExcuteNonQuery("SP_MEMBER_LOGIN_I", paramArray);
+        }
+
         public int UserJon(string id = "", string pwd = "", string name = "", string tell = "", string email = "", string addr = "", string sms = "Y", string isemail = "Y")
         {
             List<Parameter> paramArray = new List<Parameter>();
