@@ -38,3 +38,19 @@
     </div>
 </div>
 
+@section script{
+<script type="text/javascript">
+    $(function () {
+        BootstrapDialog.show({
+            title: 'Notify',
+            message: '아직 오픈 준비중입니다.~~~~~',
+            buttons: [{
+                label: 'Close',
+                action: function (dialog) {
+                    dialog.close();
+                }
+            }]
+        });
+    })
+    </script>
+}
