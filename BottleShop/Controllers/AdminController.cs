@@ -304,5 +304,10 @@ namespace BottleShop.Controllers
             int rows = new Dac_Promo().CreatePromo(count, AUser().USERID);
             return Json(rows);
         }
+
+        public ActionResult MemberShip()
+        {
+            return View();
+        }
     }
 }

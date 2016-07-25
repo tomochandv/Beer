@@ -32,6 +32,13 @@ namespace BottleShop.Dac
             return ExcuteNonQuery("SP_PROMOTION_MASTER_U", paramlist);
         }
 
+        public DataSet CheckPromo(string poro_code)
+        {
+            List<Parameter> paramlist = new List<Parameter>();
+            paramlist.Add(new Parameter(poro_code, "@PORO_CODE", SqlDbType.VarChar));
+            return ExcuteToDataSet("SP_PROMOTION_MASTER_S1", paramlist);
+        }
+
         public DataSet PromoList(int sidx, int eidx, string poro_code, string use, string useid, string usedate)
         {
             List<Parameter> paramlist = new List<Parameter>();

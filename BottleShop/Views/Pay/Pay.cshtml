@@ -45,8 +45,7 @@
     var data = Guid.NewGuid().ToString().Replace("-","");
     var count = data.Length;
 }
-<p>@data</p>
-<p>@count</p>
+
 @section script{
     <script type="text/javascript">
         $(function () {
@@ -64,7 +63,38 @@
                     location.href = "@Url.Action("CardPayResult")";
                 }
                 else {
-                    alert('준비중입니다.');
+                    var data = Common.Ajax("@Url.Action("PromoPayCheck")", { poro_code: $("#txtPromo").val() });
+                    if (data != "Y") {
+                        BootstrapDialog.show({
+                            title: 'Alert',
+                            message: data,
+                            buttons: [{
+                                label: 'Close',
+                                action: function (dialog) {
+                                    dialog.close();
+                                }
+                            }]
+                        });
+                    }
+                    else {
+                        BootstrapDialog.show({
+                            title: '감사합니다',
+                            message: '감사합니다. 결제가 되었습니다. 많은 이용 부탁드립니다.',
+                            buttons: [{
+                                label: 'Close',
+                                action: function (dialog) {
+                                    dialog.close();
+                                }
+                            },
+                            {
+                                label: '상품보러가기',
+                                action: function (dialog) {
+                                    location.href = '@Url.Action("Index","Product")';
+                                }
+                            }
+                            ]
+                        });
+                    }
                 }
             });
         });
