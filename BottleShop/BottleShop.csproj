@@ -404,6 +404,7 @@
     <Content Include="Views\Admin\Promo.cshtml" />
     <Content Include="Views\Admin\CreatePromo.cshtml" />
     <Content Include="Views\Pay\CardPayResult.cshtml" />
+    <Content Include="Views\Admin\MemberShip.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
