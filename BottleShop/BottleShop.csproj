@@ -141,6 +141,7 @@
     <Compile Include="Controllers\AdminLoginController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\NoticeController.cs" />
     <Compile Include="Controllers\PayController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\TestController.cs" />
@@ -157,6 +158,7 @@
     <Compile Include="LibClass\DataType.cs" />
     <Compile Include="LibClass\DbHelper.cs" />
     <Compile Include="LibClass\Security.cs" />
+    <Compile Include="Models\NoticeModel.cs" />
     <Compile Include="Models\OrderInfoModel.cs" />
     <Compile Include="Models\OrderProductModel.cs" />
     <Compile Include="Models\PayInfoModel.cs" />
