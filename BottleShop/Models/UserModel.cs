@@ -16,5 +16,6 @@ namespace BottleShop
         public string ISSMS { get; set; }
         public string ISEMAIL { get; set; }
         public string MEMTYPE { get; set; }
+        public string BIRTH { get; set; }
     }
 }

@@ -71,12 +71,12 @@ namespace BottleShop.Controllers
          }
 
          [HttpPost]
-         public JsonResult JoinProc(string id = "", string pwd = "", string name = "", string tell = "", string email = "", string addr = "", string sms = "Y", string isemail = "Y")
+         public JsonResult JoinProc(string id = "", string pwd = "", string name = "", string tell = "", string email = "", string addr = "", string sms = "Y", string isemail = "Y", string birth = "")
          {
              int count = 0;
              if (id != "" && pwd != "" && name != "" && tell != "" && email != "")
              {
-                 count = new Dac_User().UserJon(id, new Security().Encription(pwd), name, tell, email, addr, sms, isemail);
+                 count = new Dac_User().UserJon(id, new Security().Encription(pwd), name, tell, email, addr, sms, isemail, birth);
                  if(count > 0)
                  {
                      List<UserModel> list = DataType.ConvertToList<UserModel>(new Dac_User().Login(id));

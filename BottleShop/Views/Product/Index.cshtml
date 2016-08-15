@@ -33,10 +33,12 @@
                             <th style="width: 50%; text-align: center;">상품명</th>
                             <th style="text-align:center;">용량(L)</th>
                             <th style="text-align:center;">수입사</th>
-                            @if (@ViewBag.pay == "Y") { 
+                            
                             <th style="text-align:center;">가격</th>
-                            <th style="text-align:center;">수량</th>
-                            <th>&nbsp;</th>
+                            @*<th style="text-align:center;">수량</th>*@
+                            @if (@ViewBag.pay == "Y")
+                            {
+                                <th>&nbsp;</th>
                             }
                         </tr>
                     </thead>
@@ -49,9 +51,11 @@
                                     <td>@data.PR_NAME</td>
                                     <td>@data.PR_LITER</td>
                                     <td>@data.PR_INCOME</td>
-                                    @if (@ViewBag.pay == "Y") {
+                                    
                                     <td>@string.Format("{0:###,###}", data.PR_PRICE)</td>
-                                    <td>@string.Format("{0:###,###}", data.SALE_QTY)</td>
+                                    @*<td>@string.Format("{0:###,###}", data.SALE_QTY)</td>*@
+                                    @if (@ViewBag.pay == "Y")
+                                    {
                                     <td style="text-align:center;width:50px;">
                                         <button type="button" name="btnAdd" class="btn btn-default btn-sm" value="@data.PR_IDX"><i class="fa fa-cart-arrow-down" aria-hidden="true"></i> Add</button>
                                     </td>
