@@ -1,0 +1,60 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model List<BottleShop.NoticeModel>
+<div class="col-md-12">
+    <button type="button" class="btn btn-default" id="btnSave">Write</button>
+</div>
+<div class="col-md-12">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Contents</th>
+                <th>Indate</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var data in Model)
+            {
+                <tr>
+                    <td>
+                        @data.TITLE
+                    </td>
+                    <td>
+                        @Html.Raw(data.CONTENTS)
+                    </td>
+                    <td>
+                        @data.INDATE.ToShortDateString()
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="col-md-12" style="text-align:center;">
+    <div id="page-selection"></div>
+</div>
+
+    @section script{
+        <script type="text/javascript">
+            $(function () {
+                $("#navbar > ul > li").removeClass("active");
+                $("#navbar > ul > li").eq(5).addClass("active");
+                $("#btnSave").click(function(){
+                    location.href = "@Url.Action("NoticeWrite")";
+                })
+                $('#page-selection').bootpag({
+                    page:@ViewBag.page,
+                    firstLastUse: true,
+                    first: '←',
+                    last: '→',
+                    maxVisible: 10,
+                    total: @ViewBag.Pages
+                    }).on("page", function (event, num) {
+                        var url = "@Url.Action("NoticeList")?page=" + num;
+                        location.href = url;
+                    });
+            });
+        </script>
+    }

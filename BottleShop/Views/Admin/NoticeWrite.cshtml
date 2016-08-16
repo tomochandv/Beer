@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.Title = "NoticeWrite";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<form>
+    <div class="form-group">
+        <label for="exampleInputEmail1">Title</label>
+        <input type="text" class="form-control" id="txtTitle" placeholder="Title">
+    </div>
+    <div class="form-group">
+        <label for="exampleInputPassword1">Contents</label>
+        <textarea name="editor1" id="editor1" rows="10" cols="80"></textarea>
+    </div>
+   
+    <button type="button" class="btn btn-default" id="btnSave">Save</button>
+    <button type="button" class="btn btn-default" id="btnCancle">Cancle</button>
+</form>
+
+
+@section script {
+    <script src="//cdn.ckeditor.com/4.5.10/standard/ckeditor.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            CKEDITOR.replace('editor1');
+            $("#btnCancle").click(function () {
+                location.href = '@Url.Action("NoticeList")';
+            });
+            $("#btnSave").click(function () {
+                var content = CKEDITOR.instances.editor1.getData();
+                var data = Common.Ajax("@Url.Action("NoticeSave")", { title: $("#txtTitle").val(), content: content });
+                if (data > 0) {
+                    location.href = '@Url.Action("NoticeList")';
+                }
+            });
+        });
+    </script>
+}

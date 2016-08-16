@@ -1,0 +1,65 @@
+﻿@model List<BottleShop.NoticeModel>
+
+<div class="container">
+    <div class="row">
+        <br />
+            <div class="col-md-12">
+                <h1>Notice</h1>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th style="width: 80%; text-align: center;">제목</th>
+                            <th style="width: 20%; text-align: center;">작성일</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Count > 0)
+                        {
+                            foreach (var data in Model)
+                            {
+                                <tr>
+                                    <td><a href="javascript:Page.View(@data.IDX)">@data.TITLE</a></td>
+                                    <td>@data.INDATE.ToShortDateString()</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-12" style="text-align:center;">
+                <div id="page-selection"></div>
+            </div>
+
+    </div>
+</div>
+
+@section script{
+    <script type="text/javascript">
+            $(function () {
+                $('#page-selection').bootpag({
+                    page:@ViewBag.page,
+                    firstLastUse: true,
+                    first: '←',
+                    last: '→',
+                    maxVisible: 10,
+                    total: @ViewBag.Pages
+                    }).on("page", function (event, num) {
+                        var url = "@Url.Action("NoticeList")?page=" + num;
+                        location.href = url;
+                    });
+            });
+
+        var Page = {
+            View :function(idx){
+                BootstrapDialog.show({
+                    title : '공지사항',
+                    size: BootstrapDialog.SIZE_LARGE,
+                    draggable: true,
+                    closable: true,
+                    type: BootstrapDialog.TYPE_SUCCESS,
+                    message: $('<div></div>').load('@Url.Action("View")?idx=' + idx)
+                });
+            }
+        }
+    </script>
+}

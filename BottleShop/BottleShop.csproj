@@ -147,6 +147,7 @@
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Dac\Dac_Cart.cs" />
+    <Compile Include="Dac\Dac_Notice.cs" />
     <Compile Include="Dac\Dac_Product.cs" />
     <Compile Include="Dac\Dac_Promo.cs" />
     <Compile Include="Dac\Dac_User.cs" />
@@ -407,6 +408,10 @@
     <Content Include="Views\Admin\CreatePromo.cshtml" />
     <Content Include="Views\Pay\CardPayResult.cshtml" />
     <Content Include="Views\Admin\MemberShip.cshtml" />
+    <Content Include="Views\Admin\NoticeWrite.cshtml" />
+    <Content Include="Views\Admin\NoticeList.cshtml" />
+    <Content Include="Views\Notice\Index.cshtml" />
+    <Content Include="Views\Notice\View.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
