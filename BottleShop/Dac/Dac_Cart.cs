@@ -64,7 +64,7 @@ namespace BottleShop.Dac
             return ExcuteToDataSet("SP_ORDER_PRODUCT_S", paramlist);
         }
 
-        public DataSet OrderHistory(int sidx, int eidx, string name, string userid, int or_idx, string email)
+        public DataSet OrderHistory(int sidx, int eidx, string name, string userid, int or_idx, string email, string birth)
         {
             List<Parameter> paramlist = new List<Parameter>();
             paramlist.Add(new Parameter(or_idx, "@OR_IDX", SqlDbType.Int));

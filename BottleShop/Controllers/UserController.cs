@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -108,12 +109,57 @@ namespace BottleShop.Controllers
              {
                  count = DataType.GetInt(new Dac_User().CheckEmailAndId(value, "", "I"));
              }
+             else if(type == "birth")
+             {
+                 DateTime date = DateTime.ParseExact(value, "yyyyMMdd", CultureInfo.InvariantCulture);
+                 if(ProcGetAge(date.ToShortDateString(), true) < 20)
+                 {
+                     count = 1;
+                 }
+                 else
+                 {
+                     count = 0;
+                 }
+             }
              else
              {
                  count = DataType.GetInt(new Dac_User().CheckEmailAndId("", value, "E"));
              }
              return Json(count, JsonRequestBehavior.AllowGet);
          }
+
+         public int ProcGetAge(string BirthDay, bool KoreanAgeType = true) // BirthDay Format - YYYY-MM-DD
+         {
+             int Age = 0;
+             int BirthYear = Convert.ToInt32(BirthDay.Substring(2, 2));
+             int NowYear = DateTime.Now.Year;
+             if (BirthDay.Substring(0, 2) == "19")
+             {
+                 Age = (NowYear - (1900 + BirthYear));
+             }
+             else
+             {
+                 Age = (NowYear - (2000 + BirthYear));
+             }
+             if (KoreanAgeType)
+             {
+                 int BirthMonth = Convert.ToInt32(BirthDay.Substring(5, 2));
+                 int nowMonth = DateTime.Now.Month;
+
+                 if (BirthMonth == nowMonth)
+                 {
+                     int BirthDays = Convert.ToInt32(BirthDay.Substring(8, 2));
+                     int nowDay = DateTime.Now.Day;
+
+                     if (BirthDays <= nowDay)
+                         Age = Age + 1;
+                 }
+                 else if (BirthMonth < nowMonth)
+                     Age = Age + 1;
+             }
+             return Age;
+         }
+
 
         public ActionResult Cart()
          {

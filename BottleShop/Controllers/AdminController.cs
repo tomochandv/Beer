@@ -205,13 +205,13 @@ namespace BottleShop.Controllers
         } 
         #endregion
 
-        public ActionResult Order(int page = 1, string name = "", string id = "", int od = 0, string email="")
+        public ActionResult Order(int page = 1, string name = "", string id = "", int od = 0, string email="", string birth = "")
         {
             int rows = 20;
             int sidx = ((page - 1) * rows) + 1;
             int eidx = page * rows;
 
-            DataSet ds = new Dac_Cart().OrderHistory(sidx, eidx, name, id, od, email);
+            DataSet ds = new Dac_Cart().OrderHistory(sidx, eidx, name, id, od, email, birth);
             int totalRows = DataType.GetInt(ds.Tables[1].Rows[0][0]);
             double dd = totalRows / rows;
             ViewBag.page = page;
@@ -220,6 +220,7 @@ namespace BottleShop.Controllers
             ViewBag.name = name;
             ViewBag.id = id;
             ViewBag.od = od;
+            ViewBag.birth = birth;
             ViewBag.email = email;
 
 
