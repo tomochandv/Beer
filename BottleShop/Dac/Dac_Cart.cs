@@ -73,6 +73,7 @@ namespace BottleShop.Dac
             paramlist.Add(new Parameter(name, "@NAME", SqlDbType.VarChar));
             paramlist.Add(new Parameter(sidx, "@SIDX", SqlDbType.Int));
             paramlist.Add(new Parameter(eidx, "@EIDX", SqlDbType.Int));
+            paramlist.Add(new Parameter(birth, "@BIRTH", SqlDbType.VarChar));
             return ExcuteToDataSet("SP_ORDER_PRODUCT_S1", paramlist);
         }
 
