@@ -111,7 +111,7 @@ namespace BottleShop.Controllers
              }
              else if(type == "birth")
              {
-                 DateTime date = DateTime.ParseExact(value, "yyyyMMdd", CultureInfo.InvariantCulture);
+                 DateTime date = DateTime.ParseExact(value, "yyyy-MM-dd", CultureInfo.InvariantCulture);
                  if(ProcGetAge(date.ToShortDateString(), true) < 20)
                  {
                      count = 1;

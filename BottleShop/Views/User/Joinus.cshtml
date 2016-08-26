@@ -43,7 +43,7 @@
                 <div class="row control-group">
                     <div class="form-group col-xs-12 floating-label-form-group controls">
                         <label>생년월일 Birthday </label>
-                        <input type="number" class="form-control" placeholder="생년월일 Birthday (19800101)" id="birth" minlength="8" required data-validation-required-message="Please enter your birth day. ex: 19801121">
+                        <input type="text" class="form-control" placeholder="생년월일 Birthday (1980-01-01)" id="birth" required data-validation-required-message="Please enter your birth day. ex: 19801121">
                         <p class="help-block text-danger"></p>
                     </div>
                 </div>
@@ -168,8 +168,10 @@
 </div>
 @section script
 {
+<script src="@Url.Content("~/Scripts/jquery.mask.min.js")"></script>
     <script type="text/javascript">
         $(function () {
+            $("#birth").mask('0000-00-00');
             $("#birth").focusout(function () {
                 $.post("@Url.Action("Validate")", {type: 'birth', value : $("#birth").val()},  function (data) {
                     if (data == 0) {
