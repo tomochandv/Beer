@@ -24,12 +24,12 @@
                             <tr>
                                 <th style="width: 10%; text-align: center;">주문번호</th>
                                 <th style="width: 10%; text-align: center;">주문일</th>
-                                <th style="text-align:center;">금액</th>
+                                @*<th style="text-align:center;">금액</th>*@
                                 <th style="width: 10%; text-align: center;">수령예정일</th>
                                 <th style="width: 10%; text-align: center;">상태</th>
                                 <th style="text-align: center;">종류</th>
                                 <th style="text-align: center;">상품명</th>
-                                <th style="text-align: center;">가격</th>
+                                @*<th style="text-align: center;">가격</th>*@
                                 <th style="text-align: center;">수량</th>
                             </tr>
                         </thead>
@@ -43,7 +43,7 @@
                                     <tr>
                                         <td style="text-align: center;">@data.OR_IDX</td>
                                         <td style="text-align: center;">@data.INDT.ToShortDateString() </td>
-                                        <td style="text-align: center;">@string.Format("{0:###,###}", data.TOTAL_PRICE)</td>
+                                        @*<td style="text-align: center;">@string.Format("{0:###,###}", data.TOTAL_PRICE)</td>*@
                                         <td style="text-align: center;">@(data.END_DATE.ToShortDateString() == "0001-01-01" ? "미정" : data.END_DATE.ToShortDateString())</td>
                                         <td style="text-align: center;">
                                             @if(data.OR_STATUS == "0")
@@ -69,7 +69,7 @@
                                         </td>
                                         <td>@(data1.PR_IDX == 0 ? "특별주문" : data1.CATE_NAME)</td>
                                         <td>@(data1.PR_IDX == 0 ? data1.MESSAGE : data1.PR_NAME)</td>
-                                        <td>@string.Format("{0:###,###}", data1.PRICE)</td>
+                                        @*<td>@string.Format("{0:###,###}", data1.PRICE)</td>*@
                                         <td>@string.Format("{0:###,###}", data1.QTY)</td>
                                     </tr>
                                     }

@@ -21,8 +21,9 @@
                 <div id="success"></div>
                 <div class="row">
                     <div class="form-group col-xs-12">
-                        <button type="submit" class="btn btn-default btn-primary">Login</button>
-                        <button type="button" id="btnFind" class="btn btn-default">Find Password</button>
+                        <button type="submit" class="btn btn-default btn-primary">Login(로그인)</button>
+                        <button type="button" id="btnJoin" class="btn btn-danger">Join(회원가입)</button>
+                        <button type="button" id="btnFind" class="btn btn-default">Find Password(비밀번호찾기)</button>
                     </div>
                 </div>
             </form>
@@ -73,6 +74,9 @@
                         }
                     }]
                 });
+            });
+            $("#btnJoin").click(function () {
+                location.href = '@Url.Action("JoinUs")';
             });
         });
     </script>
