@@ -85,5 +85,12 @@ namespace BottleShop.Dac
             return ExcuteNonQuery("SP_ORDER_INFO_U", paramlist);
         }
 
+        public int OrderStatusUpdate(string moid, string or_status)
+        {
+            List<Parameter> paramlist = new List<Parameter>();
+            paramlist.Add(new Parameter(moid, "@MOID", SqlDbType.VarChar));
+            paramlist.Add(new Parameter(or_status, "@PTYPE", SqlDbType.VarChar));
+            return ExcuteNonQuery("SP_MEMBER_PAYINFO_U1", paramlist);
+        }
     }
 }

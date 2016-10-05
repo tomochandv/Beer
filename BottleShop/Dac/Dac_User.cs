@@ -40,7 +40,7 @@ namespace BottleShop.Dac
             return ExcuteNonQuery("SP_MEMBER_INFO_I", paramArray);
         }
 
-        public int UserPay(string id, string ptype, float price, DateTime sdate, DateTime edate, string use)
+        public int UserPay(string id, string ptype, float price, DateTime sdate, DateTime edate, string use, string moid)
         {
             List<Parameter> paramArray = new List<Parameter>();
             paramArray.Add(new Parameter(id, "@USERID", SqlDbType.VarChar));
@@ -49,6 +49,7 @@ namespace BottleShop.Dac
             paramArray.Add(new Parameter(sdate, "@SDATE", SqlDbType.DateTime));
             paramArray.Add(new Parameter(edate, "@EDATE", SqlDbType.DateTime));
             paramArray.Add(new Parameter(ptype, "@ISUSE", SqlDbType.VarChar));
+            paramArray.Add(new Parameter(moid, "@MOID", SqlDbType.VarChar));
 
             return ExcuteNonQuery("SP_MEMBER_PAYINFO_I", paramArray);
         }

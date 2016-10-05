@@ -41,6 +41,26 @@
         </div>
     </div>
 </div>
+
+
+
+
+<form id="form1" name="form1" method="post" action="https://mobile.inicis.com/smart/wcard">
+    <input type="hidden" name="P_GOODS" value="membership" />
+    <input type="hidden" name="P_MID" value="INIpayTest" />
+    <input type="hidden" name="P_AMT" value="100" />
+    <input type="hidden" name="P_OID" value="@ViewBag.Moid" />
+    <input type="hidden" name="P_NOTI" value="@ViewBag.Moid" />
+    <input type="hidden" name="P_EMAIL" value="@ViewBag.EMAIL" />
+    <input type="hidden" name="P_UNAME" value="@ViewBag.NAME" />
+    <input type="hidden" name="P_NEXT_URL" value="@(System.Configuration.ConfigurationManager.AppSettings["Domain"] + "/Pay/MobileResult")" />
+    <input type="hidden" name="inipaymobile_type" value="web" />
+    <input type="hidden" name="P_OFFER_PERIOD" value="M2" />
+    <input type="hidden" name="P_CHARSET" value="utf8" />
+    @*<input type="button" onclick="formSubmit();" />*@
+</form>
+
+
 @{
     var data = Guid.NewGuid().ToString().Replace("-","");
     var count = data.Length;
@@ -60,7 +80,13 @@
             $("#btnPay").click(function () {
                 var type = $("[name='rdoType']:checked").val();
                 if (type == 'C') {
-                    location.href = "@Url.Action("CardPayResult")";
+                    if ('@ViewBag.mobile' == "M") {
+                        location.href = "@Url.Action("Mobile")";
+                       
+                    }
+                    else {
+                        location.href = "/inicis/INIStdPayBill.aspx";
+                    }
                 }
                 else {
                     var data = Common.Ajax("@Url.Action("PromoPayCheck")", { poro_code: $("#txtPromo").val() });

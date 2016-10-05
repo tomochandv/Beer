@@ -137,6 +137,10 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="close.aspx.cs">
+      <DependentUpon>close.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AdminLoginController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
@@ -170,6 +174,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="close.aspx" />
     <Content Include="coming\cover.css" />
     <Content Include="coming\favicon.ico" />
     <Content Include="coming\images\1514559_565976526826174_1033990074_n.jpg" />
@@ -207,6 +212,10 @@
     <Content Include="less\clean-blog.less" />
     <Content Include="less\mixins.less" />
     <Content Include="less\variables.less" />
+    <Content Include="key\INIpayTest\keypass.enc" />
+    <Content Include="key\INIpayTest\mcert.pem" />
+    <Content Include="key\INIpayTest\mpriv.pem" />
+    <Content Include="key\pgcert.pem" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="google36aaa757820e1d83.html" />
     <Content Include="img\about-bg.jpg" />
@@ -413,6 +422,8 @@
     <Content Include="Views\Admin\NoticeList.cshtml" />
     <Content Include="Views\Notice\Index.cshtml" />
     <Content Include="Views\Notice\View.cshtml" />
+    <Content Include="Views\Pay\Mobile.cshtml" />
+    <Content Include="Views\Pay\MobileResult.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

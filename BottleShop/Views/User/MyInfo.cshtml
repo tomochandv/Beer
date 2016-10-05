@@ -134,6 +134,14 @@
                                         {
                                             <span>프로모션코드</span>
                                         }
+                                        else if (data.PTYPE == "R")
+                                        {
+                                            <span>결재실패</span>
+                                        }
+                                        else if (data.PTYPE == "F")
+                                        {
+                                            <span>결재실패</span>
+                                        }
                                     </td>
                                     <td>
                                         @if (data.ISUSE == "S" || data.ISUSE == "P")
@@ -143,6 +151,10 @@
                                         else if (data.ISUSE == "N")
                                         {
                                             <span>기간만료</span>
+                                        }
+                                        else if (data.ISUSE == "R")
+                                        {
+                                            <span>사용불가</span>
                                         }
                                     </td>
                                 </tr>
