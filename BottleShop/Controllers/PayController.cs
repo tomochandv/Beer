@@ -75,18 +75,21 @@ namespace BottleShop.Controllers
         public ActionResult Mobile()
         {
             ViewBag.Moid = "order" + DateTime.Now.ToString("yyyyMMddhhmmssfff");
+            ViewBag.IDD = new Security().Encription(ViewBag.USERID);
             new Dac_User().UserPay(AUser().USERID, "R", 20000, DateTime.Now, DateTime.Now.AddMonths(1), "Y", ViewBag.Moid);
             return View();
         }
 
         public ActionResult MobileResult()
         {
+        
             string result = Request["P_STATUS"] != null ? Request["P_STATUS"] : "";
             string moid = Request["P_NOTI"] != null ? Request["P_NOTI"] : "";
             string P_RMESG1 = Request["P_RMESG1"] != null ? Request["P_RMESG1"] : "";
             string P_REQ_URL = Request["P_REQ_URL"] != null ? Request["P_REQ_URL"] : "";
             string P_TID = Request["P_TID"] != null ? Request["P_TID"] : "";
-
+            string P_OID = Request["P_TID"] != null ? Request["P_OID"] : "";
+         
             if (result == "00")
             {
                 string strUri = P_REQ_URL;
@@ -137,7 +140,81 @@ namespace BottleShop.Controllers
             return View();
         }
 
+        //isp 모듈
+        public ActionResult MobileResult1()
+        {
+            string result = Request["P_STATUS"] != null ? Request["P_STATUS"] : "";
+            string moid = Request["P_NOTI"] != null ? Request["P_NOTI"] : "";
+            string P_RMESG1 = Request["P_RMESG1"] != null ? Request["P_RMESG1"] : "";
+            string P_REQ_URL = Request["P_REQ_URL"] != null ? Request["P_REQ_URL"] : "";
+            string P_TID = Request["P_TID"] != null ? Request["P_TID"] : "";
+            string P_OID = Request["P_TID"] != null ? Request["P_OID"] : "";
+            
+            if (result == "00")
+            {
 
+                new Dac_Cart().OrderStatusUpdate(P_OID, "S");
+            
+            }
+            else
+            {
+                new Dac_Cart().OrderStatusUpdate(P_OID, "F");
+            } 
+
+    
+            return View();
+        }
+
+      
+
+        public string GetDateTime()
+        {
+            DateTime NowDate = DateTime.Now;
+            return NowDate.ToString("yyyy-MM-dd HH:mm:ss") + ":" + NowDate.Millisecond.ToString("000");
+        }
+
+
+        /// <summary>
+        /// 로그 기록
+        /// </summary>
+        /// <param name="str">로그내용
+        public void Log(string str)
+        {
+            string FilePath =  Server.MapPath("/Logs/") + DateTime.Today.ToString("yyyyMMdd") + ".log";
+            string DirPath = Server.MapPath("/Logs/");
+            string temp;
+
+            DirectoryInfo di = new DirectoryInfo(DirPath);
+            FileInfo fi = new FileInfo(FilePath);
+
+            try
+            {
+                if (di.Exists != true) Directory.CreateDirectory(DirPath);
+
+                if (fi.Exists != true)
+                {
+                    using (StreamWriter sw = new StreamWriter(FilePath))
+                    {
+                        temp = string.Format("[{0}] : {1}", GetDateTime(), str);
+                        sw.WriteLine(temp);
+                        sw.Close();
+                    }
+                }
+                else
+                {
+                    using (StreamWriter sw = System.IO.File.AppendText(FilePath))
+                    {
+                        temp = string.Format("[{0}] : {1}", GetDateTime(), str);
+                        sw.WriteLine(temp);
+                        sw.Close();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+               
+            }
+        }
 
 
     }

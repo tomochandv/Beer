@@ -12,11 +12,16 @@
                 <div class="panel-body">
                     <form>
                         <div class="form-group">
-                            <label for="exampleInputEmail1">결제방법</label>
+                            <label for="exampleInputEmail1">결제방법 </label>
+                            @if (ViewBag.Mobile == "M")
+                            {
+                                <br />
+                                <label style="color:red;">ISP 결제시에는 기본 브라우저를 사용해주세요.(아이폰 : 사파리)</label>
+                            }
                             <div class="radio">
                                 <label>
                                     <input type="radio" name="rdoType" value="C" checked>
-                                    신용카드 (Credit Card)
+                                    신용카드 (Credit Card) 
                                 </label>
                             </div>
                             <div class="radio">

@@ -34,7 +34,7 @@ public partial class INIStdPayBill : System.Web.UI.Page
         string strGoodName = "바틀샵 맴버십";
         goodname.Text = strGoodName;
 
-        string strPrice = "1000";
+        string strPrice = "20000";
         price.Text = strPrice;
         Textbox1.Text = strPrice;
 
@@ -85,7 +85,7 @@ public partial class INIStdPayBill : System.Web.UI.Page
         mKey.Text = ComputeHash(signKey);
 
 
-        InsertPayInfo(mid.Text + "_" + timestamp.Text, 1000, DateTime.Now, DateTime.Now.AddMonths(1));
+        InsertPayInfo(mid.Text + "_" + timestamp.Text, 20000, DateTime.Now, DateTime.Now.AddMonths(1));
     }
 
     // SHA256  256bit 암호화

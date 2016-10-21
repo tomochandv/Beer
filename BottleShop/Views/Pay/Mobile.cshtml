@@ -26,7 +26,6 @@
         {
             var order_form = document.form1;
             var wallet = window.open("", "BTPG_WALLET", features);
-            <!--
             if (wallet == null) 
             {
                 if ((webbrowser.indexOf("Windows NT 5.1")!=-1) && (webbrowser.indexOf("SV1")!=-1)) 
@@ -39,7 +38,6 @@
                 }
                 return false;
             }
-            -->
 	
             order_form.target = "BTPG_WALLET";
             order_form.action = "https://mobile.inicis.com/smart/wcard/";
@@ -53,16 +51,18 @@
     <form id="form1" name="form1" method="post" action="https://mobile.inicis.com/smart/wcard">
         <input type="hidden" name="P_GOODS" value="membership" />
         <input type="hidden" name="P_MID" value="INIpayTest" />
-        <input type="hidden" name="P_AMT" value="1000" />
+        <input type="hidden" name="P_AMT" value="20000" />
         <input type="hidden" name="P_OID" value="@ViewBag.Moid" />
         <input type="hidden" name="P_NOTI" value="@ViewBag.Moid" />
         <input type="hidden" name="P_EMAIL" value="@ViewBag.EMAIL" />
         <input type="hidden" name="P_UNAME" value="@ViewBag.NAME" />
         <input type="hidden" name="P_NEXT_URL" value="@(System.Configuration.ConfigurationManager.AppSettings["Domain"] + "/Pay/MobileResult")" />
+        <input type="hidden" name="P_NOTI_URL" value="@(System.Configuration.ConfigurationManager.AppSettings["Domain"] + "/Pay/MobileResult1")" />
+        <input type="hidden" name="P_RETURN_URL" value="@(System.Configuration.ConfigurationManager.AppSettings["Domain"] + "/User/MyInfo?uid=")" />
         <input type="hidden" name="inipaymobile_type" value="web" />
         <input type="hidden" name="P_OFFER_PERIOD" value="M2" />
         <input type="hidden" name="P_CHARSET" value="utf8" />
-        <input type="hidden" name="P_RESERVED" value="apprun_check=Y&" />
+        <input type="hidden" name="P_RESERVED" value="extension_enable=Y&apprun_check=Y" />
 
         @*<input type="button" onclick="formSubmit();" />*@
     </form>
