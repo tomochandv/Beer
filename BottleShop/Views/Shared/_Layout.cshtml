@@ -61,6 +61,7 @@
                     <li>
                         <a href="@Url.Action("Index","Notice")">Notice</a>
                     </li>
+                    <!--
                     <li class="dropdown">
                         <a id="logina1" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                             Want Drink?
@@ -81,7 +82,7 @@
                             </li>*@
                         </ul> 
                     </li>
-                    
+                    -->
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li class="dropdown">
@@ -89,8 +90,8 @@
                                 <span class="caret"></span></a> 
                             <ul class="dropdown-menu">
                                 <li><a href="@Url.Action("MyInfo","User")" style="color:black;">My Info</a></li>
-                                <li><a href="@Url.Action("Cart","User")" style="color:black;">Cart</a></li>
-                                <li><a href="@Url.Action("OrderHistory","User")" style="color:black;">Order history</a></li>
+                                @*<li><a href="@Url.Action("Cart","User")" style="color:black;">Cart</a></li>
+                                <li><a href="@Url.Action("OrderHistory","User")" style="color:black;">Order history</a></li>*@
                                 <li role="separator" class="divider"></li>
                                 <li><a style="color:black;" href="@Url.Action("LogOut","User")">Log Out</a></li>
                             </ul>
