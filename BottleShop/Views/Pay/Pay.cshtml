@@ -31,14 +31,15 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="form-group" style="display:none;" id="divPromo">
+                        <div class="form-group form-inline" style="display:none;" id="divPromo">
                             <label for="exampleInputPassword1">Promotion Code</label>
-                            <input type="text" class="form-control" id="txtPromo" placeholder="Code" required>
+                            <input type="text" class="form-control input-lg" id="txtPromo" placeholder="Code" required>
+                            @*<button type="button" class="btn btn-default" id="btnPay">적용(Apply)</button>*@
                         </div>
                     </form>
                 </div>
                 <div class="panel-footer">
-                    <button type="button" class="btn btn-default" id="btnPay">Pay</button>
+                    <button type="button" class="btn btn-default" id="btnPay">결제(Pay)</button>
                 </div>
             </div>
 
@@ -90,7 +91,8 @@
                        
                     }
                     else {
-                        location.href = "/inicis/INIStdPayBill.aspx";
+                        $("#btnPay").hide();
+                        window.open("/inicis/INIStdPayBill.aspx", 'bill', 'width=800, height=500, toolbar=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no');
                     }
                 }
                 else {
@@ -129,5 +131,34 @@
                 }
             });
         });
+        
+        function EndBill() {
+            @*var tx = Common.Ajax("@Url.Action("Index", "Tx")");
+            var data = Common.Ajax("@Url.Action("TxModule")", {result : tx});
+            if (data == "S") {
+                location.href = "@Url.Action("MyInfo","User")"
+            }
+            else {
+                alert('결재실패');
+                $("#btnPay").show();
+            }
+            if (tx == 'S')
+            {
+
+            }
+            else {
+
+            }*@
+
+            var data = Common.Ajax("@Url.Action("TxModule")");
+            if (data == "S") {
+                location.href = "@Url.Action("MyInfo","User")"
+            }
+            else {
+                alert('결재실패');
+                $("#btnPay").show();
+            }
+            
+        }
     </script>
 }

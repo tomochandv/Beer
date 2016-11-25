@@ -12,19 +12,29 @@ namespace BottleShop
     {
         protected override void OnAuthorization(AuthorizationContext context)
         {
-            if (context.HttpContext.User != null && context.HttpContext.User.Identity.IsAuthenticated == true)
+            var userInCookie = Request.Cookies["bottleshop"];
+            if (userInCookie != null)
             {
-                FormsIdentity id = (FormsIdentity)context.HttpContext.User.Identity;
-                if (context.HttpContext.User.Identity.IsAuthenticated)
-                {
-                    AUser();
-                    CurrentPayInfo();
-                }
-                else
-                {
-                    context.Result = new RedirectResult("/User/Login");
-                }
+                AUser();
+                CurrentPayInfo();
             }
+            else
+            {
+                //context.Result = new RedirectResult("/User/Login");
+            }
+            //if (context.HttpContext.User != null && context.HttpContext.User.Identity.IsAuthenticated == true)
+            //{
+            //    FormsIdentity id = (FormsIdentity)context.HttpContext.User.Identity;
+            //    if (context.HttpContext.User.Identity.IsAuthenticated)
+            //    {
+            //        AUser();
+            //        CurrentPayInfo();
+            //    }
+            //    else
+            //    {
+            //        context.Result = new RedirectResult("/User/Login");
+            //    }
+            //}
           
         }
 
@@ -35,17 +45,31 @@ namespace BottleShop
         public UserModel AUser()
         {
             UserModel info = new UserModel();
-            FormsIdentity id = (FormsIdentity)User.Identity;
-            if (id.IsAuthenticated)
+            var userInCookie = Request.Cookies["bottleshop"];
+
+            if (userInCookie != null)
             {
                 JavaScriptSerializer serializer = new JavaScriptSerializer();
-                info = serializer.Deserialize<UserModel>(id.Ticket.UserData);
-                ViewBag.NAME = info.NAME;
+                info = serializer.Deserialize<UserModel>(userInCookie.Value);
+                ViewBag.NAME = HttpContext.Server.UrlDecode(info.NAME);
                 ViewBag.USERID = info.USERID;
                 ViewBag.EMAIL = info.EMAIL;
                 ViewBag.TELL = info.TELL;
             }
             return info;
+
+            //UserModel info = new UserModel();
+            //FormsIdentity id = (FormsIdentity)HttpContext.User.Identity;
+            //if (id.IsAuthenticated)
+            //{
+            //    JavaScriptSerializer serializer = new JavaScriptSerializer();
+            //    info = serializer.Deserialize<UserModel>(id.Ticket.UserData);
+            //    ViewBag.NAME = info.NAME;
+            //    ViewBag.USERID = info.USERID;
+            //    ViewBag.EMAIL = info.EMAIL;
+            //    ViewBag.TELL = info.TELL;
+            //}
+            //return info;
         }
 
         public PayInfoModel CurrentPayInfo()
@@ -55,14 +79,17 @@ namespace BottleShop
             List<PayInfoModel> list = DataType.ConvertToList<PayInfoModel>(new Dac_User().PayInfoUse(uinfo.USERID));
             if(list.Count > 0)
             {
-                model = list[0];
-                if(model.SDATE <= DateTime.Now && DateTime.Now <= model.EDATE)
+                foreach (var data in list)
                 {
-                    ViewBag.pay = "Y";
-                }
-                else
-                {
-                    ViewBag.pay = "N";
+                    if (data.SDATE <= DateTime.Now && DateTime.Now <= data.EDATE)
+                    {
+                        ViewBag.pay = "Y";
+                        model = data;
+                    }
+                    else
+                    {
+                        ViewBag.pay = "N";
+                    }
                 }
             }
             else

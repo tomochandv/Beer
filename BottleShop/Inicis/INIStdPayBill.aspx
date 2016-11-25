@@ -14,7 +14,7 @@
     </style>
 
     <!-- 이니시스 표준결제 js -->
-    <script type="text/javascript" src="https://stgstdpay.inicis.com/stdjs/INIStdPay.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="https://stdpay.inicis.com/stdjs/INIStdPay.js" charset="UTF-8"></script>
 
     <script type="text/javascript">
         function send()
@@ -26,11 +26,11 @@
 </head>
 <body bgcolor="#FFFFFF" text="#242424" leftmargin=0 topmargin=15 marginwidth=0 marginheight=0 bottommargin=0 rightmargin=0>
 	<form id="SendPayForm_id" method="post"    runat="server">   
-	<div style="padding:10px;background-color:#f3f3f3;width:100%;font-size:13px;color: #ffffff;background-color: #000000;text-align: center">
+	<div style="padding:10px;background-color:#f3f3f3;width:96%;font-size:13px;color: #ffffff;background-color: #000000;text-align: center">
 		더바틀샵 맴버십 결제
 	</div>
 	
-	<table width="650" border="0" cellspacing="0" cellpadding="0" style="padding:10px; display:none;" align="center" >
+	<table width="500" border="0" cellspacing="0" cellpadding="0" style="padding:10px; display:none;" align="center" >
 		<tr>
 			<td bgcolor="6095BC" align="center" style="padding:10px">
 				<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" style="padding:20px">                        

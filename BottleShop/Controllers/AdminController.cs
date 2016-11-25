@@ -20,6 +20,10 @@ namespace BottleShop.Controllers
         {
             return View();
         }
+        public ActionResult CreatePwd()
+        {
+            return View();
+        }
 
         public ActionResult UserList(string name = "", string id = "", int page = 1)
         {
@@ -252,7 +256,7 @@ namespace BottleShop.Controllers
             int result = 0;
             if (or_idx != 0)
             {
-                result = new Dac_Cart().OrderStatusUpdate(or_idx, status);
+                result = new Dac_Cart().OrderPrStatusUpdates(or_idx, status);
             }
             return Json(result);
         }
@@ -337,5 +341,85 @@ namespace BottleShop.Controllers
             List<NoticeModel> listModel = DataType.ConvertToList<NoticeModel>(ds.Tables[0]);
             return View(listModel);
         }
+
+        public JsonResult CurrentOrderBottle()
+        {
+            DataSet ds = new Dac_Cart().SelectCurrentProduct();
+            List<CurrentPrModel> listModel = DataType.ConvertToList<CurrentPrModel>(ds.Tables[0]);
+            List<int> list = new List<int>();
+            for (int i = 0; i < ds.Tables[1].Rows.Count; i++ )
+            {
+                list.Add(int.Parse(ds.Tables[1].Rows[i][0].ToString()));
+            }
+            if (listModel.Count > 0)
+            {
+                listModel[0].OR_IDX = list;
+            }
+            return Json(listModel);
+        }
+
+        public JsonResult StatusUpdateAll(string or_idx = "", string status = "3")
+        {
+            int result = 0;
+            if (or_idx != "")
+            {
+                string[] arror_idx = or_idx.Split(',');
+                for (int i = 0; i < arror_idx.Length; i++ )
+                {
+                    result = new Dac_Cart().OrderPrStatusUpdates(int.Parse(arror_idx[i]), status);
+                }
+            }
+            return Json(result);
+        }
+
+        public ActionResult Bill()
+        {
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+            DateTime sdate = DateTime.Now.AddDays(-7);
+            DateTime edate = DateTime.Now;
+            ViewBag.sdate = sdate;
+            ViewBag.edate = edate;
+            DataSet ds = new Dac_Cart().SelectBillList(sdate, edate);
+            for (int i = 0; i < 8; i++ )
+            {
+                string count = "No";
+                for(int j=0; j < ds.Tables[0].Rows.Count; j++)
+                {
+                    if(DateTime.Parse(ds.Tables[0].Rows[j]["INDATE"].ToString()).ToShortDateString() == sdate.AddDays(i).ToShortDateString())
+                    {
+                        count = "Yes";
+                    }
+                }
+                dic.Add(sdate.AddDays(i).ToShortDateString(), count);
+            }
+            return View(dic);
+        }
+
+        public JsonResult BillTarget()
+        {
+            DataSet ds = new Dac_Cart().SelectBilTargetlList();
+            List<AdminBillListModel> listModel = DataType.ConvertToList<AdminBillListModel>(ds.Tables[0]);
+            var newList = from p in listModel
+                          select new
+                          {
+                              IDX = p.IDX,
+                              USERID = p.USERID,
+                              PRICE = p.PRICE,
+                              SDATE = p.SDATE.ToShortDateString(),
+                              EDATE = p.EDATE.ToShortDateString(),
+                              BILLKEY = p.BILL_KEY
+                          };
+            return Json(newList.ToList());
+        }
+
+        /// <summary>
+        /// 추후 빌링실행 로직 넣어야함
+        /// </summary>
+        /// <returns></returns>
+        public RedirectResult BillRun()
+        {
+           return  Redirect(Url.Action("Bill"));
+        }
+
     }
 }

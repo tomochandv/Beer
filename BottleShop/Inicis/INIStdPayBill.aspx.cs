@@ -25,7 +25,7 @@ public partial class INIStdPayBill : System.Web.UI.Page
     private void StartINIStd()
     {
         //각 필드 설정
-        string strMid = "INIBillTst";
+        string strMid = "bthebottle";
         mid.Text = strMid;
 
         string strVersion = "1.0";
@@ -42,7 +42,7 @@ public partial class INIStdPayBill : System.Web.UI.Page
         string strCurrency = "WON";
         currency.Text = strCurrency;
 
-        string strBuyerName = AUser().NAME;
+        string strBuyerName = Server.UrlDecode(AUser().NAME);
         buyername.Text = strBuyerName;
         Textbox3.Text = strBuyerName;
 
@@ -81,7 +81,7 @@ public partial class INIStdPayBill : System.Web.UI.Page
         returnUrl.Text = strReturnUrl;
 
         // 가맹점확인을 위한 signKey 를 해쉬값으로 변경(SHA-256)
-        string signKey = "SU5JTElURV9UUklQTEVERVNfS0VZU1RS";   // 가맹점에 제공된 키(이니라이트키) (가맹점 수정후 고정) !!!절대!! 전문 데이터로 설정금지
+        string signKey = "cnl4dktVbk5YcnYxeGdOT0JCM0RIZz09";   // 가맹점에 제공된 키(이니라이트키) (가맹점 수정후 고정) !!!절대!! 전문 데이터로 설정금지
         mKey.Text = ComputeHash(signKey);
 
 
@@ -109,12 +109,18 @@ public partial class INIStdPayBill : System.Web.UI.Page
     public UserModel AUser()
     {
         UserModel info = new UserModel();
-        FormsIdentity id = (FormsIdentity)User.Identity;
-        if (id.IsAuthenticated)
-        {
-            JavaScriptSerializer serializer = new JavaScriptSerializer();
-            info = serializer.Deserialize<UserModel>(id.Ticket.UserData);
-        }
+		var userInCookie = Request.Cookies["bottleshop"];
+		if (userInCookie != null)
+		{
+			JavaScriptSerializer serializer = new JavaScriptSerializer();
+			info = serializer.Deserialize<UserModel>(userInCookie.Value);
+		}
+        //FormsIdentity id = (FormsIdentity)User.Identity;
+        //if (id.IsAuthenticated)
+        //{
+        //    JavaScriptSerializer serializer = new JavaScriptSerializer();
+        //    info = serializer.Deserialize<UserModel>(id.Ticket.UserData);
+        //}
         return info;
     }
 

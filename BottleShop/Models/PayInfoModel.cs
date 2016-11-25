@@ -19,6 +19,7 @@ namespace BottleShop
         public DateTime EDATE { get; set; }
 
         public string ISUSE { get; set; }
+        public string MOID { get; set; }
 
         public DateTime INDT { get; set; }
 

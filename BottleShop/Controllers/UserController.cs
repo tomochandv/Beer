@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using System.Web.Security;
+using Newtonsoft.Json;
 
 namespace BottleShop.Controllers
 {
@@ -41,24 +42,32 @@ namespace BottleShop.Controllers
             {
                 if(pwd == new Security().Description(list[0].PWD))
                 {
-                    string userAgent = Request.UserAgent;
-                    string ip = Request.UserHostAddress;
+                    //string userAgent = Request.UserAgent;
+                    //string ip = Request.UserHostAddress;
 
-                    new Dac_User().UserLoginHistoryInsert(list[0].USERID, ip, userAgent);
+                    //new Dac_User().UserLoginHistoryInsert(list[0].USERID, ip, userAgent);
 
-                    JavaScriptSerializer serializer = new JavaScriptSerializer();
-                    string data = serializer.Serialize(list[0]);
-                    FormsAuthenticationTicket newticket = new FormsAuthenticationTicket(1,
-                                                                      "bottleshop",
-                                                                      DateTime.Now,
-                                                                      DateTime.Now.AddDays(1),
-                                                                      false, // always persistent
-                                                                      data,
-                                                                      FormsAuthentication.FormsCookiePath);
-                    HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, FormsAuthentication.Encrypt(newticket));
-                    cookie.Expires = newticket.Expiration;
-                    Response.Cookies.Add(cookie);
-                    FormsAuthentication.GetAuthCookie("bottleshop", true);
+                    //JavaScriptSerializer serializer = new JavaScriptSerializer();
+                    //string data = serializer.Serialize(list[0]);
+                    //FormsAuthenticationTicket newticket = new FormsAuthenticationTicket(1,
+                    //                                                  "bottleshop",
+                    //                                                  DateTime.Now,
+                    //                                                  DateTime.Now.AddDays(1),
+                    //                                                  true, // always persistent
+                    //                                                  data,
+                    //                                                  FormsAuthentication.FormsCookiePath);
+                    //HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, FormsAuthentication.Encrypt(newticket));
+                    //cookie.Expires = newticket.Expiration;
+                    //Response.Cookies.Add(cookie);
+                    //FormsAuthentication.GetAuthCookie("bottleshop", true);
+                    UserModel newmodel = list[0];
+                    newmodel.NAME = Server.UrlEncode(list[0].NAME);
+                    newmodel.PWD = "";
+                    newmodel.ADDR = "";
+                    var json = JsonConvert.SerializeObject(newmodel);
+                    var userCookie = new HttpCookie("bottleshop", json);
+                    userCookie.Expires.AddDays(365);
+                    HttpContext.Response.Cookies.Add(userCookie);
                     result = true;
                 }
             }
@@ -67,7 +76,16 @@ namespace BottleShop.Controllers
 
          public RedirectResult LogOut()
          {
-             FormsAuthentication.SignOut();
+             if (Request.Cookies["bottleshop"] != null)
+             {
+                 var user = new HttpCookie("bottleshop")
+                 {
+                     Expires = DateTime.Now.AddDays(-1),
+                     Value = null
+                 };
+                 Response.Cookies.Add(user);
+             }
+             //FormsAuthentication.SignOut();
              return Redirect(Url.Action("Index","Home"));
          }
 

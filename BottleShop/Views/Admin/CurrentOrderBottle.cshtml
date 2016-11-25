@@ -1,0 +1,17 @@
+﻿@{
+    Layout = null;
+}
+
+@model List<BottleShop.OrderProductModel>
+
+@if(Model != null)
+{
+    foreach(var data in Model)
+    {
+        <tr>
+            <td>@data.PR_NAME</td>
+            <td>@data.QTY</td>
+        </tr>
+    }
+
+}

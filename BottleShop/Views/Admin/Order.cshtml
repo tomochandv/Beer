@@ -5,7 +5,26 @@
 
 <div class="row">
     <div class="col-md-12">
-        <div class="panel panel-default">
+        <div class="panel panel-primary">
+            <div class="panel-heading" id="divProduct" style="cursor:pointer;">현재 주문 들어온 제품</div>
+            <div class="panel-body" id="divBodyPr">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th style="text-align:center;">품목</th>
+                            <th style="text-align:center;">수량</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyPr"></tbody>
+                </table>
+            </div>
+            <div class="panel-footer" id="divFootPr">
+                <button type="button" class="btn btn-default btn-sm" id="txtOk">
+                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> 주문확인
+                </button>
+            </div>
+        </div>
+        <div class="panel panel-success">
             <div class="panel-body">
                 <form class="form-inline">
                     <div class="form-group">
@@ -28,7 +47,7 @@
                         <label for="txtOr">주문번호</label>
                         <input type="number" class="form-control" id="txtOr" value="@ViewBag.od">
                     </div>
-                    
+
                 </form>
             </div>
             <div class="panel-footer">
@@ -133,6 +152,8 @@
     </div>
 
 </div>
+
+<input type="hidden" id="hidOr" />
     @section script{
         
         <script type="text/javascript">
@@ -211,6 +232,43 @@
                         alert('error');
                     }
                 });
+                $('#txtOk').click(function(){
+                    var data = Common.Ajax("@Url.Action("StatusUpdateAll")", {or_idx : $('#hidOr').val() });
+                    if(data > 0){
+                        var url = "@Url.Action("Order")";
+                        location.href = url;
+                    }
+                    else{
+                        alert('error');
+                    }
+                });
+                $("#divProduct").click(function(){
+                    $('#divBodyPr, #divFootPr').slideToggle();
+                });
+                Page.CurrentPrLoad();
             });
+
+            var Page = {
+                CurrentPrLoad : function(){
+                    var data = Common.Ajax("@Url.Action("CurrentOrderBottle")");
+                    $.each(data, function(index, value){
+                        if(index == 0){
+                            $.each(value.OR_IDX, function(i, vv){
+                                if($("#hidOr").val() == ''){
+                                    $("#hidOr").val(vv);
+                                }
+                                else{
+                                    $("#hidOr").val($("#hidOr").val() + ','+vv);
+                                }
+                            });
+                        }
+                        var html = "<tr>";
+                        html += "<td>" + value.PR_NAME + "</td>";
+                        html += "<td>" + value.QTY + "</td>";
+                        html+="</tr>";
+                        $("#tbodyPr").append(html);
+                    });
+                }
+            }
         </script>
     }

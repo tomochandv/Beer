@@ -12,7 +12,8 @@
                     </strong>
                 <br />
                     주류는 법적으로 온라인 판매 배송이 금지되어있습니다.<br />따라서 절대 상품을 온라인 상으로 판매하지 않습니다.<br />
-                    주류를 선택 하실 수 있는 기능은 매장에서 재고유무를 파악하여 고객에게 알리기 위함입니다.
+                    주류를 선택 하실 수 있는 기능은 매장에서 재고유무를 파악하여 고객에게 알리기 위함입니다.<br />
+                    <span style="color: #489DE7;">맴버십 회원에게만 주문예약 할 수 있는 기능을 제공합니다.</span>
                 </div>
                 <div class="panel-body">
                     <form class="form-inline">
@@ -33,9 +34,8 @@
                             <th style="width: 50%; text-align: center;">상품명</th>
                             <th style="text-align:center;">용량(L)</th>
                             <th style="text-align:center;">수입사</th>
-                            
-                            @*<th style="text-align:center;">가격</th>*@
-                            @*<th style="text-align:center;">수량</th>*@
+                            <th style="text-align:center;">가격</th>
+                            <th style="text-align:center;">수량</th>
                             @if (@ViewBag.pay == "Y")
                             {
                                 <th>&nbsp;</th>
@@ -52,8 +52,8 @@
                                     <td>@data.PR_LITER</td>
                                     <td>@data.PR_INCOME</td>
                                     
-                                    @*<td>@string.Format("{0:###,###}", data.PR_PRICE)</td>*@
-                                    @*<td>@string.Format("{0:###,###}", data.SALE_QTY)</td>*@
+                                    <td>@string.Format("{0:###,###}", data.PR_PRICE)</td>
+                                    <td>@string.Format("{0:###,###}", data.SALE_QTY)</td>
                                     @if (@ViewBag.pay == "Y")
                                     {
                                     <td style="text-align:center;width:50px;">

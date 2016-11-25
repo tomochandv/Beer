@@ -1,0 +1,96 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model Dictionary<string, string>
+
+<div class="row">
+
+    <div class="col-md-12">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="2" style="text-align:right;">
+                        <span style="color:rosybrown;">@DateTime.Now.ToShortDateString()</span> 대상조회
+                        <button type="button" class="btn btn-default btn-sm" id="txtSearch">
+                            <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Search
+                        </button>
+                    </th>
+                </tr>
+                <tr>
+                    <th style="text-align:center;">Date</th>
+                    <th>실행여부</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count > 0)
+                {
+                    foreach (var data in Model)
+                    {
+                        <tr>
+                            <td>@data.Key</td>
+                            <td>@data.Value</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+
+    </div>
+    
+    <div class="col-md-12" id="divList" style="display:none;">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="6" style="text-align:right;">
+                        <span style="color:rosybrown;">@DateTime.Now.ToShortDateString()</span> Bill 실행
+                        <button type="button" class="btn btn-default btn-sm" id="txtRun">
+                            <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Run
+                        </button>
+                    </th>
+                </tr>
+                <tr>
+                    <th>IDX</th>
+                    <th>USERID</th>
+                    <th>PRICE</th>
+                    <th>SDATE</th>
+                    <th>EDATE</th>
+                    <th>BILLKEY</th>
+                </tr>
+            </thead>
+            <tbody id="tbody1">
+            </tbody>
+        </table>
+
+    </div>
+</div>
+@section script{
+<script type="text/javascript">
+    $(function () {
+        $("#txtSearch").click(function () {
+            var html = '';
+            var data = Common.Ajax("@Url.Action("BillTarget")");
+            if (data.length > 0) {
+                $.each(data, function (index, value) {
+                    html += '<tr>';
+                    html += '<td>' + value.IDX + '</td>';
+                    html += '<td>' + value.USERID + '</td>';
+                    html += '<td>' + value.PRICE + '</td>';
+                    html += '<td>' + value.SDATE + '</td>';
+                    html += '<td>' + value.EDATE + '</td>';
+                    html += '<td>' + value.BILLKEY + '</td>';
+                    html += '</tr>';
+                });
+                $("#tbody1").append(html);
+                $("#divList").slideToggle();
+            }
+            else {
+                alert('No');
+            }
+            
+        });
+        $("#txtRun").click(function () {
+            location.href = '@Url.Action("BillRun")';
+        });
+    });
+</script>
+}

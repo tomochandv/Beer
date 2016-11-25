@@ -9,6 +9,10 @@ using BottleShop.Dac;
 
 public partial class INIStdPayReturn : System.Web.UI.Page
 {
+    public string url = string.Empty;
+    public string paybill = string.Empty;
+    public string result = "F";
+    public string orderid = string.Empty;
     protected void Page_Load(object sender, EventArgs e)
     {
         // 여기에 사용자 코드를 배치하여 페이지를 초기화합니다.
@@ -18,6 +22,7 @@ public partial class INIStdPayReturn : System.Web.UI.Page
 
     private void StartINIStdReturn()
     {
+        BottleShop.OSIO.Log("start");
         NameValueCollection parameters = Request.Params;
 
         IEnumerator enumerator = parameters.GetEnumerator();
@@ -33,7 +38,7 @@ public partial class INIStdPayReturn : System.Web.UI.Page
 
         }
 
-        Console.WriteLine(sb.ToString());
+        //Console.WriteLine(sb.ToString());
 
 
         //#####################
@@ -53,7 +58,7 @@ public partial class INIStdPayReturn : System.Web.UI.Page
 
             String mid = parameters.Get("mid");					        // 가맹점 ID 수신 받은 데이터로 설정
 
-            String signKey = "SU5JTElURV9UUklQTEVERVNfS0VZU1RS";	    // 가맹점에 제공된 키(이니라이트키) (가맹점 수정후 고정) !!!절대!! 전문 데이터로 설정금지
+            String signKey = "cnl4dktVbk5YcnYxeGdOT0JCM0RIZz09";	    // 가맹점에 제공된 키(이니라이트키) (가맹점 수정후 고정) !!!절대!! 전문 데이터로 설정금지
 
 
             string timeTemp = "" + DateTime.UtcNow.Subtract(DateTime.MinValue.AddYears(1969)).TotalMilliseconds;
@@ -98,7 +103,7 @@ public partial class INIStdPayReturn : System.Web.UI.Page
             authMap.Add("mkey"          , mKey);		            // default=XML
             
 
-            Console.WriteLine("##승인요청 API 요청##");
+            //Console.WriteLine("##승인요청 API 요청##");
 
             try
             {
@@ -111,12 +116,12 @@ public partial class INIStdPayReturn : System.Web.UI.Page
                 //############################################################
                 //5.API 통신결과 처리(***가맹점 개발수정***)
                 //############################################################
-                Response.Write("## 승인 API 결과 ##");
+                //Response.Write("## 승인 API 결과 ##");
                 String strReplace = authResultString.Replace(",", "&").Replace(":", "=").Replace("\"", "").Replace(" ", "").Replace("\n", "").Replace("}", "").Replace("{", "");
                 System.Collections.Generic.Dictionary<string, string> resultMap = parseStringToMap(strReplace);         //문자열을 MAP형식으로 파싱
 
-                Response.Write("<pre>");
-                Response.Write("<table width='565' border='0' cellspacing='0' cellpadding='0'>");
+                //Response.Write("<pre>");
+                //Response.Write("<table width='565' border='0' cellspacing='0' cellpadding='0'>");
 
                 /*************************  결제보안 추가 START ****************************/ 
 				Dictionary<String , String> secureMap = new Dictionary<String, String>();
@@ -128,7 +133,6 @@ public partial class INIStdPayReturn : System.Web.UI.Page
 				// signature 데이터 생성 
 				String secureSignature = makeSignatureAuth(secureMap);
 				/*************************  결제보안 추가 END ****************************/
-
                 if ("0000".Equals((resultMap.ContainsKey("resultCode") ? resultMap["resultCode"] : "null")) && secureSignature.Equals(resultMap["authSignature"]))	//결제보안 추가
                 {
 
@@ -150,7 +154,15 @@ public partial class INIStdPayReturn : System.Web.UI.Page
                     checkMap.Add("charset"      , charset);		// default=UTF-8
                     checkMap.Add("format"       , format);		// default=XML
 
-                    new Dac_Cart().OrderStatusUpdate(resultMap.ContainsKey("MOID") ? resultMap["MOID"] : "", "S");
+
+                    //Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
+
+                    paybill = resultMap.ContainsKey("CARD_BillKey") ? resultMap["CARD_BillKey"] : "";
+                    orderid = resultMap.ContainsKey("MOID") ? resultMap["MOID"] : "";
+                    result = "S";
+					new Dac_Cart().OrderBillKey(orderid, paybill);
+                    //new Dac_Cart().OrderStatusUpdate(resultMap.ContainsKey("MOID") ? resultMap["MOID"] : "", "S");
+                    //new Dac_Cart().OrderBillKey(resultMap.ContainsKey("MOID") ? resultMap["MOID"] : "", resultMap.ContainsKey("CARD_BillKey") ? resultMap["CARD_BillKey"] : "");
 
                     //Response.Write("<tr><th class='td01'><p>거래 성공 여부</p></th>");
                     //Response.Write("<td class='td02'><p>성공</p></td></tr>");
@@ -164,489 +176,22 @@ public partial class INIStdPayReturn : System.Web.UI.Page
                 }
                 else
                 {
-                    new Dac_Cart().OrderStatusUpdate(resultMap.ContainsKey("MOID") ? resultMap["MOID"] : "", "F");
-                    //Response.Write("<tr><th class='td01'><p>거래 성공 여부</p></th>");
-                    //Response.Write("<td class='td02'><p>실패</p></td></tr>");
-                    //Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                    //Response.Write("<tr><th class='td01'><p>결과 코드</p></th>");
-                    //Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("resultCode") ? resultMap["resultCode"] : "null") + "</p></td></tr>");
-
-                    ////결제보안키가 다른 경우.
-                    //if (!secureSignature.Equals(resultMap["authSignature"]))
-                    //{
-                    //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                    //    Response.Write("<tr><th class='td01'><p>결과 내용</p></th>");
-                    //    Response.Write("<td class='td02'><p>* 데이터 위변조 체크 실패</p></td></tr>");
-
-                    //    //망취소
-                    //    if ("0000".Equals((resultMap.ContainsKey("resultCode") ? resultMap["resultCode"] : "null")))
-                    //    {
-                    //        throw new Exception("데이터 위변조 체크 실패");
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                    //    Response.Write("<tr><th class='td01'><p>결과 내용</p></th>");
-                    //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("resultMsg") ? resultMap["resultMsg"] : "null") + "</p></td></tr>");
-                    //}
-
+                    orderid = resultMap.ContainsKey("MOID") ? resultMap["MOID"] : "";
+                    result = "F";
+                    BottleShop.OSIO.Log("f");
+                    //new Dac_Cart().OrderStatusUpdate(resultMap.ContainsKey("MOID") ? resultMap["MOID"] : "", "F");
                 }
-
-                //공통 부분만
-                //Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //Response.Write("<tr><th class='td01'><p>거래 번호</p></th>");
-                //Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("tid") ? resultMap["tid"] : "null") + "</p></td></tr>");
-
-                //Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //Response.Write("<tr><th class='td01'><p>결제방법(지불수단)</p></th>");
-                //Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("payMethod") ? resultMap["payMethod"] : "null") + "</p></td></tr>");
-                
-                //Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //Response.Write("<tr><th class='td01'><p>결제완료금액</p></th>");
-                //Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("TotPrice") ? resultMap["TotPrice"] : "null") + "원</p></td></tr>");
-                //Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-
-                //Response.Write("<tr><th class='td01'><p>주문 번호</p></th>");
-                //Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("MOID") ? resultMap["MOID"] : "null") + "</p></td></tr>");
-                //Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-
-
-                //Response.Write("<tr><th class='td01'><p>승인날짜</p></th>");
-                //Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("applDate") ? resultMap["applDate"] : "null") + "</p></td></tr>");
-                //Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //Response.Write("<tr><th class='td01'><p>승인시간</p></th>");
-                //Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("applTime") ? resultMap["applTime"] : "null") + "</p></td></tr>");
-                //Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-
-                //if ("VBank".Equals((resultMap.ContainsKey("payMethod") ? resultMap["payMethod"] : "null")))
-                //{ //가상계좌
-
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>입금 계좌번호</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("VACT_Num") ? resultMap["VACT_Num"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>입금 은행코드</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("VACT_BankCode") ? resultMap["VACT_BankCode"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>입금 은행명</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("vactBankName") ? resultMap["vactBankName"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>예금주 명</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("VACT_Name") ? resultMap["VACT_Name"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>송금자 명</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("VACT_InputName") ? resultMap["VACT_InputName"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>송금 일자</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("VACT_Date") ? resultMap["VACT_Date"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>송금 시간</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("VACT_Time") ? resultMap["VACT_Time"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-
-                //}
-                //else if ("DirectBank".Equals((resultMap.ContainsKey("payMethod") ? resultMap["payMethod"] : "null")))
-                //{ //실시간계좌이체
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>은행코드</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("ACCT_BankCode") ? resultMap["ACCT_BankCode"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>현금영수증 발급결과코드</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("CSHR_ResultCode") ? resultMap["CSHR_ResultCode"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>현금영수증 발급구분코드</p> <font color=red><b>(0 - 소득공제용, 1 - 지출증빙용)</b></font></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("CSHR_Type") ? resultMap["CSHR_Type"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-
-                //}
-                //else if ("HPP".Equals((resultMap.ContainsKey("payMethod") ? resultMap["payMethod"] : "null")))
-                //{ //휴대폰
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>통신사</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("HPP_Corp") ? resultMap["HPP_Corp"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>결제장치</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("payDevice") ? resultMap["payDevice"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>휴대폰번호</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("HPP_Num") ? resultMap["HPP_Num"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //}
-                //else if ("KWPY".Equals((resultMap.ContainsKey("payMethod") ? resultMap["payMethod"] : "null")))
-                //{//뱅크월렛 카카오
-                //    Response.Write("<tr><th class='td01'><p>휴대폰번호</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("KWPY_CellPhone") ? resultMap["KWPY_CellPhone"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>거래금액</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("KWPY_SalesAmount") ? resultMap["KWPY_SalesAmount"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>공급가액</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("KWPY_Amount") ? resultMap["KWPY_Amount"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>부가세</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("KWPY_Tax") ? resultMap["KWPY_Tax"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>봉사료</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("KWPY_ServiceFee") ? resultMap["KWPY_ServiceFee"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-
-                //}
-                //else if ("Culture".Equals((resultMap.ContainsKey("payMethod") ? resultMap["payMethod"] : "null")))
-                //{	//문화상품권
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>문화상품권승인일자</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("applDate") ? resultMap["applDate"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>문화상품권 승인시간</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("applTime") ? resultMap["applTime"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>문화상품권 승인번호</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("applNum") ? resultMap["applNum"] : "null") + "</p></td></tr>");
-                //}
-                //else if ("DGCL".Equals((resultMap.ContainsKey("payMethod") ? resultMap["payMethod"] : "null")))
-                //{//게임문화상품권
-                //    // String sum = "0", sum2 = "0", sum3 = "0", sum4 = "0", sum5 = "0", sum6 = "0";
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>게임문화상품권승인금액</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("GAMG_ApplPrice") ? resultMap["GAMG_ApplPrice"] : "null") + "원</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>사용한 카드수</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("GAMG_Cnt") ? resultMap["GAMG_Cnt"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>사용한 카드번호</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("GAMG_Num1") ? resultMap["GAMG_Num1"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>카드잔액</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("GAMG_Price1") ? resultMap["GAMG_Price1"] : "null") + "원</p></td></tr>");
-                //    if (!"".Equals((resultMap.ContainsKey("GAMG_Num2") ? resultMap["GAMG_Num2"] : "null")))
-                //    {
-                //        Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //        Response.Write("<tr><th class='td01'><p>사용한 카드번호</p></th>");
-                //        Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("GAMG_Num2") ? resultMap["GAMG_Num2"] : "null") + "</p></td></tr>");
-                //        Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //        Response.Write("<tr><th class='td01'><p>카드잔액</p></th>");
-                //        Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("GAMG_Price2") ? resultMap["GAMG_Price2"] : "null") + "원</p></td></tr>");
-                //    }
-                //    if (!"".Equals((resultMap.ContainsKey("GAMG_Num3") ? resultMap["GAMG_Num3"] : "null")))
-                //    {
-                //        Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //        Response.Write("<tr><th class='td01'><p>사용한 카드번호</p></th>");
-                //        Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("GAMG_Num3") ? resultMap["GAMG_Num3"] : "null") + "</p></td></tr>");
-                //        Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //        Response.Write("<tr><th class='td01'><p>카드잔액</p></th>");
-                //        Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("GAMG_Price3") ? resultMap["GAMG_Price3"] : "null") + "원</p></td></tr>");
-                //    }
-                //    if (!"".Equals((resultMap.ContainsKey("GAMG_Num4") ? resultMap["GAMG_Num4"] : "null")))
-                //    {
-                //        Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //        Response.Write("<tr><th class='td01'><p>사용한 카드번호</p></th>");
-                //        Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("GAMG_Num4") ? resultMap["GAMG_Num4"] : "null") + "</p></td></tr>");
-                //        Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //        Response.Write("<tr><th class='td01'><p>카드잔액</p></th>");
-                //        Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("GAMG_Price4") ? resultMap["GAMG_Price4"] : "null") + "원</p></td></tr>");
-                //    }
-                //    if (!"".Equals((resultMap.ContainsKey("GAMG_Num5") ? resultMap["GAMG_Num5"] : "null")))
-                //    {
-                //        Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //        Response.Write("<tr><th class='td01'><p>사용한 카드번호</p></th>");
-                //        Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("GAMG_Num5") ? resultMap["GAMG_Num5"] : "null") + "</p></td></tr>");
-                //        Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //        Response.Write("<tr><th class='td01'><p>카드잔액</p></th>");
-                //        Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("GAMG_Price5") ? resultMap["GAMG_Price5"] : "null") + "원</p></td></tr>");
-                //    }
-                //    if (!"".Equals((resultMap.ContainsKey("GAMG_Num6") ? resultMap["GAMG_Num6"] : "null")))
-                //    {
-                //        Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //        Response.Write("<tr><th class='td01'><p>사용한 카드번호</p></th>");
-                //        Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("GAMG_Num6") ? resultMap["GAMG_Num6"] : "null") + "</p></td></tr>");
-                //        Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //        Response.Write("<tr><th class='td01'><p>카드잔액</p></th>");
-                //        Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("GAMG_Price6") ? resultMap["GAMG_Price6"] : "null") + "원</p></td></tr>");
-                //    }
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-
-                //}
-                //else if ("OCBPoint".Equals((resultMap.ContainsKey("payMethod") ? resultMap["payMethod"] : "null")))
-                //{ //오케이 캐쉬백
-
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>지불구분</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("PayOption") ? resultMap["PayOption"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>결제완료금액</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("applPrice") ? resultMap["applPrice"] : "null") + "원</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>OCB 카드번호</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("OCB_Num") ? resultMap["OCB_Num"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>적립 승인번호</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("OCB_SaveApplNum") ? resultMap["OCB_SaveApplNum"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>사용 승인번호</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("OCB_PayApplNum") ? resultMap["OCB_PayApplNum"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>OCB 지불 금액</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("OCB_PayPrice") ? resultMap["OCB_PayPrice"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-
-                //}
-                //else if ("GSPT".Equals((resultMap.ContainsKey("payMethod") ? resultMap["payMethod"] : "null")))
-                //{ //GSPoint
-
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>지불구분</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("PayOption") ? resultMap["PayOption"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>GS 포인트 승인금액</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("GSPT_ApplPrice") ? resultMap["GSPT_ApplPrice"] : "null") + "원</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>GS 포인트 적립금액</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("GSPT_SavePrice") ? resultMap["GSPT_SavePrice"] : "null") + "원</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>GS 포인트 지불금액</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("GSPT_PayPrice") ? resultMap["GSPT_PayPrice"] : "null") + "원</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-
-                //}
-                //else if ("UPNT".Equals((resultMap.ContainsKey("payMethod") ? resultMap["payMethod"] : "null")))
-                //{ //U-포인트
-
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>U포인트 카드번호</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("UPoint_Num") ? resultMap["UPoint_Num"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>가용포인트</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("UPoint_usablePoint") ? resultMap["UPoint_usablePoint"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>포인트지불금액</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("UPoint_ApplPrice") ? resultMap["UPoint_ApplPrice"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-
-                //}
-                //else if ("KWPY".Equals((resultMap.ContainsKey("payMethod") ? resultMap["payMethod"] : "null")))
-                //{ //뱅크월렛 카카오
-                //    Response.Write("<tr><th class='td01'><p>결제방법</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("payMethod") ? resultMap["payMethod"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>결과 코드</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("resultCode") ? resultMap["resultCode"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>결과 내용</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("resultMsg") ? resultMap["resultMsg"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>거래 번호</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("tid") ? resultMap["tid"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>주문 번호</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("orderNumber") ? resultMap["orderNumber"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>결제완료금액</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("price") ? resultMap["price"] : "null") + "원</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>사용일자</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("applDate") ? resultMap["applDate"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>사용시간</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("applTime") ? resultMap["applTime"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-
-                //}
-                //else if ("YPAY".Equals((resultMap.ContainsKey("payMethod") ? resultMap["payMethod"] : "null")))
-                //{ //엘로우 페이
-                //    //별도 응답 필드 없음
-
-                //}
-                //else if ("TEEN".Equals((resultMap.ContainsKey("payMethod") ? resultMap["payMethod"] : "null")))
-                //{//틴캐시
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>틴캐시 승인번호</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("TEEN_ApplNum") ? resultMap["TEEN_ApplNum"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>틴캐시아이디</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("TEEN_UserID") ? resultMap["TEEN_UserID"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>틴캐시승인금액</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("TEEN_ApplPrice") ? resultMap["TEEN_ApplPrice"] : "null") + "원</p></td></tr>");
-
-                //}
-                //else if ("Bookcash".Equals((resultMap.ContainsKey("payMethod") ? resultMap["payMethod"] : "null")))
-                //{//도서문화상품권
-
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>도서상품권 승인번호</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("BCSH_ApplNum") ? resultMap["BCSH_ApplNum"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>도서상품권 사용자ID</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("BCSH_UserID") ? resultMap["BCSH_UserID"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>도서상품권 승인금액</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("BCSH_ApplPrice") ? resultMap["BCSH_ApplPrice"] : "null") + "원</p></td></tr>");
-
-                //}
-                //else if ("PhoneBill".Equals((resultMap.ContainsKey("payMethod") ? resultMap["payMethod"] : "null")))
-                //{//폰빌전화결제
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>승인전화번호</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("PHNB_Num") ? resultMap["PHNB_Num"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-
-                //}
-                //else if ("Bill".Equals((resultMap.ContainsKey("payMethod") ? resultMap["payMethod"] : "null")))
-                //{//빌링결제
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>빌링키</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("CARD_BillKey") ? resultMap["CARD_BillKey"] : "null") + "</p></td></tr>");
-
-                //}
-                //else
-                //{//카드
-                //    int quota = Convert.ToInt16((resultMap.ContainsKey("CARD_Quota") ? resultMap["CARD_Quota"] : "null"));
-                //    if ((resultMap.ContainsKey("EventCode") ? resultMap["EventCode"] : "null") != null)
-                //    {
-                //        Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //        Response.Write("<tr><th class='td01'><p>이벤트 코드</p></th>");
-                //        Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("EventCode") ? resultMap["EventCode"] : "null") + "</p></td></tr>");
-                //    }
-                    
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>카드번호</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("CARD_Num") ? resultMap["CARD_Num"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>할부기간</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("CARD_Quota") ? resultMap["CARD_Quota"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-
-                //    if ("1".Equals((resultMap.ContainsKey("CARD_Interest") ? resultMap["CARD_Interest"] : "null")) || "1".Equals((resultMap.ContainsKey("EventCode") ? resultMap["EventCode"] : "null")))
-                //    {
-                //        Response.Write("<tr><th class='td01'><p>할부 유형</p></th>");
-                //        Response.Write("<td class='td02'><p>무이자</p></td></tr>");
-                //    }
-                //    else if (quota > 0 && !"1".Equals((resultMap.ContainsKey("CARD_Interest") ? resultMap["CARD_Interest"] : "null")))
-                //    {
-                //        Response.Write("<tr><th class='td01'><p>할부 유형</p></th>");
-                //        Response.Write("<td class='td02'><p>유이자 <font color='red'> *유이자로 표시되더라도 EventCode 및 EDI에 따라 무이자 처리가 될 수 있습니다.</font></p></td></tr>");
-                //    }
-
-                //    if ("1".Equals((resultMap.ContainsKey("point") ? resultMap["point"] : "null")))
-                //    {
-                //        Response.Write("<td class='td02'><p></p></td></tr>");
-                //        Response.Write("<tr><th class='td01'><p>포인트 사용 여부</p></th>");
-                //        Response.Write("<td class='td02'><p>사용</p></td></tr>");
-                //    }
-                //    else
-                //    {
-                //        Response.Write("<td class='td02'><p></p></td></tr>");
-                //        Response.Write("<tr><th class='td01'><p>포인트 사용 여부</p></th>");
-                //        Response.Write("<td class='td02'><p>미사용</p></td></tr>");
-                //    }
-
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>카드 종류</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("CARD_Code") ? resultMap["CARD_Code"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>카드 발급사</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("CARD_BankCode") ? resultMap["CARD_BankCode"] : "null") + "</p></td></tr>");
-                    
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>부분취소 가능여부</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("CARD_PRTC_CODE") ? resultMap["CARD_PRTC_CODE"] : "null") + "</p></td></tr>");
-                //    Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //    Response.Write("<tr><th class='td01'><p>체크카드 여부</p></th>");
-                //    Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("CARD_CheckFlag") ? resultMap["CARD_CheckFlag"] : "null") + "</p></td></tr>");
-
-                //    if ((resultMap.ContainsKey("OCB_Num") ? resultMap["OCB_Num"] : "null") != null && (resultMap.ContainsKey("OCB_Num") ? resultMap["OCB_Num"] : "null") != "")
-                //    {
-                //        Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //        Response.Write("<tr><th class='td01'><p>OK CASHBAG 카드번호</p></th>");
-                //        Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("OCB_Num") ? resultMap["OCB_Num"] : "null") + "</p></td></tr>");
-                //        Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //        Response.Write("<tr><th class='td01'><p>OK CASHBAG 적립 승인번호</p></th>");
-                //        Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("OCB_SaveApplNum") ? resultMap["OCB_SaveApplNum"] : "null") + "</p></td></tr>");
-                //        Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //        Response.Write("<tr><th class='td01'><p>OK CASHBAG 포인트지불금액</p></th>");
-                //        Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("OCB_PayPrice") ? resultMap["OCB_PayPrice"] : "null") + "</p></td></tr>");
-                //    }
-                //    if ((resultMap.ContainsKey("GSPT_Num") ? resultMap["GSPT_Num"] : "null") != null && (resultMap.ContainsKey("GSPT_Num") ? resultMap["GSPT_Num"] : "null") != "")
-                //    {
-                //        Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //        Response.Write("<tr><th class='td01'><p>GS&Point 카드번호</p></th>");
-                //        Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("GSPT_Num") ? resultMap["GSPT_Num"] : "null") + "</p></td></tr>");
-
-                //        Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //        Response.Write("<tr><th class='td01'><p>GS&Point 잔여한도</p></th>");
-                //        Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("GSPT_Remains") ? resultMap["GSPT_Remains"] : "null") + "</p></td></tr>");
-
-                //        Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //        Response.Write("<tr><th class='td01'><p>GS&Point 승인금액</p></th>");
-                //        Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("GSPT_ApplPrice") ? resultMap["GSPT_ApplPrice"] : "null") + "</p></td></tr>");
-                //    }
-
-                //    if ((resultMap.ContainsKey("UNPT_CardNum") ? resultMap["UNPT_CardNum"] : "null") != null && (resultMap.ContainsKey("UNPT_CardNum") ? resultMap["UNPT_CardNum"] : "null") != "")
-                //    {
-                //        Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //        Response.Write("<tr><th class='td01'><p>U-Point 카드번호</p></th>");
-                //        Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("UNPT_CardNum") ? resultMap["UNPT_CardNum"] : "null") + "</p></td></tr>");
-
-                //        Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //        Response.Write("<tr><th class='td01'><p>U-Point 가용포인트</p></th>");
-                //        Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("UPNT_UsablePoint") ? resultMap["UPNT_UsablePoint"] : "null") + "</p></td></tr>");
-
-                //        Response.Write("<tr><th class='line' colspan='2'><p></p></th></tr>");
-                //        Response.Write("<tr><th class='td01'><p>U-Point 포인트지불금액</p></th>");
-                //        Response.Write("<td class='td02'><p>" + (resultMap.ContainsKey("UPNT_PayPrice") ? resultMap["UPNT_PayPrice"] : "null") + "</p></td></tr>");
-                //    }
-                //}
-
-
-                //Response.Write("</pre>");
-
-                // 수신결과를 파싱후 resultCode가 "0000"이면 승인성공 이외 실패
-                // 가맹점에서 스스로 파싱후 내부 DB 처리 후 화면에 결과 표시
-
-                // payViewType을 popup으로 해서 결제를 하셨을 경우
-                // 내부처리후 스크립트를 이용해 opener의 화면 전환처리를 하세요
-
-                //throw new Exception("강제 Exception");
             }
             catch (Exception ex)
             {
-
-                ////####################################
-                //// 실패시 처리(***가맹점 개발수정***)
-                ////####################################
-
-                ////---- db 저장 실패시 등 예외처리----//
-                //Console.WriteLine(ex);
-
-
-                ////#####################
-                //// 망취소 API
-                ////#####################
-
-                //String netcancelResultString = processHTTP(authMap, netCancel);	// 망취소 요청 API url(고정, 임의 세팅 금지)
-
-                //Response.Write("<br/>## 망취소 API 결과 ##<br/>");
-
-                //// 취소 결과 확인
-                //Response.Write("<p>" + netcancelResultString.Replace("<", "&lt;").Replace(">", "&gt;") + "</p>");
+                BottleShop.OSIO.Log(ex.Message);
             }
 
         }
         else
         {
-            ////#############
-            //// 인증 실패시
-            ////#############
-            //Response.Write("<br/>");
-            //Response.Write("####인증실패####");
-
-            //Response.Write("<p>" + HttpUtility.UrlDecode(sb.ToString()) + "</p>");
-
+            BottleShop.OSIO.Log("11111");
         }
-
-
     }
 
 

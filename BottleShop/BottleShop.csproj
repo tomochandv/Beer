@@ -137,6 +137,13 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="bill.aspx.cs">
+      <DependentUpon>bill.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="bill.aspx.designer.cs">
+      <DependentUpon>bill.aspx</DependentUpon>
+    </Compile>
     <Compile Include="close.aspx.cs">
       <DependentUpon>close.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -162,7 +169,10 @@
     <Compile Include="LibClass\BaseController.cs" />
     <Compile Include="LibClass\DataType.cs" />
     <Compile Include="LibClass\DbHelper.cs" />
+    <Compile Include="LibClass\OSIO.cs" />
     <Compile Include="LibClass\Security.cs" />
+    <Compile Include="Models\AdminBillListModel.cs" />
+    <Compile Include="Models\CurrentPrModel.cs" />
     <Compile Include="Models\NoticeModel.cs" />
     <Compile Include="Models\OrderInfoModel.cs" />
     <Compile Include="Models\OrderProductModel.cs" />
@@ -174,6 +184,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bill.aspx" />
     <Content Include="close.aspx" />
     <Content Include="coming\cover.css" />
     <Content Include="coming\favicon.ico" />
@@ -209,6 +220,8 @@
     <Content Include="Content\nprogress.css" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="img\favicon.ico" />
+    <Content Include="img\favicon.png" />
     <Content Include="less\clean-blog.less" />
     <Content Include="less\mixins.less" />
     <Content Include="less\variables.less" />
@@ -424,6 +437,11 @@
     <Content Include="Views\Notice\View.cshtml" />
     <Content Include="Views\Pay\Mobile.cshtml" />
     <Content Include="Views\Pay\MobileResult.cshtml" />
+    <Content Include="Views\Admin\CurrentOrderBottle.cshtml" />
+    <Content Include="Views\Admin\CreatePwd.cshtml" />
+    <Content Include="Views\Pay\MobileResult2.cshtml" />
+    <Content Include="Views\Admin\Bill.cshtml" />
+    <Content Include="Views\Pay\TxModule.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -433,6 +451,17 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="INIPAY41Lib">
+      <Guid>{3088D573-9478-4A41-BA77-3C7D58CDAF5E}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

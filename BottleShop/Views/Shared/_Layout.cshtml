@@ -7,6 +7,11 @@
     <meta name="description" content="">
     <meta name="author" content="TOMOCHAN">
     <title>The Bottle Shop</title>
+    <!-- Chrome, Safari, IE -->
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <!-- Firefox, Opera (Chrome and Safari say thanks but no thanks) -->
+    <link rel="icon" href="/img/favicon.png">
     <!-- Bootstrap Core CSS -->
     <link href="~/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!-- Theme CSS -->
@@ -61,7 +66,7 @@
                     <li>
                         <a href="@Url.Action("Index","Notice")">Notice</a>
                     </li>
-                    <!--
+                 
                     <li class="dropdown">
                         <a id="logina1" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                             Want Drink?
@@ -82,16 +87,16 @@
                             </li>*@
                         </ul> 
                     </li>
-                    -->
-                    @if (User.Identity.IsAuthenticated)
+                  
+                    @if (Request.Cookies["bottleshop"] != null)
                     {
                         <li class="dropdown">
                             <a id="logina1" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Logged in @ViewBag.NAME 
                                 <span class="caret"></span></a> 
                             <ul class="dropdown-menu">
                                 <li><a href="@Url.Action("MyInfo","User")" style="color:black;">My Info</a></li>
-                                @*<li><a href="@Url.Action("Cart","User")" style="color:black;">Cart</a></li>
-                                <li><a href="@Url.Action("OrderHistory","User")" style="color:black;">Order history</a></li>*@
+                                <li><a href="@Url.Action("Cart","User")" style="color:black;">Cart</a></li>
+                                <li><a href="@Url.Action("OrderHistory","User")" style="color:black;">Order history</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a style="color:black;" href="@Url.Action("LogOut","User")">Log Out</a></li>
                             </ul>

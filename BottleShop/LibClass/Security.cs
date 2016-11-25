@@ -53,5 +53,22 @@ namespace BottleShop
                 return "";
             }
         }
+
+        public string ComputeHash(string input)
+        {
+            System.Security.Cryptography.SHA256 algorithm = System.Security.Cryptography.SHA256Managed.Create();
+            Byte[] inputBytes = Encoding.UTF8.GetBytes(input);
+            Byte[] hashedBytes = algorithm.ComputeHash(inputBytes);
+
+            StringBuilder sb = new StringBuilder();
+
+            for (int i = 0; i < hashedBytes.Length; i++)
+            {
+                sb.Append(String.Format("{0:x2}", hashedBytes[i]));
+            }
+
+
+            return sb.ToString();
+        }
     }
 }
