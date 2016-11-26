@@ -92,6 +92,12 @@ namespace BottleShop.Dac
             paramlist.Add(new Parameter(or_status, "@PTYPE", SqlDbType.VarChar));
             return ExcuteNonQuery("SP_MEMBER_PAYINFO_U1", paramlist);
         }
+        public int OrderStatusUpdate1(string moid)
+        {
+            List<Parameter> paramlist = new List<Parameter>();
+            paramlist.Add(new Parameter(moid, "@MOID", SqlDbType.VarChar));
+            return ExcuteNonQuery("SP_MEMBER_PAYINFO_U2", paramlist);
+        }
 
         public int OrderBillKey(string moid, string billkey)
         {
@@ -116,7 +122,7 @@ namespace BottleShop.Dac
 
         public DataSet SelectCurrentProduct()
         {
-            return ExcuteToDataSet("SP_MEMBER_BILL_INFO_RESULT_I", null);
+            return ExcuteToDataSet("SP_ORDER_PRODUCT_CURRENT_S", null);
         }
 
         public DataSet SelectBillList(DateTime sdate, DateTime edate)

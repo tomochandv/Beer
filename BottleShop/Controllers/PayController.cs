@@ -225,6 +225,7 @@ namespace BottleShop.Controllers
                     if (results == true)
                     {
                         new Dac_Cart().OrderStatusUpdate(list[0].MOID, "S");
+                        new Dac_Cart().OrderStatusUpdate1(list[0].MOID);
                     }
                     else
                     {
@@ -252,6 +253,7 @@ namespace BottleShop.Controllers
                     if (results == true)
                     {
                         new Dac_Cart().OrderStatusUpdate(list[0].MOID, "S");
+                        new Dac_Cart().OrderStatusUpdate1(list[0].MOID);
                         resultStr = "S";
                     }
                     else
