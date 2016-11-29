@@ -1,0 +1,33 @@
+﻿@{
+    Layout = null;
+}
+
+@model System.Data.DataSet
+
+@if(Model.Tables.Count > 0 && Model.Tables[0].Rows.Count > 0)
+{
+    for(int i=0; i < Model.Tables[0].Rows.Count; i++)
+    {
+        <tr>
+            <td>@Model.Tables[0].Rows[i]["USERID"].ToString()</td>
+            <td>@Model.Tables[0].Rows[i]["NAME"].ToString()</td>
+            <td>@Model.Tables[0].Rows[i]["TID"].ToString()</td>
+            <td>@Model.Tables[0].Rows[i]["RESULT"].ToString()</td>
+            <td>@Model.Tables[0].Rows[i]["RESULTCODE"].ToString()</td>
+            <td>@Model.Tables[0].Rows[i]["RESULTMSG"].ToString()</td>
+            <td>@Model.Tables[0].Rows[i]["AUTHCODE"].ToString()</td>
+            <td>@Model.Tables[0].Rows[i]["PGAUTHDATE"].ToString()</td>
+            <td>
+                <button type="button" class="btn btn-default btn-sm" onclick="Cancle('@Model.Tables[0].Rows[i]["TID"].ToString()');">
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> 취소
+                </button>
+            </td>
+        </tr>
+    }
+}
+else
+{
+    <tr>
+        <td colspan="9">no data.</td>
+    </tr>
+}

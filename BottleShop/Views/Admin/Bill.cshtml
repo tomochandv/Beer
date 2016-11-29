@@ -4,25 +4,33 @@
 @model Dictionary<string, string>
 
 <div class="row">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <button type="button" class="btn btn-default btn-sm" id="btnView">
+                <span class="glyphicon glyphicon-th" aria-hidden="true"></span> Toggle
+            </button>
+        </div>
+    </div>
 
-    <div class="col-md-12">
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th colspan="2" style="text-align:right;">
-                        <span style="color:rosybrown;">@DateTime.Now.ToShortDateString()</span> 대상조회
-                        <button type="button" class="btn btn-default btn-sm" id="txtSearch">
-                            <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Search
-                        </button>
-                    </th>
-                </tr>
-                <tr>
-                    <th style="text-align:center;">Date</th>
-                    <th>실행여부</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model != null && Model.Count > 0)
+    <div class="col-md-12" id="divS">
+        <div class="col-md-3">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th colspan="2" style="text-align:right;">
+                            <span style="color:rosybrown;">@DateTime.Now.ToShortDateString()</span> 대상조회
+                            <button type="button" class="btn btn-default btn-sm" id="txtSearch">
+                                <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Search
+                            </button>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th style="text-align:center;">Date</th>
+                        <th>실행여부</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Count > 0)
                 {
                     foreach (var data in Model)
                     {
@@ -32,37 +40,63 @@
                         </tr>
                     }
                 }
-            </tbody>
-        </table>
+                </tbody>
+            </table>
 
+        </div>
+        <div class="col-md-9" id="divList" style="display:none;">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th colspan="6" style="text-align:right;">
+                            <span style="color:rosybrown;">@DateTime.Now.ToShortDateString()</span> Bill 실행
+                            <button type="button" class="btn btn-default btn-sm" id="txtRun">
+                                <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Run
+                            </button>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>IDX</th>
+                        <th>USERID</th>
+                        <th>PRICE</th>
+                        <th>SDATE</th>
+                        <th>EDATE</th>
+                        <th>BILLKEY</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody1"></tbody>
+            </table>
+        </div>
     </div>
-    
-    <div class="col-md-12" id="divList" style="display:none;">
+    <div class="col-md-12">
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th colspan="6" style="text-align:right;">
-                        <span style="color:rosybrown;">@DateTime.Now.ToShortDateString()</span> Bill 실행
-                        <button type="button" class="btn btn-default btn-sm" id="txtRun">
-                            <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Run
+                    <th colspan="9" style="text-align:right;">
+                       <input type="text" id="sdate" value="@DateTime.Now.ToShortDateString()" /> ~ <input type="text" id="edate" value="@DateTime.Now.ToShortDateString()" />
+                        <button type="button" class="btn btn-default btn-sm" id="btnS">
+                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search
                         </button>
                     </th>
                 </tr>
                 <tr>
-                    <th>IDX</th>
                     <th>USERID</th>
-                    <th>PRICE</th>
-                    <th>SDATE</th>
-                    <th>EDATE</th>
-                    <th>BILLKEY</th>
+                    <th>NAME</th>
+                    <th>TID</th>
+                    <th>RESULT</th>
+                    <th>RESULTCODE</th>
+                    <th>RESULTMSG</th>
+                    <th>AUTHCODE</th>
+                    <th>PGAUTHDATE</th>
+                    <th>&nbsp;</th>
                 </tr>
             </thead>
-            <tbody id="tbody1">
-            </tbody>
+            <tbody id="tbodyResult"></tbody>
         </table>
 
     </div>
 </div>
+
 @section script{
 <script type="text/javascript">
     $(function () {
@@ -86,11 +120,49 @@
             else {
                 alert('No');
             }
-            
+
         });
         $("#txtRun").click(function () {
-            location.href = '@Url.Action("BillRun")';
+            var data = Common.Ajax("@Url.Action("BillRun")");
+            alert(data);
+            $("#btnS").click();
         });
+        $("#btnView").click(function () {
+            $("#divS").slideToggle();
+        });
+        $("#btnS").click(function () {
+            var data = Common.Ajax("@Url.Action("BillResult")", { sdate: $("#sdate").val(), edate: $("#edate").val() });
+            $("#tbodyResult").html(data);
+        });
+        
     });
+
+    @*var time = 1000* 60;// * 60;           //1초 * 60 * 60
+    setInterval("SetIntervalBill()", time);
+    function SetIntervalBill() {
+        var Now = new Date();
+        var NowTime = Now.getFullYear();
+        NowTime += '-' + Now.getMonth() + 1 ;
+        NowTime += '-' + Now.getDate();
+        NowTime += ' ' + Now.getHours();
+        NowTime += ':' + Now.getMinutes();
+        NowTime += ':' + Now.getSeconds();
+        
+        if (Now.getHours() == "22" && Now.getMinutes() == "30") {
+            var data = Common.Ajax("@Url.Action("BillTarget")");
+            if (data.length > 0) {
+                var data1 = Common.Ajax("@Url.Action("BillRun")");
+                console.log(NowTime + ' ||  S');
+            }
+            
+        }
+
+    }*@
+
+    function Cancle(tid) {
+        var data = Common.Ajax("@Url.Action("CancleBill")", {tid: tid});
+        alert(data);
+        $("#btnS").click();
+    }
 </script>
 }

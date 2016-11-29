@@ -102,13 +102,13 @@ namespace BottleShop
         public void SendEmail(string title, string body, string tomail)
         {
 
-            SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
+            SmtpClient client = new SmtpClient("smtp.worksmobile.com", 587);
             client.UseDefaultCredentials = false; // 시스템에 설정된 인증 정보를 사용하지 않는다.
             client.EnableSsl = true;  // SSL을 사용한다.
             client.DeliveryMethod = SmtpDeliveryMethod.Network; // 이걸 하지 않으면 Gmail에 인증을 받지 못한다.
-            client.Credentials = new System.Net.NetworkCredential("aka.tomochan", "xhah8469");
+            client.Credentials = new System.Net.NetworkCredential("support@thebottleshop.co.kr", "ejqkxmftiq2");
 
-            MailAddress from = new MailAddress("aka.tomochan@gmail.com", "the bottle shop", System.Text.Encoding.UTF8);
+            MailAddress from = new MailAddress("support@thebottleshop.co.kr", "the bottle shop", System.Text.Encoding.UTF8);
             MailAddress to = new MailAddress(tomail);
 
             MailMessage message = new MailMessage(from, to);

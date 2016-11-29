@@ -442,6 +442,8 @@
     <Content Include="Views\Pay\MobileResult2.cshtml" />
     <Content Include="Views\Admin\Bill.cshtml" />
     <Content Include="Views\Pay\TxModule.cshtml" />
+    <Content Include="Views\Admin\BillRun.cshtml" />
+    <Content Include="Views\Admin\BillResult.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

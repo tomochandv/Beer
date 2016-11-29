@@ -138,11 +138,47 @@ namespace BottleShop.Dac
             return ExcuteToDataSet("SP_AUTO_TARGET_S", null);
         }
 
+        public DataSet SelectBilTargetlList1()
+        {
+            return ExcuteToDataSet("SP_AUTO_TARGET_S1", null);
+        }
+
+        public int AutoBill_Insert(string userid, string ptype, float price, DateTime sdate, DateTime edate, string isuse, string moid, string billkey)
+        {
+            List<Parameter> paramlist = new List<Parameter>();
+            paramlist.Add(new Parameter(userid, "@USERID", SqlDbType.VarChar));
+            paramlist.Add(new Parameter(ptype, "@PTYPE", SqlDbType.VarChar));
+            paramlist.Add(new Parameter(price, "@PRICE", SqlDbType.Float));
+            paramlist.Add(new Parameter(sdate, "@SDATE", SqlDbType.DateTime));
+            paramlist.Add(new Parameter(edate, "@EDATE", SqlDbType.DateTime));
+            paramlist.Add(new Parameter(isuse, "@ISUSE", SqlDbType.VarChar));
+            paramlist.Add(new Parameter(moid, "@MOID", SqlDbType.VarChar));
+            paramlist.Add(new Parameter(billkey, "@BILL_KEY", SqlDbType.VarChar));
+            return ExcuteNonQuery("SP_AUTO_TARGET_BILL_I", paramlist);
+        }
+
+        public DataSet Selectautobillresult(string sdate, string edate)
+        {
+            List<Parameter> paramlist = new List<Parameter>();
+            paramlist.Add(new Parameter(sdate, "@SDATE", SqlDbType.DateTime));
+            paramlist.Add(new Parameter(edate, "@EDATE", SqlDbType.DateTime));
+            return ExcuteToDataSet("SP_AUTO_RESULT", paramlist);
+        }
+
+
         public DataSet SelectBillInfo(string moid)
         {
             List<Parameter> paramlist = new List<Parameter>();
             paramlist.Add(new Parameter(moid, "@MOID", SqlDbType.VarChar));
             return ExcuteToDataSet("SP_MEBER_BILL_INFO_S", paramlist);
+        }
+
+        public int OrderStatusUpdateCancle(string moid)
+        {
+            List<Parameter> paramlist = new List<Parameter>();
+            paramlist.Add(new Parameter(moid, "@MOID", SqlDbType.VarChar));
+            paramlist.Add(new Parameter("C", "@PTYPE", SqlDbType.VarChar));
+            return ExcuteNonQuery("SP_MEMBER_PAYINFO_U", paramlist);
         }
     }
 }
