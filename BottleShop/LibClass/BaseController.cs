@@ -74,6 +74,7 @@ namespace BottleShop
 
         public PayInfoModel CurrentPayInfo()
         {
+            ViewBag.pay = "N";
             PayInfoModel model = new PayInfoModel();
             UserModel uinfo = AUser();
             List<PayInfoModel> list = DataType.ConvertToList<PayInfoModel>(new Dac_User().PayInfoUse(uinfo.USERID));
@@ -86,15 +87,7 @@ namespace BottleShop
                         ViewBag.pay = "Y";
                         model = data;
                     }
-                    else
-                    {
-                        ViewBag.pay = "N";
-                    }
                 }
-            }
-            else
-            {
-                ViewBag.pay = "N";
             }
             return model;
         }

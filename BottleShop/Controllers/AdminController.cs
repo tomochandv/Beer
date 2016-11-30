@@ -414,7 +414,7 @@ namespace BottleShop.Controllers
         }
 
         /// <summary>
-        /// 추후 빌링실행 로직 넣어야함
+        /// 
         /// </summary>
         /// <returns></returns>
         public JsonResult BillRun()
@@ -539,6 +539,7 @@ namespace BottleShop.Controllers
             }
             return Json(result);
         }
+
 
     }
 }
