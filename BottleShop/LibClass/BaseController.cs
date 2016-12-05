@@ -82,7 +82,7 @@ namespace BottleShop
             {
                 foreach (var data in list)
                 {
-                    if (data.SDATE <= DateTime.Now && DateTime.Now <= data.EDATE)
+                    if (data.SDATE <= DateTime.Now && DateTime.Now <= data.EDATE && data.ISUSE == "S")
                     {
                         ViewBag.pay = "Y";
                         model = data;
