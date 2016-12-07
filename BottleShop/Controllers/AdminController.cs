@@ -300,6 +300,12 @@ namespace BottleShop.Controllers
             return View(listModel);
         }
 
+        public JsonResult SendPromo( string poro_code = "")
+        {
+            int row = new Dac_Promo().SendPromo(poro_code);
+            return Json(row);
+        }
+
         public ActionResult CreatePromo()
         {
             return View();

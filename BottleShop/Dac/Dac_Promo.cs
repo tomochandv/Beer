@@ -50,5 +50,12 @@ namespace BottleShop.Dac
             paramlist.Add(new Parameter(eidx, "@EIDX", SqlDbType.Int));
             return ExcuteToDataSet("SP_PROMOTION_MASTER_S", paramlist);
         }
+
+        public int SendPromo(string poro_code)
+        {
+            List<Parameter> paramlist = new List<Parameter>();
+            paramlist.Add(new Parameter(poro_code, "@PORO_CODE", SqlDbType.VarChar));
+            return ExcuteNonQuery("SP_PROMOTION_MASTER_U1", paramlist);
+        }
     }
 }

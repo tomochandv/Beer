@@ -15,6 +15,7 @@ namespace BottleShop
         public string CUSER { get; set; }
 
         public string USEID { get; set; }
+        public string SEND { get; set; }
 
         public DateTime USEDATE { get; set; }
         public int ROWNUM { get; set; }

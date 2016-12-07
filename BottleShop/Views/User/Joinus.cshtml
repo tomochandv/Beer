@@ -45,6 +45,7 @@
                         <label>생년월일 Birthday </label>
                         <input type="text" class="form-control" placeholder="생년월일 Birthday (1980-01-01)" id="birth" required data-validation-required-message="Please enter your birth day. ex: 19801121">
                         <p class="help-block text-danger"></p>
+                        <input type="hidden" id="birthC" value="N" />
                     </div>
                 </div>
                 <div class="row control-group">
@@ -175,10 +176,14 @@
             $("#birth").focusout(function () {
                 $.post("@Url.Action("Validate")", {type: 'birth', value : $("#birth").val()},  function (data) {
                     if (data == 0) {
-                        
+                        $("#birthC").val("Y");
+                    }
+                    else if (data == 404) {
+                        $("#birthC").val("N");
+                        $("#birth").next().text('유효하지 않은 형식입니다.').show();
                     }
                     else {
-                      
+                        $("#birthC").val("N");
                         $("#birth").next().text('미성년자는 가입 불가합니다.').show();
                     }
                 });
@@ -213,8 +218,8 @@
                     // additional error messages or events
                 },
                 submitSuccess: function ($form, event) {
-                    if ($("#idc").val() == "Y" && $("#emailc").val() == "Y") {
-                        var data = Common.Ajax("@Url.Action("JoinProc")", { id: $("#id").val(), pwd: $("#password").val(), name: $("#name").val(), email: $("#email").val(), tell: $("#tell").val(), birth: $("birth").val() });
+                    if ($("#idc").val() == "Y" && $("#emailc").val() == "Y" && $("#birthC").val() == "Y") {
+                        var data = Common.Ajax("@Url.Action("JoinProc")", { id: $("#id").val(), pwd: $("#password").val(), name: $("#name").val(), email: $("#email").val(), tell: $("#tell").val(), birth: $("#birth").val() });
                         $('#contactForm').trigger("reset");
                         if (data > 0) {
                             BootstrapDialog.show({
@@ -245,7 +250,7 @@
                     else {
                         BootstrapDialog.show({
                             title: 'Notify',
-                            message: 'ID와 Email을 확인하세요.',
+                            message: '모든 항목을 확인하세요.',
                             buttons: [ {
                                 label: 'Close',
                                 action: function (dialog) {

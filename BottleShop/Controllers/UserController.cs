@@ -101,19 +101,27 @@ namespace BottleShop.Controllers
                      List<UserModel> list = DataType.ConvertToList<UserModel>(new Dac_User().Login(id));
                      if (list.Count == 1)
                      {
-                        JavaScriptSerializer serializer = new JavaScriptSerializer();
-                        string data = serializer.Serialize(list[0]);
-                        FormsAuthenticationTicket newticket = new FormsAuthenticationTicket(1,
-                                                                        "bottleshop",
-                                                                        DateTime.Now,
-                                                                        DateTime.Now.AddDays(1),
-                                                                        false, // always persistent
-                                                                        data,
-                                                                        FormsAuthentication.FormsCookiePath);
-                        HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, FormsAuthentication.Encrypt(newticket));
-                        cookie.Expires = newticket.Expiration;
-                        Response.Cookies.Add(cookie);
-                        FormsAuthentication.GetAuthCookie("bottleshop", true);
+                        //JavaScriptSerializer serializer = new JavaScriptSerializer();
+                        //string data = serializer.Serialize(list[0]);
+                        //FormsAuthenticationTicket newticket = new FormsAuthenticationTicket(1,
+                        //                                                "bottleshop",
+                        //                                                DateTime.Now,
+                        //                                                DateTime.Now.AddDays(1),
+                        //                                                false, // always persistent
+                        //                                                data,
+                        //                                                FormsAuthentication.FormsCookiePath);
+                        //HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, FormsAuthentication.Encrypt(newticket));
+                        //cookie.Expires = newticket.Expiration;
+                        //Response.Cookies.Add(cookie);
+                        //FormsAuthentication.GetAuthCookie("bottleshop", true);
+                         UserModel newmodel = list[0];
+                         newmodel.NAME = Server.UrlEncode(list[0].NAME);
+                         newmodel.PWD = "";
+                         newmodel.ADDR = "";
+                         var json = JsonConvert.SerializeObject(newmodel);
+                         var userCookie = new HttpCookie("bottleshop", json);
+                         userCookie.Expires.AddDays(365);
+                         HttpContext.Response.Cookies.Add(userCookie);
                      }
                  }
              }
@@ -129,14 +137,21 @@ namespace BottleShop.Controllers
              }
              else if(type == "birth")
              {
-                 DateTime date = DateTime.ParseExact(value, "yyyy-MM-dd", CultureInfo.InvariantCulture);
-                 if(ProcGetAge(date.ToShortDateString(), true) < 20)
+                 try
                  {
-                     count = 1;
+                     DateTime date = DateTime.ParseExact(value, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                     if (ProcGetAge(date.ToShortDateString(), true) < 20)
+                     {
+                         count = 1;
+                     }
+                     else
+                     {
+                         count = 0;
+                     }
                  }
-                 else
+                 catch(Exception  ex)
                  {
-                     count = 0;
+                     count = 404;
                  }
              }
              else

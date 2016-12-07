@@ -54,6 +54,7 @@
                     <th style="text-align:center;">생성일</th>
                     <th style="text-align:center;">사용자</th>
                     <th style="text-align:center;">사용일</th>
+                    <th style="text-align:center;">발급</th>
                 </tr>
             </thead>
             <tbody>
@@ -69,6 +70,20 @@
                             <td>@data.CDATE.ToString("yyyy-MM-dd hh:mm:ss")</td>
                             <td>@data.USEID</td>
                             <td>@data.USEDATE.ToString("yyyy-MM-dd hh:mm:ss")</td>
+                            <td>
+                                @if (data.SEND == "Y")
+                                {
+                                    <button type="button" class="btn btn-danger btn-sm" disabled="disabled">
+                                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> 발급불가
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-info btn-sm" id="btnSend" data="@data.PORO_CODE">
+                                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> 발급가능
+                                    </button>
+                                }
+                            </td>
                         </tr>
                     }
                 }
@@ -121,6 +136,15 @@
                     type: BootstrapDialog.TYPE_SUCCESS,
                     message: $('<div></div>').load('@Url.Action("CreatePromo")')
                 });
+            });
+            $("#btnSend").click(function(){
+                var data = Common.Ajax("@Url.Action("SendPromo")", {poro_code:$(this).attr("data") });
+                if (data > 0) {
+                    $("#txtSearch").click();
+                }
+                else{
+                    alert('error');
+                }
             });
         });
     </script>
