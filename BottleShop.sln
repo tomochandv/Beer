@@ -5,6 +5,10 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BottleShop", "BottleShop\BottleShop.csproj", "{E5589639-657C-496C-AD7E-5F887508B0DF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Billing", "Billing\Billing.csproj", "{FE724D6B-87EF-4592-8E37-2B6D97CCAD58}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbBackup", "DbBackup\DbBackup.csproj", "{4B67B6C5-04E8-4277-A412-2563B41CB887}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{E5589639-657C-496C-AD7E-5F887508B0DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5589639-657C-496C-AD7E-5F887508B0DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5589639-657C-496C-AD7E-5F887508B0DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE724D6B-87EF-4592-8E37-2B6D97CCAD58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE724D6B-87EF-4592-8E37-2B6D97CCAD58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE724D6B-87EF-4592-8E37-2B6D97CCAD58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE724D6B-87EF-4592-8E37-2B6D97CCAD58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B67B6C5-04E8-4277-A412-2563B41CB887}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B67B6C5-04E8-4277-A412-2563B41CB887}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B67B6C5-04E8-4277-A412-2563B41CB887}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B67B6C5-04E8-4277-A412-2563B41CB887}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
