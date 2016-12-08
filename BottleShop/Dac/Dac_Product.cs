@@ -55,13 +55,14 @@ namespace BottleShop
            }
         }
 
-        public List<Parameter> CreateUpdateParameter(object pr_idx, object issale, object price, object qty)
+        public List<Parameter> CreateUpdateParameter(object pr_idx, object issale, object price, object qty, object cat)
         {
             List<Parameter> paramlist = new List<Parameter>();
             paramlist.Add(new Parameter(pr_idx, "@PR_IDX", SqlDbType.Int));
             paramlist.Add(new Parameter(issale, "@ISSALE", SqlDbType.VarChar));
             paramlist.Add(new Parameter(price, "@PRICE", SqlDbType.Float));
             paramlist.Add(new Parameter(qty, "@QTY", SqlDbType.Int));
+            paramlist.Add(new Parameter(cat, "@CAT", SqlDbType.Int));
             return paramlist;
         }
 

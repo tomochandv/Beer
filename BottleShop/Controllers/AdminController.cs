@@ -61,7 +61,7 @@ namespace BottleShop.Controllers
             ViewBag.isSale = isSale;
             return View(list);
         }
-        public JsonResult SaleUpdate(string name = "" , string value = "", string price = "", string qty = "")
+        public JsonResult SaleUpdate(string name = "" , string value = "", string price = "", string qty = "", string cat = "")
         {
             int result = 0;
             if(name != "")
@@ -71,9 +71,10 @@ namespace BottleShop.Controllers
                 string[] arrValue = value.Replace("[", "").Replace("]", "").Replace("\"", "").Split(',');
                 string[] arrprice = price.Replace("[", "").Replace("]", "").Replace("\"", "").Split(',');
                 string[] arrqty = qty.Replace("[", "").Replace("]", "").Replace("\"", "").Split(',');
+                string[] arrCat = cat.Replace("[", "").Replace("]", "").Replace("\"", "").Split(',');
                 for(int i=0; i < arrName.Length; i++)
                 {
-                    list.Add(new Dac_Product().CreateUpdateParameter(arrName[i], arrValue[i], arrprice[i], arrqty[i]));
+                    list.Add(new Dac_Product().CreateUpdateParameter(arrName[i], arrValue[i], arrprice[i], arrqty[i], arrCat[i]));
                 }
                 if (list.Count > 0)
                 {
@@ -271,10 +272,10 @@ namespace BottleShop.Controllers
 
         public ActionResult Down()
         {
-            Response.Buffer = true;
+            //Response.Buffer = true;
             Response.Clear();
             Response.AddHeader("content-disposition", "attachment; filename=DownForm.xls");
-            Response.ContentType = "application/unknown";   // 모든 파일 강제 다운로드
+            Response.ContentType = "application/octet-stream";   // 모든 파일 강제 다운로드
             Response.WriteFile(Server.MapPath("/Down/") + "DownForm.xls");
             return View();
         }

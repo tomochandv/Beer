@@ -81,7 +81,15 @@
                         <tr>
                             <td style="text-align:center;"><input type="checkbox" name="ckSale" value="@data.PR_IDX" @(data.ISSALE == "Y" ? "checked" : "") /></td>
                             <td>@data.PR_IDX</td>
-                            <td>@data.CATE_NM</td>
+                            <td>
+                                @data.CATE_NM
+                                <select name="selEC" style="display:none;">
+                                    <option value="1" @(data.CATE_NM.ToLower().Contains("wine") ? "selected" : "")>Wine</option>
+                                    <option value="2" @(data.CATE_NM.ToLower().Contains("beer") ? "selected" : "")>Beer</option>
+                                    <option value="3" @(data.CATE_NM.ToLower().Contains("whisky") ? "selected" : "")>Whisky</option>
+                                    <option value="6" @(data.CATE_NM.ToLower().Contains("spirit") ? "selected" : "")>Spirit</option>
+                                </select>
+                            </td>
                             <td>@data.PR_NAME</td>
                             <td>@data.PR_GUBUN</td>
                             <td>@data.PR_QTY</td>
@@ -96,6 +104,7 @@
                                 @string.Format("{0:###,###}", data.SALE_QTY)
                                 <input type="text" name="txtQty" value="@data.SALE_QTY" style="display:none;" />
                             </td>
+                            
                         </tr>
                     }
                 }
@@ -182,16 +191,18 @@
             var paramValue = new Array();
             var paramPrice = new Array();
             var paramQty = new Array();
+            var paramCat = new Array();
             $("[name='ckSale']").each(function(index){
                 paramName.push($(this).val());
                 paramValue.push($(this).prop("checked") == true ? "Y" : "N");
                 paramPrice.push($(this).parent().parent().children().eq(9).find("[name='txtPrice']").val());
                 paramQty.push($(this).parent().parent().children().eq(10).find("[name='txtQty']").val());
+                paramCat.push($(this).parent().parent().children().eq(2).find("[name='selEC']").val());
             });
-            console.log(paramValue);
+            console.log(paramCat);
             var data = $.ajax({
                 url :"@Url.Action("SaleUpdate")", 
-                data:{name :  JSON.stringify(paramName), value :  JSON.stringify(paramValue), price :  JSON.stringify(paramPrice), qty :  JSON.stringify(paramQty)},
+                data:{name :  JSON.stringify(paramName), value :  JSON.stringify(paramValue), price :  JSON.stringify(paramPrice), qty :  JSON.stringify(paramQty), cat: JSON.stringify(paramCat)},
                 type: 'POST',
                 success: function (data) {
                     console.log(data);
@@ -207,10 +218,10 @@
             window.open("@Url.Action("Down")");
         });
         $("#btnUpdate").click(function(){
-            $("[name='txtPrice'] , [name='txtQty'], #btnCancle").toggle();
+            $("[name='selEC'] ,[name='txtPrice'] , [name='txtQty'], #btnCancle").toggle();
         });
         $("#btnCancle").click(function(){
-            $("[name='txtPrice'] , [name='txtQty'], #btnCancle").toggle();
+            $("[name='selEC'] ,[name='txtPrice'] , [name='txtQty'], #btnCancle").toggle();
         });
     });
 </script>
