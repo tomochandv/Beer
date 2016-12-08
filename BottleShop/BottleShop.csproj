@@ -159,6 +159,7 @@
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Dac\Dac_Cart.cs" />
     <Compile Include="Dac\Dac_Notice.cs" />
+    <Compile Include="Dac\Dac_Popup.cs" />
     <Compile Include="Dac\Dac_Product.cs" />
     <Compile Include="Dac\Dac_Promo.cs" />
     <Compile Include="Dac\Dac_User.cs" />
@@ -173,10 +174,12 @@
     <Compile Include="LibClass\Security.cs" />
     <Compile Include="Models\AdminBillListModel.cs" />
     <Compile Include="Models\CurrentPrModel.cs" />
+    <Compile Include="Models\imagesviewModel.cs" />
     <Compile Include="Models\NoticeModel.cs" />
     <Compile Include="Models\OrderInfoModel.cs" />
     <Compile Include="Models\OrderProductModel.cs" />
     <Compile Include="Models\PayInfoModel.cs" />
+    <Compile Include="Models\PopupModel.cs" />
     <Compile Include="Models\ProductModel.cs" />
     <Compile Include="Models\PromoModel.cs" />
     <Compile Include="Models\StringModel.cs" />
@@ -301,6 +304,7 @@
     <Content Include="startbootstrap-clean-blog-1.1.0\vendor\jquery\jquery.js" />
     <Content Include="startbootstrap-clean-blog-1.1.0\vendor\jquery\jquery.min.js" />
     <Content Include="TABLE.sql" />
+    <Content Include="Upload\Images\KakaoTalk_20161207_235844477.jpg" />
     <Content Include="vendor\bootstrap\css\bootstrap.css" />
     <Content Include="vendor\bootstrap\css\bootstrap.min.css" />
     <Content Include="vendor\bootstrap\fonts\glyphicons-halflings-regular.svg" />
@@ -444,6 +448,9 @@
     <Content Include="Views\Pay\TxModule.cshtml" />
     <Content Include="Views\Admin\BillRun.cshtml" />
     <Content Include="Views\Admin\BillResult.cshtml" />
+    <Content Include="Views\Admin\PopUp.cshtml" />
+    <Content Include="Views\Home\Popup.cshtml" />
+    <Content Include="Views\Admin\uploadPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

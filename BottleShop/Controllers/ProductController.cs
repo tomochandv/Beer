@@ -33,16 +33,19 @@ namespace BottleShop.Controllers
             {
                 case 1:
                     bc_name = "Wine";
-                break;
+                    break;
                 case 2:
                     bc_name = "BEER";
-                break;
+                    break;
                 case 3:
                     bc_name = "Whisky";
-                break;
+                    break;
                 case 4:
                     bc_name = "Special Order";
-                break;
+                    break;
+                case 6:
+                    bc_name = "Spirit";
+                 break;
             }
            
             ViewBag.bc_name = bc_name;

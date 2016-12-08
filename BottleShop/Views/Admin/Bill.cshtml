@@ -100,6 +100,9 @@
 @section script{
 <script type="text/javascript">
     $(function () {
+        $("#navbar > ul > li").removeClass("active");
+        $("#navbar > ul > li").eq(4).addClass("active");
+
         $("#txtSearch").click(function () {
             var html = '';
             var data = Common.Ajax("@Url.Action("BillTarget")");

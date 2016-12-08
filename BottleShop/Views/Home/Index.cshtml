@@ -1,4 +1,5 @@
-﻿<div class="container">
+﻿@model List<BottleShop.PopupModel>
+<div class="container">
     <br />
     <div class="alert alert-danger" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -10,15 +11,14 @@
             <p>Membership Commerce</p>
             <p>맴버십</p>
             <ul>
-                <li>맴버십(월 2,0000원) 가입을 합니다.</li>
-                <li>어디서도 구매할 수 없는 가격의 혜택을 드립니다.</li>
+                <li>맴버십(월 20,000원) 가입을 합니다.</li>
+                <li>최저가 구매 혜택을 드립니다.</li>
             </ul>
-            <p>이용법</p>
+            <p>이용방법</p>
             <ul>
                 <li>바틀샵 유료맴버십 가입을 한다.</li>
-                <li>내가 원하는 맥주를 담는다.(재고유무를 판단 하여 재고가 없을시에는 매장에 가져다 놓기 위해서 필요합니다.)</li>
-                <li>바틀샵 매장으로 가서 아주 저렴하게 맥주를 선택후 결제한다.</li>
-                <li>집 또는 바틀샵에서 맛있게 맥주를 마신다.</li>
+                <li>내가 원하는 상품을 담는다.(재고유무를 판단 하여 재고가 없을시에는 매장에 준비해 놓기 위해서 필요합니다.)</li>
+                <li>바틀샵 매장으로 가서 아주 저렴하게 상품을 선택후 결제한다.</li>
             </ul>
         </div>
 
@@ -29,9 +29,9 @@
                     <h2 class="post-title">
                         Beer
                     </h2>
-                    <h3 class="post-subtitle">
+                    @*<h3 class="post-subtitle">
                         The First Premium Beer Bottle Shop in town
-                    </h3>
+                    </h3>*@
                 </a>
             </div>
             <hr>
@@ -40,9 +40,9 @@
             <h2 class="post-title">
                 Wine
             </h2>
-            <h3 class="post-subtitle">
+            @*<h3 class="post-subtitle">
                 The First Premium Wine Bottle Shop in town
-            </h3>
+            </h3>*@
         </a>
     </div>
     <hr>
@@ -51,29 +51,43 @@
             <h2 class="post-title">
                 Whisky
             </h2>
-            <h3 class="post-subtitle">
-                The First Premium Whisky Bottle Shop in town
-            </h3>
         </a>
     </div>
+            <hr>
+            <div class="post-preview">
+                <a href="@Url.Action("Index","Product")?bc_idx=6">
+                    <h2 class="post-title">
+                        Spirit
+                    </h2>
+                </a>
+            </div>
     <hr>
         </div>
     </div>
 </div>
 
 @section script{
-<script type="text/javascript">
-    $(function () {
-        //BootstrapDialog.show({
-        //    title: 'Notify',
-        //    message: '아직 오픈 준비중입니다.~~~~~',
-        //    buttons: [{
-        //        label: 'Close',
-        //        action: function (dialog) {
-        //            dialog.close();
-        //        }
-        //    }]
-        //});
-    })
-    </script>
+@if(Model != null && Model.Count >0)
+{
+    if(Model[0].USEYN == "Y")
+    {
+            <script type="text/javascript">
+                $(function () {
+                    BootstrapDialog.show({
+                        title: '@Model[0].TITLE',
+                        message: $('<div></div>').load('@Url.Action("Popup")'),
+                        buttons: [{
+                            label: 'Close',
+                            action: function (dialog) {
+                                dialog.close();
+                            }
+                        }]
+                    });
+                })
+            </script>
+    }
+
+}
+
+
 }

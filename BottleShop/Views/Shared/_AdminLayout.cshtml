@@ -10,6 +10,7 @@
     <title>The Bottle Shop</title>
     <!-- Bootstrap Core CSS -->
     <link href="~/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Content/bootstrap-dialog.min.css" rel="stylesheet" />
     <link href="~/Content/jquery-ui.min.css" rel="stylesheet" />
     <link href="~/Content/jquery-ui.theme.css" rel="stylesheet" />
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -41,6 +42,7 @@
                     <li><a href="@Url.Action("Bill")">Billing관리</a></li>
                     <li><a href="@Url.Action("Promo")">프로모션관리</a></li>
                     <li><a href="@Url.Action("NoticeList")">공지사항</a></li>
+                    <li><a href="@Url.Action("Popup")">팝업</a></li>
                 </ul>
             </div><!--/.nav-collapse -->
         </div>
@@ -58,11 +60,8 @@
     <script src="@Url.Content("~/Scripts/bootstrap-dialog.min.js")"></script>
     <script src="@Url.Content("~/Scripts/contact_me.js")"></script>
     <script src="@Url.Content("~/Scripts/jquery.mask.min.js")"></script>
-    <script type="text/javascript">
-        $(function () {
-
-        });
-    </script>
+   
     @RenderSection("script", false)
+
 </body>
 </html>

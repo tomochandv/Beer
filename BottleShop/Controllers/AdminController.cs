@@ -9,6 +9,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using INIPAY41Lib;
+using System.IO;
 
 namespace BottleShop.Controllers
 {
@@ -278,6 +279,7 @@ namespace BottleShop.Controllers
             return View();
         }
 
+        #region promotion
         public ActionResult Promo(int page = 1, string poro_code = "", string use = "", string useid = "", string usedate = "")
         {
             int rows = 20;
@@ -300,7 +302,7 @@ namespace BottleShop.Controllers
             return View(listModel);
         }
 
-        public JsonResult SendPromo( string poro_code = "")
+        public JsonResult SendPromo(string poro_code = "")
         {
             int row = new Dac_Promo().SendPromo(poro_code);
             return Json(row);
@@ -311,26 +313,40 @@ namespace BottleShop.Controllers
             return View();
         }
 
-        public JsonResult AddPromo(int count =0)
+        public JsonResult AddPromo(int count = 0)
         {
             int rows = new Dac_Promo().CreatePromo(count, AUser().USERID);
             return Json(rows);
-        }
+        } 
+        #endregion
 
         public ActionResult MemberShip()
         {
             return View();
         }
 
-        public ActionResult NoticeWrite()
+        #region notice
+        public ActionResult NoticeWrite(int idx = 0)
         {
-            return View();
+            ViewBag.idx = idx;
+            List<NoticeModel> listModel = new List<NoticeModel>();
+            if (idx != 0)
+            {
+                DataSet ds = new Dac_Notice().ViewNotice(idx);
+                listModel = DataType.ConvertToList<NoticeModel>(ds.Tables[0]);
+            }
+            return View(listModel);
         }
 
         [ValidateInput(false)]
-        public JsonResult NoticeSave(string title = "", string content = "")
+        public JsonResult NoticeSave(int idx = 0, string title = "", string content = "")
         {
-            int count = new Dac_Notice().SaveNotice(title, content);
+            int count = new Dac_Notice().SaveNotice(idx, title, content);
+            return Json(count);
+        }
+        public JsonResult NoticeDelete(int idx = 0)
+        {
+            int count = new Dac_Notice().DeleteNotice(idx);
             return Json(count);
         }
         public ActionResult NoticeList(int page = 1)
@@ -347,7 +363,8 @@ namespace BottleShop.Controllers
             ViewBag.Pages = Math.Ceiling(dd);
             List<NoticeModel> listModel = DataType.ConvertToList<NoticeModel>(ds.Tables[0]);
             return View(listModel);
-        }
+        } 
+        #endregion
 
         public JsonResult CurrentOrderBottle()
         {
@@ -379,6 +396,7 @@ namespace BottleShop.Controllers
             return Json(result);
         }
 
+        #region 빌링
         public ActionResult Bill()
         {
             Dictionary<string, string> dic = new Dictionary<string, string>();
@@ -387,12 +405,12 @@ namespace BottleShop.Controllers
             ViewBag.sdate = sdate;
             ViewBag.edate = edate;
             DataSet ds = new Dac_Cart().SelectBillList(sdate, edate);
-            for (int i = 0; i < 8; i++ )
+            for (int i = 0; i < 8; i++)
             {
                 string count = "No";
-                for(int j=0; j < ds.Tables[0].Rows.Count; j++)
+                for (int j = 0; j < ds.Tables[0].Rows.Count; j++)
                 {
-                    if(DateTime.Parse(ds.Tables[0].Rows[j]["INDATE"].ToString()).ToShortDateString() == sdate.AddDays(i).ToShortDateString())
+                    if (DateTime.Parse(ds.Tables[0].Rows[j]["INDATE"].ToString()).ToShortDateString() == sdate.AddDays(i).ToShortDateString())
                     {
                         count = "Yes";
                     }
@@ -428,9 +446,9 @@ namespace BottleShop.Controllers
             int count = 0;
             DataSet ds = new Dac_Cart().SelectBilTargetlList1();
             List<AdminBillListModel> listModel = DataType.ConvertToList<AdminBillListModel>(ds.Tables[0]);
-            if(listModel != null && listModel.Count > 0)
+            if (listModel != null && listModel.Count > 0)
             {
-                foreach(var data in listModel)
+                foreach (var data in listModel)
                 {
                     //TX
                     /*1. 객체 생성*/
@@ -471,7 +489,7 @@ namespace BottleShop.Controllers
                     INIpay.Destroy(ref intPInst);
                 }
             }
-           return  Json(count);
+            return Json(count);
         }
 
         public ActionResult BillResult(string sdate, string edate)
@@ -539,15 +557,55 @@ namespace BottleShop.Controllers
                 //####################
                 INIpay.Destroy(ref intPInst);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
             return Json(result);
+        } 
+        #endregion
+
+        public ActionResult PopUp()
+        {
+            List<PopupModel> listModel = new List<PopupModel>();
+            DataSet ds = new Dac_Popup().GetPopUp();
+            listModel = DataType.ConvertToList<PopupModel>(ds.Tables[0]);
+            return View(listModel);
+        }
+         [ValidateInput(false)]
+        public JsonResult PopupSave(string title = "", string content = "", string useyn = "")
+        {
+            int count = new Dac_Popup().SetPopUp(title, content, useyn);
+            return Json(count);
         }
 
-       
-
-
+         #region ckeditor images
+         public void uploadnow(HttpPostedFileWrapper upload)
+         {
+             if (upload != null)
+             {
+                 string ImageName = upload.FileName;
+                 string name = ImageName;
+                 string[] arrImageName = ImageName.Split('.');
+                 if(arrImageName.Length > 0)
+                 {
+                     string extension = arrImageName[arrImageName.Length - 1];
+                     name = string.Format("{0}.{1}",DateTime.Now.ToString("yyyyMMddHmmss"), extension);
+                 }
+                 string path = System.IO.Path.Combine(Server.MapPath("~/Upload/Images"), name);
+                 upload.SaveAs(path);
+             }
+         }
+         public ActionResult uploadPartial()
+         {
+             var appData = Server.MapPath("~/Upload/Images");
+             var images = Directory.GetFiles(appData).Select(x => new imagesviewModel
+             {
+                 Url = Url.Content("/Upload/Images/" + Path.GetFileName(x))
+             });
+             return View(images);
+         }
+        
+         #endregion
     }
 }

@@ -36,7 +36,7 @@
                 <div class="row control-group">
                     <div class="form-group col-xs-12 floating-label-form-group controls">
                         <label>Tell</label>
-                        <input type="number" class="form-control" placeholder="전화번호 Tell (01012345678)" id="tell" minlength="6" required data-validation-required-message="Please enter your Tell. ex: 01088881111">
+                        <input type="text" class="form-control" placeholder="전화번호 Tell (01012345678)" id="tell" minlength="6" maxlength="11" required data-validation-required-message="Please enter your Tell. ex: 01088881111">
                         <p class="help-block text-danger"></p>
                     </div>
                 </div>
@@ -172,6 +172,7 @@
 <script src="@Url.Content("~/Scripts/jquery.mask.min.js")"></script>
     <script type="text/javascript">
         $(function () {
+            $("#tell").mask('00000000000');
             $("#birth").mask('0000-00-00');
             $("#birth").focusout(function () {
                 $.post("@Url.Action("Validate")", {type: 'birth', value : $("#birth").val()},  function (data) {
