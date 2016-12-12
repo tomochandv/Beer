@@ -1,0 +1,102 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="container">
+    <div class="col-md-12">
+        <form>
+            <div class="form-group">
+                <label for="selEC">카테고리</label>
+                <select id="selEC" class="form-control">
+                    <option value="1">Wine</option>
+                    <option value="2">Beer</option>
+                    <option value="3">Whisky</option>
+                    <option value="6">Spirit</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="txtNm">상품명</label>
+                <input type="text" class="form-control" id="txtNm">
+            </div>
+            <div class="form-group">
+                <label for="txtCountry">제조국가</label>
+                <input type="text" class="form-control" id="txtCountry">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputFile">구분</label>
+                <input type="text" class="form-control" id="txtGubun">
+                <p class="help-block">술종류.</p>
+            </div>
+            <div class="form-group">
+                <label for="txtQty">수량</label>
+                <input type="number" class="form-control" id="txtQty" style="width:200px;">
+            </div>
+            <div class="form-group">
+                <label for="txtLiter">용량</label>
+                <input type="number" class="form-control" id="txtLiter" style="width:200px;">
+            </div>
+            <div class="form-group">
+                <label for="txtIn">수입사</label>
+                <input type="text" class="form-control" id="txtIn">
+            </div>
+            <div class="form-group">
+                <label for="txtInPrice">공급가</label>
+                <input type="number" class="form-control" id="txtInPrice" style="width:200px;">
+            </div>
+            <div class="form-group">
+                <label for="txtSellPrice">판매가</label>
+                <input type="number" class="form-control" id="txtSellPrice" style="width:200px;">
+            </div>
+            <div class="form-group">
+                <label for="txtSellQty">판매수량</label>
+                <input type="number" class="form-control" id="txtSellQty" style="width:200px;">
+            </div>
+            <button type="button" class="btn btn-default btn-danger" id="btnMinus">
+                <span class="glyphicon glyphicon-minus" aria-hidden="true"></span> 취소
+            </button>
+            <button type="button" class="btn btn-default btn-primary" id="btnAdd">
+                <span class="glyphicon glyphicon-saved" aria-hidden="true"></span> 저장
+            </button>
+        </form>
+
+    </div>
+</div>
+@section script
+{
+   <script src="@Url.Content("~/Scripts/jquery.mask.min.js")"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#navbar > ul > li").removeClass("active");
+            $("#navbar > ul > li").eq(1).addClass("active");
+        $("#txtQty, #txtLiter").mask('0000');
+        $("#txtInPrice, #txtSellPrice").mask('0000000');
+        $("#txtSellQty").mask('00');
+
+        $("#btnMinus").click(function () {
+            location.href = '@Url.Action("ProductList")';
+        });
+        $("#btnAdd").click(function () {
+            var data = Common.Ajax("@Url.Action("ProductInsert")", {
+                cat: $("#selEC").val(),
+                name: $("#txtNm").val(),
+                country: $("#txtCountry").val(),
+                gubun: $("#txtGubun").val(),
+                qty: $("#txtQty").val(),
+                liter: $("#txtLiter").val(),
+                inNm: $("#txtIn").val(),
+                price: $("#txtInPrice").val(),
+                sellPrice: $("#txtSellPrice").val(),
+                sellQty: $("#txtSellQty").val(),
+            });
+
+            if (data > 0) {
+                alert('Saved.');
+                $("input[type='text'], input[type='number']").val('');
+            }
+            else {
+                alert('fail');
+            }
+
+        });
+    });
+    </script>
+}

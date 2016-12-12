@@ -174,53 +174,53 @@
 @section script
 {
     <script type="text/javascript">
-        $(function () {
-            $("#contactForm input").not("[type=submit]").jqBootstrapValidation({
-                preventSubmit: true,
-                submitError: function ($form, event, errors) {
-                    // additional error messages or events
-                },
-                submitSuccess: function ($form, event) {
-                    var data = Common.Ajax("@Url.Action("PwdChange")", { pwd: $("#password1").val() });
-                    //submit 안일어나게
-                    event.preventDefault();
+    $(function () {
+        $("#contactForm input").not("[type=submit]").jqBootstrapValidation({
+            preventSubmit: true,
+            submitError: function ($form, event, errors) {
+                // additional error messages or events
+            },
+            submitSuccess: function ($form, event) {
+                var data = Common.Ajax("@Url.Action("PwdChange")", { pwd: $("#password1").val() });
+                //submit 안일어나게
+                event.preventDefault();
 
-                    if (data > 0) {
-                        $('#success').html("<div class='alert alert-info'>");
-                        $('#success > .alert-info').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;")
-                            .append("</button>");
-                        $('#success > .alert-info').append("<strong>비밀번호 변경 성공.");
-                        $('#success > .alert-info').append('</div>');
-                        $('#contactForm').trigger("reset");
-                    }
-                    else {
-                        $('#success').html("<div class='alert alert-danger'>");
-                        $('#success > .alert-danger').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;")
-                            .append("</button>");
-                        $('#success > .alert-danger').append("<strong>에러.");
-                        $('#success > .alert-danger').append('</div>');
-                    }
+                if (data > 0) {
+                    $('#success').html("<div class='alert alert-info'>");
+                    $('#success > .alert-info').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;")
+                        .append("</button>");
+                    $('#success > .alert-info').append("<strong>비밀번호 변경 성공.");
+                    $('#success > .alert-info').append('</div>');
+                    $('#contactForm').trigger("reset");
                 }
-            });
-            $("#btnFind").click(function () {
-                
-                
-                BootstrapDialog.show({
-                    title: '경고',
-                    message: '<p>탈퇴시 회원권 기한이 남아있어도 환불 불가합니다.</p><p>모든 자료가 영구적으로 지워지게 됩니다.<br> 그래도 하시겠습니까?</p>',
-                    buttons: [ {
-                        label: 'Close',
-                        action: function (dialog) {
-                            dialog.close();
-                        }
-                    },
-                    {
-                        label: '탈퇴',
-                        action: function (dialog) {
-                            var data = Common.Ajax("@Url.Action("DeleteAll")", null);
-                            if (data > 0) {
-                                alert('good bye ...ㅠㅠ');
-                                location.href = '@Url.Action("Index","Home")';
+                else {
+                    $('#success').html("<div class='alert alert-danger'>");
+                    $('#success > .alert-danger').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;")
+                        .append("</button>");
+                    $('#success > .alert-danger').append("<strong>에러.");
+                    $('#success > .alert-danger').append('</div>');
+                }
+            }
+        });
+        $("#btnFind").click(function () {
+
+
+            BootstrapDialog.show({
+                title: '경고',
+                message: '<p>탈퇴시 회원권 기한이 남아있어도 환불 불가합니다.</p><p>모든 자료가 영구적으로 지워지게 됩니다.<br> 그래도 하시겠습니까?</p>',
+                buttons: [ {
+                    label: 'Close',
+                    action: function (dialog) {
+                        dialog.close();
+                    }
+                },
+                {
+                    label: '탈퇴',
+                    action: function (dialog) {
+                        var data = Common.Ajax("@Url.Action("DeleteAll")", null);
+                        if (data > 0) {
+                            alert('good bye ...ㅠㅠ');
+                            location.href = '@Url.Action("Index","Home")';
                             }
                         }
                     }]
@@ -228,8 +228,23 @@
             });
 
             $("#btnPay").click(function () {
-                location.href = "@Url.Action("Pay","Pay")";
-            });
+                BootstrapDialog.show({
+                    title: '결제전 알림',
+                    message: '<p>이전에 결재하신 맴버십은 기간이 남아있어도 사용이 불가 하게 됩니다. 그래도 하시겠습니까?</p>',
+                    buttons: [ {
+                        label: 'Close',
+                        action: function (dialog) {
+                            dialog.close();
+                        }
+                    },
+                    {
+                        label: '결제진행',
+                        action: function (dialog) {
+                            location.href = "@Url.Action("Pay","Pay")";
+                        }
+                    }]
+                });
         });
+    });
     </script>
 }

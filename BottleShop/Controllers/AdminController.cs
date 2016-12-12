@@ -61,6 +61,37 @@ namespace BottleShop.Controllers
             ViewBag.isSale = isSale;
             return View(list);
         }
+
+        public ActionResult ProcuctAddView()
+        {
+            return View();
+        }
+        public JsonResult ProductInsert(int cat = 0, string name="", string country = "", string gubun = "", int qty = 0, int liter = 0, string inNm = "", 
+            int price = 0, int sellPrice = 0, int sellQty = 0)
+        {
+            int coutn = 0;
+            try
+            {
+                List<List<Parameter>> list = new List<List<Parameter>>();
+                list.Add(new Dac_Product().Createparameter(cat,
+                                name,
+                                country,
+                                gubun,
+                                qty,
+                               liter,
+                               inNm,
+                               price,
+                               sellPrice,
+                                0, "N", liter, "", sellQty));
+                new Dac_Product().ProductInsert(list);
+                coutn = 1;
+            }
+            catch(Exception ex)
+            {
+                coutn = 0;
+            }
+            return Json(coutn);
+        }
         public JsonResult SaleUpdate(string name = "" , string value = "", string price = "", string qty = "", string cat = "")
         {
             int result = 0;

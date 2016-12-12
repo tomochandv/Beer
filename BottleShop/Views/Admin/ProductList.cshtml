@@ -52,6 +52,9 @@
                 <button type="button" class="btn btn-default btn-sm btn-primary" id="txtUpdate">
                     <span class="glyphicon glyphicon-saved" aria-hidden="true"></span> 저장
                 </button>
+                <button type="button" class="btn btn-default btn-sm btn-warning" id="btnAdd">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 추가
+                </button>
             </div>
         </div>
     </div>
@@ -222,6 +225,9 @@
         });
         $("#btnCancle").click(function(){
             $("[name='selEC'] ,[name='txtPrice'] , [name='txtQty'], #btnCancle").toggle();
+        });
+        $("#btnAdd").click(function(){
+            location.href= '@Url.Action("ProcuctAddView")';
         });
     });
 </script>
