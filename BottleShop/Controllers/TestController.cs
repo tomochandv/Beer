@@ -108,5 +108,10 @@ namespace BottleShop.Controllers
             }
             return Json(result);
         }
+
+        public JsonResult Test()
+        {
+            return Json("YES");
+        }
     }
 }

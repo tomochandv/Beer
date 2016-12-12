@@ -170,6 +170,7 @@
     <Compile Include="LibClass\BaseController.cs" />
     <Compile Include="LibClass\DataType.cs" />
     <Compile Include="LibClass\DbHelper.cs" />
+    <Compile Include="LibClass\InicisBilling.cs" />
     <Compile Include="LibClass\OSIO.cs" />
     <Compile Include="LibClass\Security.cs" />
     <Compile Include="Models\AdminBillListModel.cs" />
