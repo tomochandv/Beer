@@ -1,0 +1,31 @@
+﻿@{
+    Layout = null;
+}
+
+
+<form>
+    <div class="form-group">
+        <label for="txtPName">사용자</label>
+        <input type="text" class="form-control" id="txtPName" readonly="readonly" value="@ViewBag.userId">
+    </div>
+    <div class="form-group">
+        <label for="txtSdate">시작일</label>
+        <input type="text" class="form-control" id="txtSdate" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+    </div>
+    <div class="form-group">
+        <label for="txtEdate">종료일</label>
+        <input type="text" class="form-control" id="txtEdate" value="@DateTime.Now.AddMonths(1).ToString("yyyy-MM-dd")">
+    </div>
+    <button type="button" class="btn btn-default btn-danger" id="btnMinus">
+        <span class="glyphicon glyphicon-minus" aria-hidden="true"></span> 취소
+    </button>
+    <button type="button" class="btn btn-default btn-primary" id="btnAdd">
+        <span class="glyphicon glyphicon-saved" aria-hidden="true"></span> 저장
+    </button>
+</form>
+<script src="@Url.Content("~/Scripts/jquery.mask.min.js")"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#txtSdate, #txtEdate").mask('0000-00-00').datepicker();
+    });
+</script>

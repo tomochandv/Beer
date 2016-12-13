@@ -44,6 +44,16 @@ namespace BottleShop.Controllers
 
             return View(list);
         }
+        public ActionResult CounterPay(string userId)
+        {
+            ViewBag.userId = userId;
+            return View();
+        }
+        public JsonResult CounterPaySave(string userId, string sdate, string edate)
+        {
+            int row = new Dac_User().UserPay(userId, "B", 20000, DateTime.Parse(sdate), DateTime.Parse(edate), "Y", "Bottleshop");
+            return Json(row);
+        }
         public ActionResult ProductList(int bc_idx = 0, string pr_name = "", int page = 1, string isSale = "")
         {
             int rows = 20;
@@ -513,7 +523,7 @@ namespace BottleShop.Controllers
                     if (resultCode == "00")
                     {
                         count++;
-                        result = "S";
+                        result = "Y";
                     }
                     new Dac_Cart().AutoBill_Insert(data.USERID, "S", 20000, data.SDATE.AddDays(1), data.EDATE.AddMonths(1), result, INIpay.GetResult(ref intPInst, "tid"), data.BILL_KEY);
                     new Dac_Cart().OrderBillResult(data.BILL_KEY, INIpay.GetResult(ref intPInst, "tid"), INIpay.GetResult(ref intPInst, "resultcode"), INIpay.GetResult(ref intPInst, "resultmsg"),

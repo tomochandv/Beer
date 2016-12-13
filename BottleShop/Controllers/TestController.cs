@@ -46,13 +46,13 @@ namespace BottleShop.Controllers
             //{
             //    //MessageBox.Show(ex.ToString());
             //}
-            
+            ViewBag.sss = new Security().Description("DC0Xdral4s2mJcoNietWvdqDu7pYPIyKokFW/NPMsx3WDPEvB8j4bJhGYdTabytH2G8CcEoZhcQ4bmSSngo7NpssTvVdOPRnBt+Zg47hez1Dlov2Hi5glKQY0S/yoHFDFGUeTfaX/CM2dtfE3CIGk9wP4W3M94X8kmDyMdHHXkHXaPt7Xq59WXfUN5BOi/t3tG0Xr5JdYNiiEdbr4xmh3mFGlNUmIdohq6OVhI10CF0wsDv5Q5q1OW4fMxIIk9TPgP32KBe2UtIqXGo/qxjvIBYbTHBBfFJG/NfD0e2iwk4mq2ff9M1n74M/qJXE/+aIUUZZBF5Zpg7NaCo7UG7xPA==");
             ViewBag.pwd = new Security().Encription(pwd == "" ? "0" : pwd);
             return View();
         }
         public JsonResult BillApi(string key)
         {
-            string result = string.Empty;
+            string result = "N";
             if (new Security().Description(key) == "apiqwe123!@#")
             {
                 int count = 0;
@@ -93,6 +93,7 @@ namespace BottleShop.Controllers
                         if (resultCode == "00")
                         {
                             count++;
+                            result = "Y";
                         }
                         new Dac_Cart().AutoBill_Insert(data.USERID, "S", 20000, data.SDATE.AddDays(1), data.EDATE.AddMonths(1), result, INIpay.GetResult(ref intPInst, "tid"), data.BILL_KEY);
                         new Dac_Cart().OrderBillResult(data.BILL_KEY, INIpay.GetResult(ref intPInst, "tid"), INIpay.GetResult(ref intPInst, "resultcode"), INIpay.GetResult(ref intPInst, "resultmsg"),

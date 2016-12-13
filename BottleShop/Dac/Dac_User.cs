@@ -48,7 +48,7 @@ namespace BottleShop.Dac
             paramArray.Add(new Parameter(price, "@PRICE", SqlDbType.Float));
             paramArray.Add(new Parameter(sdate, "@SDATE", SqlDbType.DateTime));
             paramArray.Add(new Parameter(edate, "@EDATE", SqlDbType.DateTime));
-            paramArray.Add(new Parameter(ptype, "@ISUSE", SqlDbType.VarChar));
+            paramArray.Add(new Parameter(use, "@ISUSE", SqlDbType.VarChar));
             paramArray.Add(new Parameter(moid, "@MOID", SqlDbType.VarChar));
 
             return ExcuteNonQuery("SP_MEMBER_PAYINFO_I", paramArray);
@@ -93,8 +93,8 @@ namespace BottleShop.Dac
             List<Parameter> paramArray = new List<Parameter>();
             paramArray.Add(new Parameter(sidx, "@SINDEX", SqlDbType.Int));
             paramArray.Add(new Parameter(eidx, "@EINDEX", SqlDbType.Int));
-            paramArray.Add(new Parameter(name, "@USERID", SqlDbType.VarChar));
-            paramArray.Add(new Parameter(id, "@NAME", SqlDbType.VarChar));
+            paramArray.Add(new Parameter(id, "@USERID", SqlDbType.VarChar));
+            paramArray.Add(new Parameter(name, "@NAME", SqlDbType.VarChar));
             return ExcuteToDataSet("SP_MEMBER_INFO_S2", paramArray);
         }
     }

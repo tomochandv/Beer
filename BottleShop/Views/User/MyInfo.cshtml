@@ -104,8 +104,8 @@
                                <th style="text-align:center;">사용기간</th>
                                <th style="text-align:center;">결재금액</th>
                                <th style="text-align:center;">결재일</th>
-                               <th style="text-align:center;">결재상태</th>
-                               <th style="text-align:center;">자격여부</th>
+                               <th style="text-align:center;">결재상태/종류</th>
+                               <th style="text-align:center;">사용여부</th>
                            </tr>
                        </thead>
                         <tbody>
@@ -142,9 +142,13 @@
                                         {
                                             <span>결재실패</span>
                                         }
+                                        else if (data.PTYPE == "B")
+                                        {
+                                            <span>현장결재</span>
+                                        }
                                     </td>
                                     <td>
-                                        @if (data.ISUSE == "S" || data.ISUSE == "P")
+                                        @if (data.ISUSE == "S" || data.ISUSE == "P" || data.ISUSE == "Y")
                                         {
                                             <span>사용중</span>
                                         }

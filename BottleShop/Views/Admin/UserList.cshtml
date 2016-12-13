@@ -51,7 +51,8 @@
                             <td>@data.BIRTH</td>
                             <td>@data.EMAIL</td>
                             <td>
-                                <button name="btnView" value="@data.USERID">결재내역</button>
+                                <button name="btnView" class="btn btn-default" value="@data.USERID">결재내역</button>
+                                <button name="btnPay" class="btn btn-primary" value="@data.USERID">현장결제</button>
                             </td>
                         </tr>
                     }
@@ -124,6 +125,48 @@
                     message: $('<div></div>').load('@Url.Action("ViewPay")?userid=' + $(this).val())
                 });
             });
+            $("[name='btnPay']").click(function(){
+                BootstrapDialog.show({
+                    title : '현장결제',
+                    size: BootstrapDialog.SIZE_LARGE,
+                    draggable: true,
+                    closable: true,
+                    type: BootstrapDialog.TYPE_SUCCESS,
+                    message: $('<div></div>').load('@Url.Action("CounterPay")?userid=' + $(this).val()),
+                    buttons: [{
+                        label: 'Close',
+                        action: function(dialogRef) {
+                            dialogRef.close();
+                        }
+                    },{
+                        label :'저장',
+                        action : function(dialogRef){
+                            if(Page.Pay() == 'S'){
+                                dialogRef.close();
+                            }
+                        }
+                    }]
+                });
+            });
         });
+
+        var Page = {
+            Pay : function(){
+                alert( $("#txtName").val());
+                var data = Common.Ajax("@Url.Action("CounterPaySave")", {
+                    userId: $("#txtPName").val(),
+                    sdate: $("#txtSdate").val(),
+                    edate: $("#txtEdate").val()
+                });
+                if (data > 0) {
+                    alert('Saved.');
+                    return "S";
+                }
+                else {
+                    alert('fail');
+                    return "F";
+                }
+            }
+        }
     </script>
 }

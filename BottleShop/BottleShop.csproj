@@ -453,6 +453,7 @@
     <Content Include="Views\Home\Popup.cshtml" />
     <Content Include="Views\Admin\uploadPartial.cshtml" />
     <Content Include="Views\Admin\ProcuctAddView.cshtml" />
+    <Content Include="Views\Admin\CounterPay.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

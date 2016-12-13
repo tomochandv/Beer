@@ -144,7 +144,7 @@
                                         <br />성명 :심민섭
                                         <br />직책 :CTO
                                         <br />직급 :CTO
-                                        <br />연락처 :02-797-6425, aka.tomochan@gmail.com
+                                        <br />연락처 :02-797-6425, admin@thebottleshop.co.kr
 
                                         <br />② 정보주체께서는 더바틀샵(‘thebottleshop.co.kr’이하 ‘thebottleshop) 의 서비스(또는 사업)을 이용하시면서 발생한 모든 개인정보 보호 관련 문의, 불만처리, 피해구제 등에 관한 사항을 개인정보 보호책임자 및 담당부서로 문의하실 수 있습니다. 더바틀샵(‘thebottleshop.co.kr’이하 ‘thebottleshop) 은(는) 정보주체의 문의에 대해 지체 없이 답변 및 처리해드릴 것입니다.
                                     </p></br></br>
@@ -160,7 +160,7 @@
                 <div id="success"></div>
                 <div class="row">
                     <div class="form-group col-xs-12">
-                        <button type="submit" class="btn btn-default btn-lg btn-primary"><i class="fa fa-ticket" aria-hidden="true"></i> 약관동의 및 가입(Terms Agee & Join)</button>
+                        <button type="submit" class="btn btn-default btn-lg btn-primary"><i class="fa fa-ticket" aria-hidden="true"></i> 약관동의 및 가입(Terms Agree & Join)</button>
                     </div>
                 </div>
             </form>
@@ -181,11 +181,11 @@
                     }
                     else if (data == 404) {
                         $("#birthC").val("N");
-                        $("#birth").next().text('유효하지 않은 형식입니다.').show();
+                        $("#birth").next().text('유효하지 않은 형식입니다. enable format').show();
                     }
                     else {
                         $("#birthC").val("N");
-                        $("#birth").next().text('미성년자는 가입 불가합니다.').show();
+                        $("#birth").next().text('미성년자는 가입 불가합니다. only adults.').show();
                     }
                 });
             });
@@ -198,7 +198,7 @@
                     }
                     else {
                         $("#idc").val("N");
-                        $("#id").next().text('이미 존재하는 ID 입니다.').show();
+                        $("#id").next().text('이미 존재하는 ID 입니다. already exsist Id.').show();
                     }
                 });
             });
@@ -209,7 +209,7 @@
                     }
                     else {
                         $("#emailc").val("N");
-                        $("#email").next().text('이미 존재하는 Email 입니다.').show();
+                        $("#email").next().text('이미 존재하는 Email 입니다. already exsist email.').show();
                     }
                 });
             });
@@ -225,7 +225,7 @@
                         if (data > 0) {
                             BootstrapDialog.show({
                                 title: 'Notify',
-                                message: '가입 완료. 맴버십 결재를 진행 하여주세요.',
+                                message: '가입 완료. 맴버십 결재를 진행 하여주세요. welcome bottle shop member.',
                                 buttons: [{
                                     label: 'Close',
                                     action: function (dialog) {
@@ -244,14 +244,14 @@
                             $('#success').html("<div class='alert alert-danger'>");
                             $('#success > .alert-danger').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>Close;")
                                 .append("</button>");
-                            $('#success > .alert-danger').append("<strong>회원가입 실패. 다시 하세요.");
+                            $('#success > .alert-danger').append("<strong>회원가입 실패. 다시 하세요. fail. try again.");
                             $('#success > .alert-danger').append('</div>');
                         }
                     }
                     else {
                         BootstrapDialog.show({
                             title: 'Notify',
-                            message: '모든 항목을 확인하세요.',
+                            message: '모든 항목을 확인하세요. all input text.',
                             buttons: [ {
                                 label: 'Close',
                                 action: function (dialog) {
