@@ -79,7 +79,7 @@ namespace BottleShop.Controllers
             ViewBag.Moid = "order" + DateTime.Now.ToString("yyyyMMddhhmmssfff");
             ViewBag.IDD = new Security().Encription(ViewBag.USERID);
             ViewBag.timestmap = DateTime.Now.ToString("yyyyMMddHHmmss");
-            new Dac_User().UserPay(AUser().USERID, "R", 20000, DateTime.Now, DateTime.Now.AddMonths(1), "Y", ViewBag.Moid);
+            new Dac_User().UserPay(AUser().USERID, "R", 20000, DateTime.Now, DateTime.Now.AddMonths(1), "N", ViewBag.Moid);
             return View();
         }
 

@@ -126,6 +126,6 @@ public partial class INIStdPayBill : System.Web.UI.Page
 
     public void InsertPayInfo(string moid, int price, DateTime stime, DateTime edate)
     {
-        new Dac_User().UserPay(AUser().USERID, "R", price, stime, edate, "Y", moid);
+        new Dac_User().UserPay(AUser().USERID, "R", price, stime, edate, "N", moid);
     }
 }

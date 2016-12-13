@@ -462,6 +462,20 @@ namespace BottleShop.Controllers
             return View(dic);
         }
 
+        public ActionResult Bill1(string sdate = "", string edate = "", string userid= "", string name = "", string iscancle = "")
+        {
+            ViewBag.tsdate = sdate;
+            ViewBag.tedate = edate;
+            ViewBag.tid = userid;
+            ViewBag.tname = name;
+            ViewBag.tcancle = iscancle;
+            DateTime nsdate = DateTime.Parse(sdate == "" ? DateTime.Now.ToShortDateString() + " 00:00:00" : sdate + " 00:00:00");
+            DateTime nedate = DateTime.Parse(edate == "" ? DateTime.Now.ToShortDateString() + " 23:59:59" : edate + " 23:59:59");
+            DataSet ds = new Dac_Cart().SelectTotalBill(userid, name, nsdate, nedate, iscancle);
+
+            return View(ds.Tables[0]);
+        }
+
         public JsonResult BillTarget()
         {
             DataSet ds = new Dac_Cart().SelectBilTargetlList();
@@ -540,7 +554,7 @@ namespace BottleShop.Controllers
             return View(ds);
         }
 
-        public JsonResult CancleBill(string tid)
+        public JsonResult CancleBill(string tid,string moid)
         {
             string result = "F";
             try
@@ -582,7 +596,7 @@ namespace BottleShop.Controllers
                 if (INIpay.GetResult(ref intPInst, "resultcode") == "00")
                 {
                     result = "S";
-                    new Dac_Cart().OrderStatusUpdateCancle(tid);
+                    new Dac_Cart().OrderStatusUpdateCancle(moid);
                     new Dac_Cart().OrderBillResult("C", tid, INIpay.GetResult(ref intPInst, "resultcode"), INIpay.GetResult(ref intPInst, "resultmsg"),
                        INIpay.GetResult(ref intPInst, "CancelDate"), INIpay.GetResult(ref intPInst, "CancelTime"), INIpay.GetResult(ref intPInst, "CSHR_CancelNum"));
                     INIpay.Destroy(ref intPInst);

@@ -180,5 +180,16 @@ namespace BottleShop.Dac
             paramlist.Add(new Parameter("C", "@PTYPE", SqlDbType.VarChar));
             return ExcuteNonQuery("SP_MEMBER_PAYINFO_U", paramlist);
         }
+
+        public DataSet SelectTotalBill(string userid, string name, DateTime sdate, DateTime edate, string isCancle)
+        {
+            List<Parameter> paramlist = new List<Parameter>();
+            paramlist.Add(new Parameter(userid, "@USERID", SqlDbType.VarChar));
+            paramlist.Add(new Parameter(name, "@NAME", SqlDbType.VarChar));
+            paramlist.Add(new Parameter(sdate, "@SDATE", SqlDbType.DateTime));
+            paramlist.Add(new Parameter(edate, "@EDATE", SqlDbType.DateTime));
+            paramlist.Add(new Parameter(isCancle, "@ISCANCLE", SqlDbType.VarChar));
+            return ExcuteToDataSet("SP_TOTAL_BILL_S", paramlist);
+        }
     }
 }

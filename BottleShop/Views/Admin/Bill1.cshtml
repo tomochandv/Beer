@@ -1,0 +1,137 @@
+﻿@{
+    ViewBag.Title = "Bill1";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model System.Data.DataTable
+<style type="text/css">
+    table {
+        width: 100% !important;
+        overflow-x: scroll;
+        display: block;
+    }
+</style>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label for="txtName">이름</label>
+                        <input type="text" class="form-control" id="name" value="@ViewBag.tname">
+                    </div>
+                    <div class="form-group">
+                        <label for="txtId">아이디</label>
+                        <input type="text" class="form-control" id="userid" value="@ViewBag.tid">
+                    </div>
+                    <div class="form-group">
+                        <label for="txtId">기간</label>
+                        <input type="text" class="form-control" style="width:200px;" id="sdate" value="@ViewBag.tsdate"> ~
+                        <input type="text" class="form-control" style="width:200px;" id="edate" value="@ViewBag.tedate">
+                    </div>
+                    <div class="form-group">
+                        <label for="selType">종류</label>
+                        <select id="selType" class="form-control">
+                            <option value="">All</option>
+                            <option value="C" @( ViewBag.tcancle == "C" ? "selected" : "")>취소</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="panel-footer">
+                <button type="button" class="btn btn-default btn-sm" id="txtSearch">
+                    <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Search
+                </button>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="col-md-12">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th style="text-align:center;">Name</th>
+                    <th style="text-align:center;">USERID</th>
+                    <th style="text-align:center;">PTYPE</th>
+                    <th style="text-align:center;">PRICE</th>
+                    <th style="text-align:center;">SDATE</th>
+                    <th style="text-align:center;">EDATE</th>
+                    <th style="text-align:center;">ISUSE</th>
+                    <th style="text-align:center;">INDT</th>
+                    <th style="text-align:center;">MOID</th>
+                    <th style="text-align:center;">BILL_KEY</th>
+                    <th style="text-align:center;">TID</th>
+                    <th style="text-align:center;">RESULTCODE</th>
+                    <th style="text-align:center;">RESULTMSG</th>
+                    <th style="text-align:center;">AUTHCODE</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Rows.Count > 0)
+                {
+                    for (int i = 0; i < Model.Rows.Count; i++)
+                    {
+                        <tr>
+                            <td>@string.Format("{0}", Model.Rows[i]["Name"])</td>
+                            <td>@string.Format("{0}", Model.Rows[i]["USERID"])</td>
+                            <td>@string.Format("{0}", Model.Rows[i]["PTYPE"])</td>
+                            <td>@string.Format("{0:###,###}", Model.Rows[i]["PRICE"])</td>
+                            <td>@string.Format("{0:yyyy/MM/dd}", Model.Rows[i]["SDATE"])</td>
+                            <td>@string.Format("{0:yyyy/MM/dd}", Model.Rows[i]["EDATE"])</td>
+                            <td>@string.Format("{0}", Model.Rows[i]["ISUSE"])</td>
+                            <td>@string.Format("{0}", Model.Rows[i]["INDT"])</td>
+                            <td>@string.Format("{0}", Model.Rows[i]["MOID"])</td>
+                            <td>@string.Format("{0}", Model.Rows[i]["BILL_KEY"])</td>
+                            <td>@string.Format("{0}", Model.Rows[i]["TID"])</td>
+                            <td>@string.Format("{0}", Model.Rows[i]["RESULTCODE"])</td>
+                            <td>
+                                @if (Model.Rows[i]["ISCANCLE"].ToString() != "C")
+                                {
+                                    <span>@string.Format("{0}", Model.Rows[i]["RESULTMSG"])</span>
+                                }
+                                else
+                                {
+                                    <span>@string.Format("{0}", Model.Rows[i]["CANCLEMSG"])</span>
+                                }
+                           </td>
+                            <td>@string.Format("{0}", Model.Rows[i]["AUTHCODE"])</td>
+                            <td>
+                                @if (Model.Rows[i]["PTYPE"].ToString() == "S" && Model.Rows[i]["ISUSE"].ToString() == "Y" && Model.Rows[i]["ISCANCLE"].ToString() != "C")
+                                {
+                                <button type="button" class="btn btn-default btn-sm" onclick="Cancle('@Model.Rows[i]["TID"].ToString()', '@Model.Rows[i]["MOID"].ToString()');">
+                                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> 취소
+                                </button>    
+                                }
+                                
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+@section script{
+    <script type="text/javascript">
+        $(function () {
+            $("#navbar > ul > li").removeClass("active");
+            $("#navbar > ul > li").eq(4).addClass("active");
+
+            $("#txtSearch").click(function () {
+                var url = '@Url.Action("Bill1")';
+                url += '?name=' + $("#name").val();
+                url += '&userid=' + $("#userid").val();
+                url += '&sdate=' + $("#sdate").val();
+                url += '&edate=' + $("#edate").val();
+                url += '&iscancle=' + $("#selType").val();
+                location.href = url;
+            });
+        });
+        function Cancle(tid, moid) {
+            var data = Common.Ajax("@Url.Action("CancleBill")", {tid: tid, moid : moid});
+            alert(data);
+            $("#txtSearch").click();
+        }
+    </script>
+}
+
