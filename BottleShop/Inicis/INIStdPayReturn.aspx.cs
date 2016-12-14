@@ -22,7 +22,7 @@ public partial class INIStdPayReturn : System.Web.UI.Page
 
     private void StartINIStdReturn()
     {
-        BottleShop.OSIO.Log("start");
+        //BottleShop.OSIO.Log("start");
         NameValueCollection parameters = Request.Params;
 
         IEnumerator enumerator = parameters.GetEnumerator();
@@ -178,7 +178,7 @@ public partial class INIStdPayReturn : System.Web.UI.Page
                 {
                     orderid = resultMap.ContainsKey("MOID") ? resultMap["MOID"] : "";
                     result = "F";
-                    BottleShop.OSIO.Log("f");
+                    //BottleShop.OSIO.Log("f");
                     //new Dac_Cart().OrderStatusUpdate(resultMap.ContainsKey("MOID") ? resultMap["MOID"] : "", "F");
                 }
             }
@@ -190,7 +190,7 @@ public partial class INIStdPayReturn : System.Web.UI.Page
         }
         else
         {
-            BottleShop.OSIO.Log("11111");
+            //BottleShop.OSIO.Log("11111");
         }
     }
 
