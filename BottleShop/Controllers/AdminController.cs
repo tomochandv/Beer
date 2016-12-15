@@ -204,12 +204,12 @@ namespace BottleShop.Controllers
                             "",
                             dt.Rows[i]["구분"],
                             dt.Rows[i]["본수"].ToString() == "" ? "1" : dt.Rows[i]["본수"].ToString(),
-                            dt.Rows[i]["용 량(ml)"],
+                            dt.Rows[i]["용량"],
                             dt.Rows[i]["수입사"],
                             dt.Rows[i]["공급가"],
-                            dt.Rows[i]["가격"],
+                            dt.Rows[i]["회원가"],
                             //Caculate(dt.Rows[i]["공급가"], dt.Rows[i]["본수"]),
-                            0, "N", dt.Rows[i]["용 량(ml)"], "", 1, dt.Rows[i]["비회원가"]));
+                            0, "N", dt.Rows[i]["용량"], "", 1, dt.Rows[i]["정상가"]));
                     }
                 }
 
@@ -218,13 +218,17 @@ namespace BottleShop.Controllers
                 {
                     if (dt.Rows[i]["상품명"].ToString() != "")
                     {
-                        list.Add(new Dac_Product().Createparameter(2, dt.Rows[i]["상품명"], dt.Rows[i]["국가"], dt.Rows[i]["구분"],
-                            dt.Rows[i]["본수"].ToString() == "" ? "1" : dt.Rows[i]["본수"].ToString(),
-                            dt.Rows[i]["용 량(ml)"], dt.Rows[i]["수입사"],
-                            dt.Rows[i]["공급가"],
-                            dt.Rows[i]["가격"],
-                            //Caculate(dt.Rows[i]["공급가"], dt.Rows[i]["본수"]), 
-                            0, "N", dt.Rows[i]["용 량(ml)"], "", 1, dt.Rows[i]["비회원가"]));
+                        list.Add(new Dac_Product().Createparameter(3,
+                             dt.Rows[i]["상품명"],
+                             "",
+                             dt.Rows[i]["구분"],
+                             dt.Rows[i]["본수"].ToString() == "" ? "1" : dt.Rows[i]["본수"].ToString(),
+                             dt.Rows[i]["용량"],
+                             dt.Rows[i]["수입사"],
+                             dt.Rows[i]["공급가"],
+                             dt.Rows[i]["회원가"],
+                            //Caculate(dt.Rows[i]["공급가"], dt.Rows[i]["본수"]),
+                             0, "N", dt.Rows[i]["용량"], "", 1, dt.Rows[i]["정상가"]));
                     }
                 }
 
@@ -233,13 +237,17 @@ namespace BottleShop.Controllers
                 {
                     if (dt.Rows[i]["상품명"].ToString() != "")
                     {
-                        list.Add(new Dac_Product().Createparameter(2, dt.Rows[i]["상품명"], "", "",
-                            dt.Rows[i]["단위"].ToString() == "" ? "1" : dt.Rows[i]["단위"].ToString(),
-                            dt.Rows[i]["용량"], dt.Rows[i]["수입사"],
-                            dt.Rows[i]["공급가"],
-                            dt.Rows[i]["가격"],
-                            //Caculate(dt.Rows[i]["공급가"], dt.Rows[i]["본수"]), 
-                            0, "N", dt.Rows[i]["용량"], "", 1, dt.Rows[i]["비회원가"]));
+                        list.Add(new Dac_Product().Createparameter(3,
+                              dt.Rows[i]["상품명"],
+                              "",
+                              dt.Rows[i]["구분"],
+                              dt.Rows[i]["본수"].ToString() == "" ? "1" : dt.Rows[i]["본수"].ToString(),
+                              dt.Rows[i]["용량"],
+                              dt.Rows[i]["수입사"],
+                              dt.Rows[i]["공급가"],
+                              dt.Rows[i]["회원가"],
+                            //Caculate(dt.Rows[i]["공급가"], dt.Rows[i]["본수"]),
+                              0, "N", dt.Rows[i]["용량"], "", 1, dt.Rows[i]["정상가"]));
                     }
                 }
 
@@ -323,9 +331,9 @@ namespace BottleShop.Controllers
         {
             //Response.Buffer = true;
             Response.Clear();
-            Response.AddHeader("content-disposition", "attachment; filename=DownForm.xls");
+            Response.AddHeader("content-disposition", "attachment; filename=더바틀샵_양식.xlsx");
             Response.ContentType = "application/octet-stream";   // 모든 파일 강제 다운로드
-            Response.WriteFile(Server.MapPath("/Down/") + "DownForm.xls");
+            Response.WriteFile(Server.MapPath("/Down/") + "더바틀샵_양식.xlsx");
             return View();
         }
 

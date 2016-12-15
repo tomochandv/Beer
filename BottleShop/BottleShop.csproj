@@ -233,6 +233,7 @@
     <Content Include="key\INIpayTest\mcert.pem" />
     <Content Include="key\INIpayTest\mpriv.pem" />
     <Content Include="key\pgcert.pem" />
+    <Content Include="Down\더바틀샵_양식.xlsx" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="google36aaa757820e1d83.html" />
     <Content Include="img\about-bg.jpg" />
@@ -458,7 +459,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Down\" />
     <Folder Include="Excel\" />
     <Folder Include="startbootstrap-clean-blog-1.1.0\css\" />
   </ItemGroup>
