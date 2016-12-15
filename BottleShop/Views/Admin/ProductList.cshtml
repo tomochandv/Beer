@@ -72,7 +72,8 @@
                   <th style="text-align: center; width: 5%;">용량</th>
                   <th style="text-align: center; width: 10%;">수입사</th>
                   <th style="text-align: center; width: 5%;">공급가</th>
-                  <th style="text-align: center; width: 5%;">판매가</th>
+                  <th style="text-align: center; width: 5%;">회원판매가</th>
+                  <th style="text-align: center; width: 5%;">일반가</th>
                   <th style="text-align: center; width: 5%;">판매수량</th>
               </tr>
           </thead>
@@ -102,6 +103,10 @@
                             <td>
                                 @string.Format("{0:###,###}",data.PR_PRICE)
                                 <input type="text" name="txtPrice" value="@data.PR_PRICE" style="display:none;" />
+                            </td>
+                            <td>
+                                @string.Format("{0:###,###}", data.PR_NOMEM_SALE)
+                                <input type="text" name="txtPrice1" value="@data.PR_NOMEM_SALE" style="display:none;" />
                             </td>
                             <td>
                                 @string.Format("{0:###,###}", data.SALE_QTY)
@@ -195,17 +200,20 @@
             var paramPrice = new Array();
             var paramQty = new Array();
             var paramCat = new Array();
+            var paramNoPrice = new Array();
             $("[name='ckSale']").each(function(index){
                 paramName.push($(this).val());
                 paramValue.push($(this).prop("checked") == true ? "Y" : "N");
                 paramPrice.push($(this).parent().parent().children().eq(9).find("[name='txtPrice']").val());
-                paramQty.push($(this).parent().parent().children().eq(10).find("[name='txtQty']").val());
+                paramNoPrice.push($(this).parent().parent().children().eq(10).find("[name='txtPrice1']").val());
+                paramQty.push($(this).parent().parent().children().eq(11).find("[name='txtQty']").val());
                 paramCat.push($(this).parent().parent().children().eq(2).find("[name='selEC']").val());
             });
             console.log(paramCat);
             var data = $.ajax({
                 url :"@Url.Action("SaleUpdate")", 
-                data:{name :  JSON.stringify(paramName), value :  JSON.stringify(paramValue), price :  JSON.stringify(paramPrice), qty :  JSON.stringify(paramQty), cat: JSON.stringify(paramCat)},
+                data:{name :  JSON.stringify(paramName), value :  JSON.stringify(paramValue), 
+                    price :  JSON.stringify(paramPrice), qty :  JSON.stringify(paramQty), cat: JSON.stringify(paramCat), price1 :  JSON.stringify(paramNoPrice)},
                 type: 'POST',
                 success: function (data) {
                     console.log(data);
@@ -221,10 +229,10 @@
             window.open("@Url.Action("Down")");
         });
         $("#btnUpdate").click(function(){
-            $("[name='selEC'] ,[name='txtPrice'] , [name='txtQty'], #btnCancle").toggle();
+            $("[name='selEC'] ,[name='txtPrice'] , [name='txtQty'], #btnCancle,  [name='txtPrice1']").toggle();
         });
         $("#btnCancle").click(function(){
-            $("[name='selEC'] ,[name='txtPrice'] , [name='txtQty'], #btnCancle").toggle();
+            $("[name='selEC'] ,[name='txtPrice'] , [name='txtQty'], #btnCancle,  [name='txtPrice1']").toggle();
         });
         $("#btnAdd").click(function(){
             location.href= '@Url.Action("ProcuctAddView")';

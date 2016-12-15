@@ -18,6 +18,7 @@ namespace BottleShop
         public float PR_IN_PRICE { get; set; }
         public float PR_PRICE { get; set; }
         public float PR_SALE { get; set; }
+        public float PR_NOMEM_SALE { get; set; }
         public string ISSALE { get; set; }
         public float PR_WEIGHT { get; set; }
         public string PE_DESC { get; set; }

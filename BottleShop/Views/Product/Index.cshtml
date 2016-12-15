@@ -31,11 +31,12 @@
                     <thead>
                         <tr>
    
-                            <th style="width: 50%; text-align: center;">상품명</th>
+                            <th style="width: 50%; text-align: center;">상품명(Name)</th>
                             <th style="text-align:center;">용량(L)</th>
                             <th style="text-align:center;">수입사</th>
-                            <th style="text-align:center;">가격</th>
-                            <th style="text-align:center;">수량</th>
+                            <th style="text-align:center;">회원가(Member Price)</th>
+                            <th style="text-align:center;">일반가(Price)</th>
+                            <th style="text-align:center;">수량(Qty)</th>
                             @if (@ViewBag.pay == "Y")
                             {
                                 <th>&nbsp;</th>
@@ -49,11 +50,11 @@
                             {
                                 <tr>
                                     <td>@data.PR_NAME</td>
-                                    <td>@data.PR_LITER</td>
+                                    <td style="text-align:right;">@data.PR_LITER</td>
                                     <td>@data.PR_INCOME</td>
-                                    
-                                    <td>@string.Format("{0:###,###}", data.PR_PRICE)</td>
-                                    <td>@string.Format("{0:###,###}", data.SALE_QTY)</td>
+                                    <td style="text-align:right;">@string.Format("{0:###,###}", data.PR_PRICE)</td>
+                                    <td style="text-align:right;">@string.Format("{0:###,###}", data.PR_NOMEM_SALE)</td>
+                                    <td style="text-align:right;">@string.Format("{0:###,###}", data.SALE_QTY)</td>
                                     @if (@ViewBag.pay == "Y")
                                     {
                                     <td style="text-align:center;width:50px;">
@@ -66,7 +67,11 @@
                         else
                         {
                             <tr>
-                                <td colspan="5">Sorry.. No data.</td>
+                                <td colspan="6">
+                                    <p>죄송합니다. 상품 준비중입니다.최대한 빠른시일안에 준비하겠습니다.</p>
+                                    <p>궁금하신 점은 <a her="maito:support@thebottleshop.co.kr">support@thebottleshop.co.kr</a>로 문의 바랍니다.</p>
+                                    <p>Sorry. We will prepare as soon as possible.</p>
+                                </td>
                             </tr>
                         }
                     </tbody>
