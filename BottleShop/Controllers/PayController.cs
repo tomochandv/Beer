@@ -38,14 +38,14 @@ namespace BottleShop.Controllers
                 }
             }
             ViewBag.mobile = isMobile == true ? "M" : "D";
-            //임시결재
+            //임시결제
             //new Dac_User().UserPay(AUser().USERID, "S", 20000, DateTime.Now, DateTime.Now.AddMonths(1), "Y");
             return View();
         }
 
         public ActionResult CardPayResult()
         { 
-             //임시결재
+             //임시결제
              //new Dac_User().UserPay(AUser().USERID, "S", 20000, DateTime.Now, DateTime.Now.AddMonths(1), "Y");
             return View();
         }  

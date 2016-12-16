@@ -102,9 +102,9 @@
                        <thead>
                            <tr>
                                <th style="text-align:center;">사용기간</th>
-                               <th style="text-align:center;">결재금액</th>
-                               <th style="text-align:center;">결재일</th>
-                               <th style="text-align:center;">결재상태/종류</th>
+                               <th style="text-align:center;">결제금액</th>
+                               <th style="text-align:center;">결제일</th>
+                               <th style="text-align:center;">결제상태/종류</th>
                                <th style="text-align:center;">사용여부</th>
                            </tr>
                        </thead>
@@ -124,11 +124,11 @@
                                     <td>
                                         @if(data.PTYPE == "S")
                                         {
-                                            <span>결재성공</span>
+                                            <span>결제성공</span>
                                         }
                                         else if (data.PTYPE == "C")
                                         {
-                                            <span>결재취소</span>
+                                            <span>결제취소</span>
                                         }
                                         else if (data.PTYPE == "P")
                                         {
@@ -136,15 +136,15 @@
                                         }
                                         else if (data.PTYPE == "R")
                                         {
-                                            <span>결재실패</span>
+                                            <span>결제실패</span>
                                         }
                                         else if (data.PTYPE == "F")
                                         {
-                                            <span>결재실패</span>
+                                            <span>결제실패</span>
                                         }
                                         else if (data.PTYPE == "B")
                                         {
-                                            <span>현장결재</span>
+                                            <span>현장결제</span>
                                         }
                                     </td>
                                     <td>
@@ -234,7 +234,7 @@
             $("#btnPay").click(function () {
                 BootstrapDialog.show({
                     title: '결제전 알림',
-                    message: '<p>이전에 결재하신 맴버십은 기간이 남아있어도 사용이 불가 하게 됩니다. 그래도 하시겠습니까?</p>',
+                    message: '<p>이전에 결제하신 맴버십은 기간이 남아있어도 사용이 불가 하게 됩니다. 그래도 하시겠습니까?</p>',
                     buttons: [ {
                         label: 'Close',
                         action: function (dialog) {
