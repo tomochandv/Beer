@@ -40,5 +40,9 @@ namespace BottleShop.Controllers
             return View();
         }
 
+        public ActionResult Mart()
+        {
+            return View();
+        }
     }
 }

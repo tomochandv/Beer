@@ -218,9 +218,9 @@ namespace BottleShop.Controllers
                 {
                     if (dt.Rows[i]["상품명"].ToString() != "")
                     {
-                        list.Add(new Dac_Product().Createparameter(3,
+                        list.Add(new Dac_Product().Createparameter(2,
                              dt.Rows[i]["상품명"],
-                             "",
+                             dt.Rows[i]["국가"],
                              dt.Rows[i]["구분"],
                              dt.Rows[i]["본수"].ToString() == "" ? "1" : dt.Rows[i]["본수"].ToString(),
                              dt.Rows[i]["용량"],
@@ -237,7 +237,7 @@ namespace BottleShop.Controllers
                 {
                     if (dt.Rows[i]["상품명"].ToString() != "")
                     {
-                        list.Add(new Dac_Product().Createparameter(3,
+                        list.Add(new Dac_Product().Createparameter(2,
                               dt.Rows[i]["상품명"],
                               "",
                               dt.Rows[i]["구분"],
