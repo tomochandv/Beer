@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<doc>
+  <assembly>
+    <name>System.Web.Http.Tracing</name>
+  </assembly>
+  <members>
+    <member name="T:System.Web.Http.HttpConfigurationTracingExtensions">
+      <summary> 이 정적 클래스에는 <see cref="T:System.Web.Http.Tracing.ITraceWriter" /> 인스턴스의 등록과 관련된 도우미 메서드가 들어 있습니다. </summary>
+    </member>
+    <member name="M:System.Web.Http.HttpConfigurationTracingExtensions.EnableSystemDiagnosticsTracing(System.Web.Http.HttpConfiguration)">
+      <summary> 이 응용 프로그램에 사용할 <see cref="T:System.Web.Http.Tracing.ITraceWriter" /> 구현을 만들고 등록합니다. </summary>
+      <returns>만들어 등록된 <see cref="T:System.Web.Http.Tracing.SystemDiagnosticsTraceWriter" />입니다.</returns>
+      <param name="configuration">만들어진 추적 작성기를 등록할 <see cref="T:System.Web.Http.HttpConfiguration" />입니다.</param>
+    </member>
+    <member name="T:System.Web.Http.Tracing.SystemDiagnosticsTraceWriter">
+      <summary>
+        <see cref="T:System.Diagnostics.Trace" />로 추적하는 <see cref="T:System.Web.Http.Tracing.ITraceWriter" />의 구현</summary>
+    </member>
+    <member name="M:System.Web.Http.Tracing.SystemDiagnosticsTraceWriter.#ctor">
+      <summary>
+        <see cref="T:System.Web.Http.Tracing.SystemDiagnosticsTraceWriter" /> 클래스의 새 인스턴스를 초기화합니다.</summary>
+    </member>
+    <member name="M:System.Web.Http.Tracing.SystemDiagnosticsTraceWriter.Format(System.Web.Http.Tracing.TraceRecord)">
+      <summary> 지정된 <see cref="T:System.Web.Http.Tracing.TraceRecord" />의 콘텐츠를 각 <see cref="T:System.Web.Http.Tracing.TraceRecord" /> 속성에 대해 쉼표로 구분된 이름-값 쌍이 있는 단일 문자열로 서식을 지정합니다. </summary>
+      <returns>쉼표로 구분된 이름-값 쌍이 있는 문자열입니다.</returns>
+      <param name="traceRecord">결과를 생성할 <see cref="T:System.Web.Http.Tracing.TraceRecord" />입니다.</param>
+    </member>
+    <member name="M:System.Web.Http.Tracing.SystemDiagnosticsTraceWriter.FormatDateTime(System.DateTime)">
+      <summary> 추적에 대한 <see cref="T:System.DateTime" />의 서식을 지정합니다. </summary>
+      <returns>문자열로 서식이 지정된 <see cref="T:System.DateTime" />입니다.</returns>
+      <param name="dateTime">
+        <see cref="T:System.DateTime" />입니다.</param>
+    </member>
+    <member name="M:System.Web.Http.Tracing.SystemDiagnosticsTraceWriter.FormatRequestEnvelope(System.Web.Http.Tracing.TraceRecord)">
+      <summary>
+        <see cref="T:System.Web.Http.Tracing.TraceKind" />에 따라, 지정된 <see cref="T:System.Web.Http.Tracing.TraceRecord" />를 들어오는 요청의 최초 수신 또는 응답의 최종 전송을 설명하는 문자열로 서식을 지정합니다. </summary>
+      <returns>쉼표로 구분된 이름-값 쌍이 있는 문자열입니다.</returns>
+      <param name="traceRecord">결과를 생성할 <see cref="T:System.Web.Http.Tracing.TraceRecord" />입니다.</param>
+    </member>
+    <member name="P:System.Web.Http.Tracing.SystemDiagnosticsTraceWriter.IsVerbose">
+      <summary> 서식이 지정된 메시지가 <see cref="T:System.Web.Http.Tracing.TraceRecord" />의 모든 필드를 표시하는 자세한 형식인지 여부를 나타내는 값을 가져오거나 설정합니다. </summary>
+      <returns>true<see cref="T:System.Web.Http.Tracing.TraceRecord" />falsefalse</returns>
+    </member>
+    <member name="P:System.Web.Http.Tracing.SystemDiagnosticsTraceWriter.MinimumLevel">
+      <summary> 최소 추적 수준을 가져오거나 설정합니다. </summary>
+      <returns>
+        <see cref="T:System.Web.Http.Tracing.TraceLevel" />
+        <see cref="F:System.Web.Http.Tracing.TraceLevel.Info" />
+      </returns>
+    </member>
+    <member name="M:System.Web.Http.Tracing.SystemDiagnosticsTraceWriter.Trace(System.Net.Http.HttpRequestMessage,System.String,System.Web.Http.Tracing.TraceLevel,System.Action{System.Web.Http.Tracing.TraceRecord})">
+      <summary>수준이 <see cref="P:System.Web.Http.Tracing.SystemDiagnosticsTraceWriter.MinimumLevel" />보다 크거나 같으면 추적 내용을 <see cref="T:System.Diagnostics.Trace" />에 씁니다. </summary>
+      <param name="request">이 추적과 연관된 <see cref="T:System.Net.Http.HttpRequestMessage" />입니다.  null일 수 있으나 결과 추적에는 상관 관계 ID가 없습니다.</param>
+      <param name="category">추적의 범주입니다. 사용자 정의 값일 수 있습니다. 이 구현으로 해석되지 않으나 추적에 기록됩니다.</param>
+      <param name="level">이 추적의 <see cref="T:System.Web.Http.Tracing.TraceLevel" />입니다. <see cref="P:System.Web.Http.Tracing.SystemDiagnosticsTraceWriter.MinimumLevel" />보다 작은 경우 이 추적 요청은 무시됩니다.</param>
+      <param name="traceAction">
+        <see cref="T:System.Web.Http.Tracing.TraceRecord" />를 추적에 추가할 추가 정보로 채우도록 호출할 사용자 콜백입니다.</param>
+    </member>
+    <member name="P:System.Web.Http.Tracing.SystemDiagnosticsTraceWriter.TraceSource">
+      <summary> 추적을 전송할 <see cref="P:System.Web.Http.Tracing.SystemDiagnosticsTraceWriter.TraceSource" />를 가져오거나 설정합니다. </summary>
+      <returns>
+        <see cref="P:System.Web.Http.Tracing.SystemDiagnosticsTraceWriter.TraceSource" />
+        <see cref="P:System.Web.Http.Tracing.SystemDiagnosticsTraceWriter.TraceSource" />
+        <see cref="T:System.Diagnostics.Trace" />null<see cref="T:System.Diagnostics.Trace" /></returns>
+    </member>
+    <member name="M:System.Web.Http.Tracing.SystemDiagnosticsTraceWriter.TranslateHttpResponseException(System.Web.Http.Tracing.TraceRecord)">
+      <summary> 지정된 <see cref="T:System.Web.Http.Tracing.TraceRecord" />를 검사하여 <see cref="T:System.Web.Http.HttpResponseException" />을 포함하는지 확인하고 포함하는 경우 보다 자세한 정보를 캡처하도록 <see cref="T:System.Web.Http.Tracing.TraceRecord" />를 수정합니다. </summary>
+      <param name="traceRecord">검사 및 수정할 <see cref="T:System.Web.Http.Tracing.TraceRecord" />입니다.</param>
+    </member>
+  </members>
+</doc>
