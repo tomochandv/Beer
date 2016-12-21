@@ -75,6 +75,7 @@
                   <th style="text-align: center; width: 5%;">회원판매가</th>
                   <th style="text-align: center; width: 5%;">일반가</th>
                   <th style="text-align: center; width: 5%;">판매수량</th>
+                  <th style="text-align: center; width: 5%;">매장재고</th>
               </tr>
           </thead>
             <tbody>
@@ -112,7 +113,10 @@
                                 @string.Format("{0:###,###}", data.SALE_QTY)
                                 <input type="text" name="txtQty" value="@data.SALE_QTY" style="display:none;" />
                             </td>
-                            
+                            <td>
+                                @string.Format("{0:###,###}", data.IN_QTY)
+                                <input type="text" name="txtInqty" value="@data.IN_QTY" style="display:none;" />
+                            </td>
                         </tr>
                     }
                 }
@@ -201,6 +205,7 @@
             var paramQty = new Array();
             var paramCat = new Array();
             var paramNoPrice = new Array();
+            var paramInqty = new Array();
             $("[name='ckSale']").each(function(index){
                 paramName.push($(this).val());
                 paramValue.push($(this).prop("checked") == true ? "Y" : "N");
@@ -208,12 +213,13 @@
                 paramNoPrice.push($(this).parent().parent().children().eq(10).find("[name='txtPrice1']").val());
                 paramQty.push($(this).parent().parent().children().eq(11).find("[name='txtQty']").val());
                 paramCat.push($(this).parent().parent().children().eq(2).find("[name='selEC']").val());
+                paramInqty.push($(this).parent().parent().children().eq(12).find("[name='txtInqty']").val());
             });
-            console.log(paramCat);
+            console.log(paramInqty);
             var data = $.ajax({
                 url :"@Url.Action("SaleUpdate")", 
                 data:{name :  JSON.stringify(paramName), value :  JSON.stringify(paramValue), 
-                    price :  JSON.stringify(paramPrice), qty :  JSON.stringify(paramQty), cat: JSON.stringify(paramCat), price1 :  JSON.stringify(paramNoPrice)},
+                    price :  JSON.stringify(paramPrice), qty :  JSON.stringify(paramQty), cat: JSON.stringify(paramCat), price1 :  JSON.stringify(paramNoPrice), inqty : JSON.stringify(paramInqty)},
                 type: 'POST',
                 success: function (data) {
                     console.log(data);
@@ -229,10 +235,10 @@
             window.open("@Url.Action("Down")");
         });
         $("#btnUpdate").click(function(){
-            $("[name='selEC'] ,[name='txtPrice'] , [name='txtQty'], #btnCancle,  [name='txtPrice1']").toggle();
+            $("[name='selEC'] ,[name='txtPrice'] , [name='txtQty'], #btnCancle,  [name='txtPrice1'],  [name='txtInqty']").toggle();
         });
         $("#btnCancle").click(function(){
-            $("[name='selEC'] ,[name='txtPrice'] , [name='txtQty'], #btnCancle,  [name='txtPrice1']").toggle();
+            $("[name='selEC'] ,[name='txtPrice'] , [name='txtQty'], #btnCancle,  [name='txtPrice1'],  [name='txtInqty']").toggle();
         });
         $("#btnAdd").click(function(){
             location.href= '@Url.Action("ProcuctAddView")';

@@ -77,7 +77,7 @@ namespace BottleShop.Controllers
             return View();
         }
         public JsonResult ProductInsert(int cat = 0, string name="", string country = "", string gubun = "", int qty = 0, int liter = 0, string inNm = "", 
-            int price = 0, int sellPrice = 0, int sellQty = 0, int price_nomem = 0)
+            int price = 0, int sellPrice = 0, int sellQty = 0, int price_nomem = 0, int inqty = 0)
         {
             int coutn = 0;
             try
@@ -92,7 +92,7 @@ namespace BottleShop.Controllers
                                inNm,
                                price,
                                sellPrice,
-                                0, "N", liter, "", sellQty, price_nomem));
+                                0, "N", liter, "", sellQty, price_nomem, inqty));
                 new Dac_Product().ProductInsert(list);
                 coutn = 1;
             }
@@ -102,7 +102,7 @@ namespace BottleShop.Controllers
             }
             return Json(coutn);
         }
-        public JsonResult SaleUpdate(string name = "" , string value = "", string price = "", string qty = "", string cat = "", string price1 = "")
+        public JsonResult SaleUpdate(string name = "", string value = "", string price = "", string qty = "", string cat = "", string price1 = "", string inqty = "")
         {
             int result = 0;
             if(name != "")
@@ -114,9 +114,10 @@ namespace BottleShop.Controllers
                 string[] arrqty = qty.Replace("[", "").Replace("]", "").Replace("\"", "").Split(',');
                 string[] arrCat = cat.Replace("[", "").Replace("]", "").Replace("\"", "").Split(',');
                 string[] arrprice1 = price1.Replace("[", "").Replace("]", "").Replace("\"", "").Split(',');
+                string[] arrInqty = inqty.Replace("[", "").Replace("]", "").Replace("\"", "").Split(',');
                 for(int i=0; i < arrName.Length; i++)
                 {
-                    list.Add(new Dac_Product().CreateUpdateParameter(arrName[i], arrValue[i], arrprice[i], arrqty[i], arrCat[i], arrprice1[i]));
+                    list.Add(new Dac_Product().CreateUpdateParameter(arrName[i], arrValue[i], arrprice[i], arrqty[i], arrCat[i], arrprice1[i], arrInqty[i]));
                 }
                 if (list.Count > 0)
                 {
@@ -209,7 +210,7 @@ namespace BottleShop.Controllers
                             dt.Rows[i]["공급가"],
                             dt.Rows[i]["회원가"],
                             //Caculate(dt.Rows[i]["공급가"], dt.Rows[i]["본수"]),
-                            0, "N", dt.Rows[i]["용량"], "", 1, dt.Rows[i]["정상가"]));
+                            0, "N", dt.Rows[i]["용량"], "", 1, dt.Rows[i]["정상가"], 0));
                     }
                 }
 
@@ -228,7 +229,7 @@ namespace BottleShop.Controllers
                              dt.Rows[i]["공급가"],
                              dt.Rows[i]["회원가"],
                             //Caculate(dt.Rows[i]["공급가"], dt.Rows[i]["본수"]),
-                             0, "N", dt.Rows[i]["용량"], "", 1, dt.Rows[i]["정상가"]));
+                             0, "N", dt.Rows[i]["용량"], "", 1, dt.Rows[i]["정상가"], 0));
                     }
                 }
 
@@ -247,7 +248,7 @@ namespace BottleShop.Controllers
                               dt.Rows[i]["공급가"],
                               dt.Rows[i]["회원가"],
                             //Caculate(dt.Rows[i]["공급가"], dt.Rows[i]["본수"]),
-                              0, "N", dt.Rows[i]["용량"], "", 1, dt.Rows[i]["정상가"]));
+                              0, "N", dt.Rows[i]["용량"], "", 1, dt.Rows[i]["정상가"], 0));
                     }
                 }
 

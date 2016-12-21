@@ -23,6 +23,7 @@ namespace BottleShop
         public float PR_WEIGHT { get; set; }
         public string PE_DESC { get; set; }
         public string CATE_NM { get; set; }
+        public int IN_QTY { get; set; }
         public DateTime INDT { get; set; }
     }
 }

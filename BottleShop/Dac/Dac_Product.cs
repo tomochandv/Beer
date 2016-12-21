@@ -21,7 +21,7 @@ namespace BottleShop
         }
 
         public List<Parameter>  Createparameter(object bc_idx, object pr_name, object pr_country, object pr_gubun, object pr_qty, object pr_liter
-            , object pr_income, object pr_in_price, object pr_price, object pr_sale, object issale, object pr_weight, object pe_desc, object sale_qty, object pr_nomem_sale)
+            , object pr_income, object pr_in_price, object pr_price, object pr_sale, object issale, object pr_weight, object pe_desc, object sale_qty, object pr_nomem_sale, object in_qty)
         {
             List<Parameter> paramlist = new List<Parameter>();
             paramlist.Add(new Parameter(bc_idx, "@BC_IDX", SqlDbType.Int));
@@ -39,6 +39,7 @@ namespace BottleShop
             paramlist.Add(new Parameter(pe_desc, "@PE_DESC", SqlDbType.VarChar));
             paramlist.Add(new Parameter(sale_qty, "@SALE_QTY", SqlDbType.Int));
             paramlist.Add(new Parameter(pr_nomem_sale, "@PR_NOMEM_SALE", SqlDbType.Float));
+            paramlist.Add(new Parameter(in_qty, "@IN_QTY", SqlDbType.Int));
             return paramlist;
         }
 
@@ -62,7 +63,7 @@ namespace BottleShop
            }
         }
 
-        public List<Parameter> CreateUpdateParameter(object pr_idx, object issale, object price, object qty, object cat, object price1)
+        public List<Parameter> CreateUpdateParameter(object pr_idx, object issale, object price, object qty, object cat, object price1, object inqty)
         {
             List<Parameter> paramlist = new List<Parameter>();
             paramlist.Add(new Parameter(pr_idx, "@PR_IDX", SqlDbType.Int));
@@ -71,6 +72,7 @@ namespace BottleShop
             paramlist.Add(new Parameter(qty, "@QTY", SqlDbType.Int));
             paramlist.Add(new Parameter(cat, "@CAT", SqlDbType.Int));
             paramlist.Add(new Parameter(price1, "@PR_NOMEM_SALE", SqlDbType.Float));
+            paramlist.Add(new Parameter(inqty, "@IN_QTY", SqlDbType.Int));
             return paramlist;
         }
 
