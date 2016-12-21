@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Billing", "Billing\Billing.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbBackup", "DbBackup\DbBackup.csproj", "{4B67B6C5-04E8-4277-A412-2563B41CB887}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BottleShop.Api", "BottleShop.Api\BottleShop.Api.csproj", "{F3B972D7-4726-4A3F-BB2E-706D3E08ED1B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bottleshop.Api", "Bottleshop.Api\Bottleshop.Api.csproj", "{F6D91CD3-0240-41FD-ADAD-658D80EC0821}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{4B67B6C5-04E8-4277-A412-2563B41CB887}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B67B6C5-04E8-4277-A412-2563B41CB887}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B67B6C5-04E8-4277-A412-2563B41CB887}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F3B972D7-4726-4A3F-BB2E-706D3E08ED1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F3B972D7-4726-4A3F-BB2E-706D3E08ED1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F3B972D7-4726-4A3F-BB2E-706D3E08ED1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F3B972D7-4726-4A3F-BB2E-706D3E08ED1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6D91CD3-0240-41FD-ADAD-658D80EC0821}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6D91CD3-0240-41FD-ADAD-658D80EC0821}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6D91CD3-0240-41FD-ADAD-658D80EC0821}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6D91CD3-0240-41FD-ADAD-658D80EC0821}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
