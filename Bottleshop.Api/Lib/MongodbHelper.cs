@@ -31,6 +31,19 @@ namespace Bottleshop.Api.Lib
             }
         }
 
+        public static void InsertManyModel<T>(List<T> instance, string collectionName) where T : class
+        {
+            try
+            {
+                var collection = database.GetCollection<T>(collectionName);
+                collection.InsertMany(instance);
+            }
+            catch (Exception ex)
+            {
+                new Log().Error(ex);
+            }
+        }
+
         /// <summary>
         /// Update 
         /// </summary>
@@ -70,8 +83,15 @@ namespace Bottleshop.Api.Lib
         public static T FindOne<T>(FilterDefinition<T> filter, string collectionName) where T : class
         {
             var collection = database.GetCollection<T>(collectionName);
-            var document = collection.Find(filter).First();
-            return document;
+            var document = collection.Find(filter);
+            if(document.ToList().Count > 0)
+            {
+               return  collection.Find(filter).First();
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public static List<T> Find<T>(FilterDefinition<T> filter, string collectionName) where T : class

@@ -12,12 +12,23 @@ using MongoDB.Driver;
 
 namespace Bottleshop.Api.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
-        //
-        // GET: /Home/
-
         public ActionResult Index()
+        {
+            var filter = new BsonDocument();
+            Popup result = MongodbHelper.FindOne<Popup>(filter, "Popup");
+            return View(result);
+        }
+
+        public ActionResult Popup()
+        {
+            var filter = new BsonDocument();
+            Popup result = MongodbHelper.FindOne<Popup>(filter, "Popup");
+            return View(result);
+        }
+
+        public ActionResult About()
         {
             return View();
         }

@@ -44,7 +44,7 @@
                     maxVisible: 10,
                     total: @ViewBag.Pages
                     }).on("page", function (event, num) {
-                        var url = "@Url.Action("NoticeList")?page=" + num;
+                        var url = "@Url.Action("Index")?page=" + num;
                         location.href = url;
                     });
             });

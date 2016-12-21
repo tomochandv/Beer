@@ -19,7 +19,7 @@ namespace Bottleshop.Api.Models
         public int ProductSaleQty { get; set; }
         public bool IsSale { get; set; }
         public DateTime InDate { get; set; }
-        public int MemberQty { get; set; }
+        public int Inqty { get; set; }
 
     }
 }

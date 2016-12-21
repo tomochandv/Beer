@@ -1,0 +1,82 @@
+﻿<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <h1 id="p1">Want to be a Member? <small>Join Us!</small></h1>
+            <form name="sentMessage" id="contactForm" novalidate>
+                <div class="row control-group">
+                    <div class="form-group col-xs-12 floating-label-form-group controls">
+                        <label>ID</label>
+                        <input type="text" class="form-control" placeholder="ID" id="id" required data-validation-required-message="Please enter your id.">
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+                <div class="row control-group">
+                    <div class="form-group col-xs-12 floating-label-form-group controls">
+                        <label>Password</label>
+                        <input type="password" class="form-control" placeholder="Password" id="password" required data-validation-required-message="Please enter your password.">
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+                <br>
+                <div id="success"></div>
+                <div class="row">
+                    <div class="form-group col-xs-12">
+                        <button type="submit" class="btn btn-default btn-primary">Login(로그인)</button>
+                        <button type="button" id="btnJoin" class="btn btn-danger">Join(회원가입)</button>
+                        <button type="button" id="btnFind" class="btn btn-default">Find Password(비밀번호찾기)</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section script
+{
+    <script type="text/javascript">
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+            $("#p1").css("cursor", "pointer").click(function () {
+                location.href = '@Url.Action("JoinUs")';
+            });
+            $("#contactForm input").not("[type=submit]").jqBootstrapValidation({
+                preventSubmit: true,
+                submitError: function ($form, event, errors) {
+                    // additional error messages or events
+                },
+                submitSuccess: function ($form, event) {
+                    var data = Common.Ajax("@Url.Action("LoginProc")", { id: $("#id").val(), pwd: $("#password").val() });
+                    //$('#contactForm').trigger("reset");
+                    //submit 안일어나게
+                    event.preventDefault();
+
+                    if (data) {
+                        location.href = "@Url.Action("MyInfo","User")";
+                    }
+                    else {
+                        $('#success').html("<div class='alert alert-danger'>");
+                        $('#success > .alert-danger').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>");
+                        $('#success > .alert-danger').append("<strong>아이디 또는 비밀번호 확인하세요.");
+                        $('#success > .alert-danger').append('</div>');
+                    }
+                }
+            });
+            $("#btnFind").click(function () {
+                if ($("#id").val() == "") { alert('아이디를 입력하세요'); return false; }
+                $.post("@Url.Action("PwdFind")", { id: $("#id").val() });
+                BootstrapDialog.show({
+                    title: 'Notify',
+                    message: '이메일을 확인하세요.',
+                    buttons: [ {
+                        label: 'Close',
+                        action: function (dialog) {
+                            dialog.close();
+                        }
+                    }]
+                });
+            });
+            $("#btnJoin").click(function () {
+                location.href = '@Url.Action("JoinUs")';
+            });
+        });
+    </script>
+}

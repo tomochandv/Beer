@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace Bottleshop.Api.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         public ActionResult Login()
         {
@@ -34,7 +34,7 @@ namespace Bottleshop.Api.Controllers
                 {
                     Member member = new Member();
                     member.Uid = id;
-                    member.Pwd = pwd;
+                    member.Pwd = new Security().Encription(pwd);
                     member.Name = name;
                     member.Tell = tell;
                     member.Email = email;
@@ -44,13 +44,12 @@ namespace Bottleshop.Api.Controllers
 
                     MongodbHelper.InsertOneModel<Member>(member, "Member");
 
-                    member.Pwd = "";
-                    member.Tell = "";
-                    member.Email = "";
-                    member.Birth = "";
-                    var json = JsonConvert.SerializeObject(member);
+                    LoginCookie loginCookie = new LoginCookie();
+                    loginCookie.Uid = Server.UrlEncode(id);
+                    loginCookie.Name = Server.UrlEncode(name);
+                    var json = JsonConvert.SerializeObject(loginCookie);
                     var userCookie = new HttpCookie("bottleshop", json);
-                    userCookie.Expires.AddDays(365);
+                    userCookie.Expires.AddHours(5);
                     HttpContext.Response.Cookies.Add(userCookie);
                 }
                 result = true;
@@ -104,13 +103,12 @@ namespace Bottleshop.Api.Controllers
             var list = MongodbHelper.Find<Member>(new BsonDocument(), "Member").Where(x => (x.Uid == id && new Security().Description(x.Pwd) == pwd)).ToList();
             if (list.Count == 1)
             {
-                Member newmodel = list[0];
-                newmodel.Name = Server.UrlEncode(list[0].Name);
-                newmodel.Uid = Server.UrlEncode(list[0].Uid);
-                newmodel.MemberType = Server.UrlEncode(list[0].MemberType);
-                var json = JsonConvert.SerializeObject(newmodel);
+                LoginCookie loginCookie = new LoginCookie();
+                loginCookie.Uid = Server.UrlEncode(list[0].Uid);
+                loginCookie.Name = Server.UrlEncode(list[0].Name);
+                var json = JsonConvert.SerializeObject(loginCookie);
                 var userCookie = new HttpCookie("bottleshop", json);
-                userCookie.Expires.AddDays(365);
+                userCookie.Expires.AddHours(5);
                 HttpContext.Response.Cookies.Add(userCookie);
                 result = true;
             }

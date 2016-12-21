@@ -1,0 +1,9 @@
+﻿@{
+    Layout = null;
+}
+
+@model Bottleshop.Api.Models.Popup
+@if (Model != null)
+{
+    @Html.Raw(Model.Contents)
+}

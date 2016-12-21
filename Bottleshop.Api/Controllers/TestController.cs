@@ -18,13 +18,19 @@ namespace Bottleshop.Api.Controllers
 
         public JsonResult Insert()
         {
-            Category ca = new Category();
+            List<Notice> list = new List<Notice>();
+            
 
-
-            ca.CategoryId = 6;
-            ca.Name = "SPIRIT";
-            MongodbHelper.InsertOneModel<Category>(ca, "Category");
-           
+            for(int i=0; i< 100; i++)
+            {
+                Notice ca = new Notice();
+                ca.Title = i.ToString();
+                ca.Contents = i.ToString();
+                ca.Indate = DateTime.Now;
+                list.Add(ca);
+                
+            }
+            MongodbHelper.InsertManyModel<Notice>(list, "Notice");
            return Json("", JsonRequestBehavior.AllowGet);
         }
 
@@ -42,7 +48,7 @@ namespace Bottleshop.Api.Controllers
             var filter = new BsonDocument();
             var sort = Builders<Member>.Sort.Descending("Name");
 
-            MongoPagingResult<Member> result = MongodbHelper.FindPaging<Member>(filter, sort, "Member", 1, 10);
+            MongoPagingResult<Member> result = MongodbHelper.FindPaging<Member>(filter, sort, "Member", 20, 10);
 
             return Json(result.Result.ToList(), JsonRequestBehavior.AllowGet);
         }

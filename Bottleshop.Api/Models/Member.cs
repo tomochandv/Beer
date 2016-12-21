@@ -18,8 +18,6 @@ namespace Bottleshop.Api.Models
         /// <summary>
         /// A : 어드민, U : 일반사용자
         /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
-        [BsonRepresentation(BsonType.String)]
         public string  MemberType { get; set; }
         public DateTime CreateDate { get; set; }
 
