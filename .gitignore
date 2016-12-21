@@ -6,3 +6,6 @@
 /Billing/bin
 /DbBackup/bin
 /DbBackup/obj
+/Bottleshop.Api/Logs
+/Bottleshop.Api/obj
+/Bottleshop.Api/bin
