@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using Bottleshop.Api.Lib;
 using Bottleshop.Api.Models;
 using MongoDB.Bson;
@@ -50,6 +51,31 @@ namespace Bottleshop.Api.Controllers
             double dd = double.Parse(result.Count.ToString()) / double.Parse(rows.ToString());
             ViewBag.Pages = Math.Ceiling(dd);
             return View(result);
+        }
+
+        public JsonResult Update(string name = "", string value = "", string price = "", string qty = "", string cat = "", string price1 = "", string inqty = "")
+        {
+            int result = 0;
+            if (name != "")
+            {
+                string[] arrName = name.Replace("[", "").Replace("]", "").Replace("\"", "").Split(',');
+                string[] arrValue = value.Replace("[", "").Replace("]", "").Replace("\"", "").Split(',');
+                string[] arrprice = price.Replace("[", "").Replace("]", "").Replace("\"", "").Split(',');
+                string[] arrqty = qty.Replace("[", "").Replace("]", "").Replace("\"", "").Split(',');
+                string[] arrCat = cat.Replace("[", "").Replace("]", "").Replace("\"", "").Split(',');
+                string[] arrprice1 = price1.Replace("[", "").Replace("]", "").Replace("\"", "").Split(',');
+                string[] arrInqty = inqty.Replace("[", "").Replace("]", "").Replace("\"", "").Split(',');
+                for (int i = 0; i < arrName.Length; i++)
+                {
+                    var filter = Builders<Product>.Filter.Eq("Id", ObjectId.Parse(arrName[i]));
+                    var update = Builders<Product>.Update.Set("IsSale", arrValue[i] == "Y" ? true : false).Set("ProductSaleMemberPrice", DataType.Float(arrprice[i]))
+                        .Set("ProductSaleNormalPrice", DataType.Float(arrprice1[i])).Set("ProductSaleQty", DataType.Int(arrqty[i]))
+                        .Set("CategoryId", DataType.Int(arrCat[i])).Set("Inqty", DataType.Int(arrInqty[i]));
+                    MongodbHelper.Update<Product>(filter, update, "Product");
+                    result++;
+                }
+            }
+            return Json(result);
         }
 
     }
