@@ -196,7 +196,6 @@
     <Content Include="Content\jquery-ui.min.css" />
     <Content Include="Content\jquery-ui.theme.css" />
     <Content Include="Content\nprogress.css" />
-    <Content Include="Content\Site.css" />
     <Content Include="Global.asax" />
     <Content Include="img\about-bg.jpg" />
     <Content Include="img\contact-bg.jpg" />
