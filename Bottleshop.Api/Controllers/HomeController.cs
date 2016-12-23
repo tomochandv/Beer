@@ -32,7 +32,10 @@ namespace Bottleshop.Api.Controllers
         {
             return View();
         }
-
+        public ActionResult Mart()
+        {
+            return View();
+        }
 
     }
 }

@@ -1,0 +1,164 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model Bottleshop.Api.Lib.MongoPagingResult<Bottleshop.Api.Models.Member>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label for="txtName">이름</label>
+                        <input type="text" class="form-control" id="txtName" value="@ViewBag.name">
+                    </div>
+                    <div class="form-group">
+                        <label for="txtId">아이디</label>
+                        <input type="text" class="form-control" id="txtId" value="@ViewBag.userids">
+                    </div>
+                </form>
+            </div>
+            <div class="panel-footer">
+                <button type="button" class="btn btn-default btn-sm" id="txtSearch">
+                    <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Search
+                </button>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="col-md-12">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th style="text-align:center;">Name</th>
+                    <th style="text-align:center;">ID</th>
+                    <th style="text-align:center;">Tell</th>
+                    <th style="text-align:center;">Birth</th>
+                    <th style="text-align:center;">Email</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count > 0)
+                {
+                    foreach (var data in Model.Result)
+                    {
+                        <tr>
+                            <td>@data.Name</td>
+                            <td>@data.Uid</td>
+                            <td>@data.Tell</td>
+                            <td>@data.Birth</td>
+                            <td>@data.Email</td>
+                            <td>
+                                <button name="btnView" class="btn btn-default" value="@data.Uid">결제내역</button>
+                                <button name="btnPay" class="btn btn-primary" value="@data.Uid">현장결제</button>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+
+    </div>
+    <div class="col-md-12" style="text-align:center;">
+        <div id="page-selection"></div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" style="display:none;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">New message</h4>
+            </div>
+            <div class="modal-body">
+                <form id="form1" enctype="multipart/form-data" method="post" action="@Url.Action("ExcelImport")">
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">Excel:</label>
+                        <input type="file" name="file1">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="btnsubmit">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section script{
+    <script type="text/javascript">
+        $(function () {
+            $("#navbar > ul > li").removeClass("active");
+            $("#navbar > ul > li").eq(3).addClass("active");
+
+            $('#page-selection').bootpag({
+                page:@ViewBag.page,
+                firstLastUse: true,
+                first: '←',
+                last: '→',
+                maxVisible: 10,
+                total: @ViewBag.Pages
+                }).on("page", function (event, num) {
+                    var url = "@Url.Action("Member")?page=" + num;
+                    url += "&name=" + $("#txtName").val();
+                    url += "&id=" + $("#txtId").val();
+                    location.href = url;
+                });
+
+            $("#txtSearch").click(function () {
+                var url = "@Url.Action("Member")?page=1";
+                url += "&name=" + $("#txtName").val();
+                url += "&id=" + $("#txtId").val();
+                location.href = url;
+            });
+            $("[name='btnView']").click(function(){
+                BootstrapDialog.show({
+                    title : '결제로그',
+                    size: BootstrapDialog.SIZE_LARGE,
+                    draggable: true,
+                    closable: true,
+                    type: BootstrapDialog.TYPE_SUCCESS,
+                    message: $('<div></div>').load('@Url.Action("ViewPay")?userid=' + $(this).val())
+                });
+            });
+            $("[name='btnPay']").click(function(){
+                var data = Common.Ajax("@Url.Action("ShopPayment", "Pay")", {uid : $(this).val()});
+                if(data == "S"){
+                    alert("성공");
+                    $("#txtSearch").click();
+                }
+                else{
+                    alert("실패");
+                }
+               
+            });
+        });
+
+        var Page = {
+            Pay : function(){
+                alert( $("#txtName").val());
+                var data = Common.Ajax("@Url.Action("CounterPaySave")", {
+                    userId: $("#txtPName").val(),
+                    sdate: $("#txtSdate").val(),
+                    edate: $("#txtEdate").val()
+                });
+                if (data > 0) {
+                    alert('Saved.');
+                    return "S";
+                }
+                else {
+                    alert('fail');
+                    return "F";
+                }
+            },
+            Cancle : function(tid, uid){
+                var data = Common.Ajax("@Url.Action("CancleBill", "Pay")", {tid: tid, uid : uid});
+                alert(data);
+            }
+        }
+    </script>
+}

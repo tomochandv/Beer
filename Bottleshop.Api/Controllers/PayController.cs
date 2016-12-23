@@ -238,6 +238,8 @@ namespace Bottleshop.Api.Controllers
                     }
                     else
                     {
+                        memberPayInfo.BillingUse = false;
+                        memberPayInfo.IsAuth = true;
                         memberPayInfo.billList.Add(billInfo);
                         MongodbHelper.ReplaceOne<MemberPayInfo>(filter_payinfo, memberPayInfo, "MemberPayInfo");
                     }
@@ -255,6 +257,81 @@ namespace Bottleshop.Api.Controllers
             {
                 message = "프로모션 코드가 유효하지 않습니다.";
             }
+            return Json(message);
+        }
+
+        public JsonResult ShopPayment(string uid = "")
+        {
+            string message = string.Empty;
+            var filter_payinfo = Builders<MemberPayInfo>.Filter.Eq("Uid", uid);
+            var memberPayInfo = MongodbHelper.FindOne<MemberPayInfo>(filter_payinfo, "MemberPayInfo");
+            List<MemberBillingInfo> list_memberBillInfo = new List<MemberBillingInfo>();
+
+            MemberBillingInfo billInfo = new MemberBillingInfo();
+            billInfo.BillingKey = "SHOPPAY";
+            billInfo.InicisId = "SHOPPAY";
+            billInfo.BillType = "A";
+            billInfo.StartDate = DateTime.Now;
+            billInfo.EndDate = DateTime.Now.AddMonths(1);
+            billInfo.InDate = DateTime.Now;
+            billInfo.Use = true;
+
+            if (memberPayInfo == null)
+            {
+                list_memberBillInfo.Add(billInfo);
+
+                MemberPayInfo data = new MemberPayInfo();
+                data.BillingKey = "";
+                data.BillingUse = false;
+                data.InDate = DateTime.Now;
+                data.InicisId = "";
+                data.IsAuth = true;
+                data.Orderid = "";
+                data.Uid = uid;
+                data.billList = list_memberBillInfo;
+                MongodbHelper.InsertOneModel<MemberPayInfo>(data, "MemberPayInfo");
+                message = "S";
+            }
+            else
+            {
+                memberPayInfo.BillingUse = false;
+                memberPayInfo.IsAuth = true;
+                memberPayInfo.billList.Add(billInfo);
+                MongodbHelper.ReplaceOne<MemberPayInfo>(filter_payinfo, memberPayInfo, "MemberPayInfo");
+                message = "S";
+            }
+            return Json(message);
+        }
+
+        public JsonResult CancleBill(string tid, string uid)
+        {
+            string message = string.Empty;
+            TxBillingCancle cancle = new TxBillingCancle(tid);
+            var filter_payinfo = Builders<MemberPayInfo>.Filter.Eq("Uid", uid);
+            var memberPayInfo = MongodbHelper.FindOne<MemberPayInfo>(filter_payinfo, "MemberPayInfo");
+            if(memberPayInfo != null && memberPayInfo.billList.Count > 0)
+            {
+                foreach(var data in memberPayInfo.billList)
+                {
+                    data.Use = false;
+                }
+            }
+
+            MemberBillingInfo billInfo = new MemberBillingInfo();
+            billInfo.BillingKey = "";
+            billInfo.BillType = "C";
+            billInfo.InDate = DateTime.Now;
+            billInfo.InicisId = tid;
+            billInfo.PgauthDate = cancle.pgauthdate;
+            billInfo.PgauthTime = cancle.pgauthtime;
+            billInfo.ResultMsg = cancle.resultmsg;
+            billInfo.ResultCode = cancle.resultcode;
+            billInfo.Use = false;
+
+            memberPayInfo.billList.Add(billInfo);
+            memberPayInfo.BillingUse = false;
+            memberPayInfo.IsAuth = false;
+            MongodbHelper.ReplaceOne<MemberPayInfo>(filter_payinfo, memberPayInfo, "MemberPayInfo");
             return Json(message);
         }
 

@@ -155,6 +155,7 @@
     <Compile Include="Lib\TxBilling.cs" />
     <Compile Include="Models\Cart.cs" />
     <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\ImageView.cs" />
     <Compile Include="Models\LoginCookie.cs" />
     <Compile Include="Models\Member.cs" />
     <Compile Include="Models\MemberBillingInfo.cs" />
@@ -212,6 +213,7 @@
     <Content Include="Scripts\contact_me.js" />
     <Content Include="Scripts\ie-emulation-modes-warning.js" />
     <Content Include="Scripts\jqBootstrapValidation.js" />
+    <Content Include="Down\Excel_mongo_product.xlsx" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
@@ -236,6 +238,10 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\nprogress.js" />
     <None Include="Scripts\_references.js" />
+    <Content Include="Upload\Images\1478655038e3028755546d4318a94f8797d628cf61__mn267255__w800__h800__f69774__Ym201611.jpg" />
+    <Content Include="Upload\Images\20161208112402.gif" />
+    <Content Include="Upload\Images\KakaoTalk_20161207_235844477.jpg" />
+    <Content Include="Upload\Images\logo1.gif" />
     <Content Include="vendor\bootstrap\css\bootstrap.css" />
     <Content Include="vendor\bootstrap\css\bootstrap.min.css" />
     <Content Include="vendor\bootstrap\fonts\glyphicons-halflings-regular.svg" />
@@ -275,6 +281,15 @@
     <Content Include="Views\My\Order.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Admin\Product.cshtml" />
+    <Content Include="Views\Home\Mart.cshtml" />
+    <Content Include="Views\Admin\ProductAdd.cshtml" />
+    <Content Include="Views\Admin\Notice.cshtml" />
+    <Content Include="Views\Admin\NoticeWrite.cshtml" />
+    <Content Include="Upload\Excel\1.xlsx" />
+    <Content Include="Views\Admin\PopUp.cshtml" />
+    <Content Include="Views\Admin\uploadPartial.cshtml" />
+    <Content Include="Views\Admin\Member.cshtml" />
+    <Content Include="Views\Admin\ViewPay.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

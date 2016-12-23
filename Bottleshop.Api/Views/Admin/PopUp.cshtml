@@ -1,0 +1,73 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@model Bottleshop.Api.Models.Popup
+<form>
+    <div class="form-group">
+        <label for="exampleInputEmail1">사용여부</label>
+        <br />
+        <div class="radio-inline">
+            <label>
+                <input type="radio" name="rdoUse" value="Y" id="rdo1" checked>
+                사용
+            </label>
+        </div>
+        <div class="radio-inline">
+            <label>
+                <input type="radio" name="rdoUse" id="rdo2" value="N">
+                미사용
+            </label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="exampleInputEmail1">Title</label>
+        <input type="text" class="form-control" id="txtTitle" placeholder="Title">
+    </div>
+    <div class="form-group">
+        <label for="exampleInputPassword1">Contents</label>
+        <textarea name="editor1" id="editor1" rows="10" cols="80">
+            @if (Model != null)
+            {
+                @Model.Contents
+            }
+        </textarea>
+    </div>
+    <button type="button" class="btn btn-default" id="btnSave">Save</button>
+</form>
+
+
+@section script {
+    <script src="//cdn.ckeditor.com/4.5.10/standard/ckeditor.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#navbar > ul > li").removeClass("active");
+            $("#navbar > ul > li").eq(7).addClass("active");
+            CKEDITOR.replace('editor1', {
+                filebrowserImageBrowseUrl: 'uploadPartial',
+                filebrowserImageUploadUrl: 'uploadnow'
+            });
+            $("#btnSave").click(function () {
+                var content = CKEDITOR.instances.editor1.getData();
+                var data = Common.Ajax("@Url.Action("PopupSave")", { title: $("#txtTitle").val(), content: content, useyn: $("[name='rdoUse']:checked").val() });
+                if (data > 0) {
+                    alert('sucess');
+                }
+                else {
+                    alert('error');
+                }
+            });
+        });
+        @if(Model != null)
+        {
+          @:$("#txtTitle").val('@Model.Title');
+                  @:var check = '@(Model.UseYn ==  true ? "Y" : "N")';
+                  @: check == "Y" ? $("#rdo1").prop("checked", true) : $("#rdo2").prop("checked", true);
+        }
+
+        function updateValue(id, value) {
+            // this gets called from the popup window and updates the field with a new value
+            document.getElementById(id).value = value;
+        }
+    </script>
+}

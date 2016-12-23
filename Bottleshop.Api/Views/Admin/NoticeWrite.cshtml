@@ -1,0 +1,68 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model Bottleshop.Api.Models.Notice
+<form>
+    <div class="form-group">
+        <label for="exampleInputEmail1">Title</label>
+        <input type="text" class="form-control" id="txtTitle" placeholder="Title">
+    </div>
+    <div class="form-group">
+        <label for="exampleInputPassword1">Contents</label>
+        <textarea name="editor1" id="editor1" rows="10" cols="80">
+            @if (Model.Contents != null)
+            {
+                @Model.Contents
+            }
+        </textarea>
+    </div>
+    <input type="hidden" id="hidIdx" value="@ViewBag.idx">
+    <button type="button" class="btn btn-default" id="btnSave">Save</button>
+    <button type="button" class="btn btn-danger" id="btnDelete" style="display:none;">Delete</button>
+    <button type="button" class="btn btn-default" id="btnCancle">Cancle</button>
+</form>
+
+
+@section script {
+    <script src="//cdn.ckeditor.com/4.5.10/standard/ckeditor.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#navbar > ul > li").removeClass("active");
+            $("#navbar > ul > li").eq(6).addClass("active");
+            CKEDITOR.replace('editor1', {
+                filebrowserImageBrowseUrl: 'uploadPartial',
+                filebrowserImageUploadUrl: 'uploadnow'
+            });
+
+            $("#btnCancle").click(function () {
+                location.href = '@Url.Action("Notice")';
+            });
+            $("#btnSave").click(function () {
+                var content = CKEDITOR.instances.editor1.getData();
+                var data = Common.Ajax("@Url.Action("NoticeSave")", { idx: $("#hidIdx").val(), title: $("#txtTitle").val(), content: content });
+                if (data > 0) {
+                    location.href = '@Url.Action("Notice")';
+                }
+            });
+            $("#btnDelete").click(function () {
+                var data = Common.Ajax("@Url.Action("NoticeDelete")", { idx: $("#hidIdx").val() });
+                if (data > 0) {
+                    location.href = '@Url.Action("Notice")';
+                }
+                else {
+                    alert('Error');
+                }
+            });
+        });
+        @if(Model.Title != null )
+        {
+          @:$("#txtTitle").val('@Model.Title');
+                  @:$("#btnDelete").show();
+        }
+
+        function updateValue(id, value) {
+            // this gets called from the popup window and updates the field with a new value
+            document.getElementById(id).value = value;
+        }
+    </script>
+}

@@ -1,0 +1,65 @@
+﻿@{
+    Layout = null;
+}
+@model Bottleshop.Api.Models.MemberPayInfo
+@if (Model != null)
+{
+<div >
+    <ul>
+        <li>사용여부 : @Model.IsAuth</li>
+        <li>빌링여부 : @Model.BillingUse</li>
+        <li>빌링키 : @Model.BillingKey</li>
+        <li>오더 : @Model.Orderid</li>
+    </ul>
+    <h3>결제내역</h3>
+    <hr />
+    @foreach (var data in Model.billList)
+    {
+        <h4>
+            @data.InDate.ToString("yyyy-MM-dd hh:mm:ss")
+            @if(data.BillType == "S" && Model.billList.Where(x=> x.InicisId == data.InicisId && x.BillType == "C").ToList().Count == 0)
+            { 
+                <button type="button" class="btn btn-default btn-sm" onclick="Page.Cancle('@data.InicisId', '@Model.Uid');">
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> 취소
+                </button>   
+            }
+        </h4>
+        <ul>
+            <li>TID : @data.InicisId</li>
+            <li>Bill Key : @data.BillingKey</li>
+            <li>OID : @data.Orderid</li>
+            <li>
+                Type :
+                @if (data.BillType == "S")
+                {
+                    <button type="button" class="btn btn-primary btn-sm" aria-label="Left Align">
+                        <i class="fa fa-credit-card" aria-hidden="true"></i> 카드성공
+                    </button>
+                }
+                @if (data.BillType == "P")
+                {
+                    <button type="button" class="btn btn-success btn-sm" aria-label="Left Align">
+                        <i class="fa fa-barcode" aria-hidden="true"></i> 프로모션
+                    </button>
+                }
+                @if (data.BillType == "A")
+                {
+                    <button type="button" class="btn btn-info btn-sm" aria-label="Left Align">
+                        <i class="fa fa-money" aria-hidden="true"></i> 현장구매
+                    </button>
+                }
+                @if (data.BillType == "C")
+                {
+                    <button type="button" class="btn btn-danger btn-sm" aria-label="Left Align">
+                        <i class="fa fa-times" aria-hidden="true"></i> 카드취소
+                    </button>
+                }
+
+            </li>
+            <li>기간 : @data.StartDate.ToShortDateString() ~ @data.EndDate.ToShortDateString()</li>
+            <li>Code : @data.ResultCode</li>
+            <li>Message : @data.ResultMsg</li>
+        </ul>
+    }
+</div>
+}
