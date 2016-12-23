@@ -8,6 +8,7 @@ using Bottleshop.Api.Lib;
 using Bottleshop.Api.Models;
 using BottleShop.Api.Lib;
 using MongoDB.Bson;
+using MongoDB.Driver;
 using Newtonsoft.Json;
 
 namespace Bottleshop.Api.Controllers
@@ -113,6 +114,47 @@ namespace Bottleshop.Api.Controllers
                 result = true;
             }
             return Json(result);
+        }
+
+        public JsonResult PwdChange(string pwd = "")
+        {
+            int row = 0;
+            if (pwd != "")
+            {
+                var filter = Builders<Member>.Filter.Eq("Uid", AUser().Uid);
+                var update = Builders<Member>.Update.Set("Pwd", new Security().Encription(pwd));
+                MongodbHelper.Update<Member>(filter, update, "Member");
+                row = 1;
+            }
+            return Json(row);
+        }
+
+        public JsonResult PwdFind(string id = "")
+        {
+            if (id != "")
+            {
+                var filter = Builders<Member>.Filter.Eq("Uid", id);
+                Member info = MongodbHelper.FindOne<Member>(filter, "Member");
+                if (info != null)
+                {
+                    string title = "The bottleshop 비밀번호 찾기";
+                    string body = string.Format("문의하신 비밀번호는 {0} 입니다.", new Security().Description(info.Pwd));
+
+                   ProjectUtill.SendEmail(title, body, info.Email);
+                }
+            }
+            return Json("");
+        }
+
+        public JsonResult UserOut()
+        {
+            int row = 0;
+            var filter = Builders<Member>.Filter.Eq("Uid", AUser().Uid);
+            var filter1 = Builders<MemberPayInfo>.Filter.Eq("Uid", AUser().Uid);
+            var update = Builders<MemberPayInfo>.Update.Set("BillingUse", false);
+            MongodbHelper.Update<MemberPayInfo>(filter1, update, "MemberPayInfo");
+            MongodbHelper.Delete<Member>(filter, "Member");
+            return Json(row);
         }
 
         public RedirectResult LogOut()

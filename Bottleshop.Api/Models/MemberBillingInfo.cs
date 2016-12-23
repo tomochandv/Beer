@@ -20,8 +20,9 @@ namespace Bottleshop.Api.Models
         public string PgauthDate { get; set; }
         public string PgauthTime { get; set; }
         /// <summary>
-        /// 빌링타입 P:결제, C: 취소
+        /// 빌링타입 S:결제, C: 취소, P:프로모션
         /// </summary>
         public string BillType { get; set; }
+        public bool Use { get; set; }
     }
 }

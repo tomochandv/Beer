@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using Bottleshop.Api.Models;
+using MongoDB.Driver;
 
 namespace Bottleshop.Api.Lib
 {
@@ -16,7 +17,7 @@ namespace Bottleshop.Api.Lib
             if (userInCookie != null)
             {
                 AUser();
-                //CurrentPayInfo();
+                GetPayInfo();
             }
             else
             {
@@ -41,6 +42,28 @@ namespace Bottleshop.Api.Lib
                 ViewBag.USERID = info.Uid;
             }
             return info;
+        }
+
+        public bool GetPayInfo()
+        {
+            bool result = false;
+            var filter = Builders<MemberPayInfo>.Filter.Eq("Uid", AUser().Uid);
+            var model = MongodbHelper.FindOne<MemberPayInfo>(filter, "MemberPayInfo");
+            if(model != null)
+            {
+                if(model.billList != null && model.billList.Count > 0)
+                {
+                    var data = model.billList.Where(x => x.Use == true && x.StartDate <= DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd") + " 23:59:59")
+                        && x.EndDate >= DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd") + " 00:00:00")).ToList();
+                    if(data.Count > 0)
+                    {
+                        result = true;
+                        ViewBag.pay = "Y";
+                    }
+                }
+            }
+
+            return result;
         }
 
        

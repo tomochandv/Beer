@@ -1,0 +1,22 @@
+﻿
+<div class="page-header">
+    @if (ViewBag.result == "S")
+    {
+        <h1>결제 성공!. Success. <small>5초 후 이동합니다..</small></h1>
+    }
+    else
+    {
+        <h1>결제 실패!. Fail. <small>5초 후 이동합니다..</small></h1>
+    }
+
+</div>
+@section script{
+    <script type="text/javascript">
+        $(function () {
+            setTimeout('go_url()', 5000);
+        });
+        function go_url(){
+            location.href = "@Url.Action("Index", "Home")";
+        }
+    </script>
+}

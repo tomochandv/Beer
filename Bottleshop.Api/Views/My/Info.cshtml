@@ -1,0 +1,255 @@
+﻿@model Bottleshop.Api.Models.MemberPayInfo
+
+<div class="container">
+    <h1 id="p1">My Info</h1>
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingOne">
+                <h4 class="panel-title">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        기본정보
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                <div class="panel-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">ID</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="txtId" readonly >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail2" class="col-sm-2 control-label">Name</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="txtName" readonly >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail1" class="col-sm-2 control-label">Email</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="txtEmail" readonly >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail0" class="col-sm-2 control-label">Tell</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="txtTell" readonly >
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="button" id="btnFind" class="btn btn-danger">
+                                    <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
+                                    탈퇴
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingTwo">
+                <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        비밀번호 변경
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                <div class="panel-body">
+                    <form name="sentMessage" id="contactForm" novalidate>
+                        <div class="row control-group">
+                            <div class="form-group col-xs-12 floating-label-form-group controls">
+                                <label>Password</label>
+                                <input type="password" class="form-control" placeholder="Password" id="password1" name="password1" required data-validation-required-message="Please enter your password.">
+                                <p class="help-block text-danger"></p>
+                            </div>
+                        </div>
+                        <div class="row control-group">
+                            <div class="form-group col-xs-12 floating-label-form-group controls">
+                                <label>Confirm Password</label>
+                                <input type="password" class="form-control" placeholder="Confirm Password" id="password2" required data-validation-required-message="Please enter your password." data-validation-matches-match="password1" data-validation-matches-message="비밀번호가 다릅니다.">
+                                <p class="help-block text-danger"></p>
+                            </div>
+                        </div>
+                        <br>
+                        <div id="success"></div>
+                        <div class="row">
+                            <div class="form-group col-xs-12">
+                                <button type="submit" class="btn btn-default btn-primary">비밀번호 변경</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingThree">
+                <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        맴버십 결제 정보
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseThree" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree">
+                <div class="panel-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="text-align:center;">사용기간</th>
+                                <th style="text-align:center;">결제금액</th>
+                                <th style="text-align:center;">결제일</th>
+                                <th style="text-align:center;">결제상태/종류</th>
+                                <th style="text-align:center;">사용여부</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null)
+                            {
+                                foreach (var data in Model.billList)
+                                {
+                                    <tr>
+                                        <td>
+                                            @data.StartDate.ToShortDateString()
+                                            ~
+                                            @data.EndDate.ToShortDateString()
+                                        </td>
+                                        <td style="text-align:right;">20,000</td>
+                                        <td style="text-align:center;">@data.InDate.ToShortDateString()</td>
+                                        <td>
+                                            @if (data.BillType == "S")
+                                            {
+                                                <span>결제성공</span>
+                                            }
+                                            else if (data.BillType == "C")
+                                            {
+                                                <span>결제취소</span>
+                                            }
+                                            else if (data.BillType == "P")
+                                            {
+                                                <span>프로모션코드</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (data.Use )
+                                            {
+                                                <span>사용중</span>
+                                            }
+                                            else
+                                            {
+                                                <span>사용불가</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="5" style="text-align:right;">
+                                    <button type="button" id="btnPay" class="btn btn-default btn-sm btn-primary"><i class="fa fa-ticket" aria-hidden="true"></i> 맴버십결제</button>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section script
+{
+    <script type="text/javascript">
+        $(function () {
+            $("#contactForm input").not("[type=submit]").jqBootstrapValidation({
+                preventSubmit: true,
+                submitError: function ($form, event, errors) {
+                    // additional error messages or events
+                },
+                submitSuccess: function ($form, event) {
+                    var data = Common.Ajax("@Url.Action("PwdChange", "Account")", { pwd: $("#password1").val() });
+                    //submit 안일어나게
+                    event.preventDefault();
+
+                    if (data > 0) {
+                        $('#success').html("<div class='alert alert-info'>");
+                        $('#success > .alert-info').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;")
+                            .append("</button>");
+                        $('#success > .alert-info').append("<strong>비밀번호 변경 성공.");
+                        $('#success > .alert-info').append('</div>');
+                        $('#contactForm').trigger("reset");
+                    }
+                    else {
+                        $('#success').html("<div class='alert alert-danger'>");
+                        $('#success > .alert-danger').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;")
+                            .append("</button>");
+                        $('#success > .alert-danger').append("<strong>에러.");
+                        $('#success > .alert-danger').append('</div>');
+                    }
+                }
+            });
+            $("#btnFind").click(function () {
+                BootstrapDialog.show({
+                    title: '경고',
+                    message: '<p>탈퇴시 회원권 기한이 남아있어도 환불 불가합니다.</p><p>모든 자료가 영구적으로 지워지게 됩니다.<br> 그래도 하시겠습니까?</p>',
+                    buttons: [{
+                        label: 'Close',
+                        action: function (dialog) {
+                            dialog.close();
+                        }
+                    },
+                    {
+                        label: '탈퇴',
+                        action: function (dialog) {
+                            var data = Common.Ajax("@Url.Action("UserOut")", null);
+                            if (data > 0) {
+                                alert('good bye ...ㅠㅠ');
+                                location.href = '@Url.Action("Index","Home")';
+                            }
+                        }
+                    }]
+                });
+            });
+
+            $("#btnPay").click(function () {
+                BootstrapDialog.show({
+                    title: '결제전 알림',
+                    message: '<p>이전에 결제하신 맴버십은 기간이 남아있어도 사용이 불가 하게 됩니다. 그래도 하시겠습니까?</p>',
+                    buttons: [{
+                        label: 'Close',
+                        action: function (dialog) {
+                            dialog.close();
+                        }
+                    },
+                    {
+                        label: '결제진행',
+                        action: function (dialog) {
+                            location.href = "@Url.Action("Pay","Pay")";
+                        }
+                    }]
+                });
+            });
+
+            Page.GetInfo();
+        });
+
+        var Page = {
+            GetInfo: function () {
+                var data = Common.Ajax("@Url.Action("GetMyInfo")", null);
+                if (data != null) {
+                    $("#txtId").val(data.Uid);
+                    $("#txtName").val(data.Name);
+                    $("#txtTell").val(data.Tell);
+                    $("#txtEmail").val(data.Email);
+                }
+            }
+        }
+    </script>
+}

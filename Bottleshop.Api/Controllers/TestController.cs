@@ -18,19 +18,18 @@ namespace Bottleshop.Api.Controllers
 
         public JsonResult Insert()
         {
-            List<Notice> list = new List<Notice>();
+            List<Promotion> list = new List<Promotion>();
             
 
             for(int i=0; i< 100; i++)
             {
-                Notice ca = new Notice();
-                ca.Title = i.ToString();
-                ca.Contents = i.ToString();
-                ca.Indate = DateTime.Now;
+                Promotion ca = new Promotion();
+                ca.PromotionCode = i.ToString();
+                ca.Send = true;
                 list.Add(ca);
                 
             }
-            MongodbHelper.InsertManyModel<Notice>(list, "Notice");
+            MongodbHelper.InsertManyModel<Promotion>(list, "Promotion");
            return Json("", JsonRequestBehavior.AllowGet);
         }
 

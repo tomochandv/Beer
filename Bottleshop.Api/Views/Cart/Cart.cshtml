@@ -29,6 +29,7 @@
                                         <td>@string.Format("{0:###,###}", data.Product.ProductSaleMemberPrice)</td>
                                         <td>
                                             <input type="number" name="qty" style="width:50px;" value="@data.Qty" />
+                                            <input type="hidden" name="pr_idx" value="@data.Product.Id" />
                                         </td>
                                         <td>
                                             <button type="button" name="btnDelete" class="btn btn-default" value="@data.Id"><i class="fa fa-trash" aria-hidden="true"></i> 삭제</button>
@@ -59,7 +60,7 @@
     <script type="text/javascript">
         $(function () {
             $("[name='btnDelete']").click(function () {
-                var data = Common.Ajax("@Url.Action("DelteCart")", { pr_idx: $(this).val() });
+                var data = Common.Ajax("@Url.Action("Delete")", { pr_idx: $(this).val() });
                 if (data > 0) {
                     location.href = "@Url.Action("Cart")";
                 }

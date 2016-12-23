@@ -62,7 +62,7 @@ namespace BottleShop.Controllers
             DataSet ds = new Dac_Product().ProductSelect(bc_idx, pr_name, sidx, eidx, isSale);
             int totalRows = DataType.GetInt(ds.Tables[1].Rows[0][0]);
             List<ProductModel> list = DataType.ConvertToList<ProductModel>(ds.Tables[0]);
-            double dd = totalRows / rows;
+            double dd = double.Parse(totalRows.ToString()) / double.Parse(rows.ToString());
             ViewBag.page = page;
             ViewBag.total = totalRows;
             ViewBag.Pages = Math.Ceiling(dd);

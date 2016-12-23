@@ -137,7 +137,7 @@
             $("[name='btnAdd']").click(function(){
 
                 var pr_idx = $(this).val();
-                var data = Common.Ajax("@Url.Action("AddCart")", { pr_idx: pr_idx});
+                var data = Common.Ajax("@Url.Action("Add", "Cart")", { pr_idx: pr_idx});
                 if(data > 0){
                     BootstrapDialog.show({
                         title: 'Notify',
@@ -145,7 +145,7 @@
                         buttons: [{
                             label: 'Cart',
                             action: function(dialog) {
-                                location.href = '@Url.Action("Cart", "User")';
+                                location.href = '@Url.Action("Cart", "Cart")';
                             }
                         }, {
                             label: 'Close',

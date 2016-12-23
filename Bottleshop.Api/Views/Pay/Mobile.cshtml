@@ -1,0 +1,65 @@
+﻿@{Layout = null;}
+@model Bottleshop.Api.Models.Member
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+
+    <script>
+        window.name = "BTPG_CLIENT";
+
+        var width = 330;
+        var height = 480;
+        var xpos = (screen.width - width) / 2;
+        var ypos = (screen.width - height) / 2;
+        var position = "top=" + ypos + ",left=" + xpos;
+        var features = position + ", width=320, height=440";
+        function formSubmit() {
+            on_web();
+        }
+        function on_web() {
+            var order_form = document.form1;
+            var wallet = window.open("", "BTPG_WALLET", features);
+            if (wallet == null) {
+                if ((webbrowser.indexOf("Windows NT 5.1") != -1) && (webbrowser.indexOf("SV1") != -1)) {    // Windows XP Service Pack 2
+                    alert("팝업이 차단되었습니다. 브라우저의 상단 노란색 [알림 표시줄]을 클릭하신 후 팝업창 허용을 선택하여 주세요.");
+                }
+                else {
+                    alert("팝업이 차단되었습니다.");
+                }
+                return false;
+            }
+
+            order_form.target = "BTPG_WALLET";
+            //order_form.action = "https://inilite.inicis.com/inibill/inibill_card.jsp";
+            order_form.submit();
+        }
+        function Complete() {
+            location.href = "@Url.Action("Index", "Home")";
+        }
+
+    </script>
+    <form id="form1" name="form1" method="post" action="https://inilite.inicis.com/inibill/inibill_card.jsp" accept-charset="UTF-8">
+        <input type="hidden" name="goodname" value="바틀샵 맴버십" />
+        <input type="hidden" name="mid" value="bthebottle" />
+        <input type="hidden" name="price" value="20000" />
+        <input type="hidden" name="orderid" value="@ViewBag.Moid" />
+        <input type="hidden" name="timestamp" value="@ViewBag.timestmap" />
+        <input type="hidden" name="p_noti" value="@ViewBag.Moid" />
+        <input type="hidden" name="buyername" value="@Model.Name" />
+        <input type="hidden" name="returnurl" value="@(System.Configuration.ConfigurationManager.AppSettings["Domain"] + "/Pay/MobileReturn")" />
+        <input type="hidden" name="period" value="M2" />
+        <input type="hidden" name="hashdata" value="@(Bottleshop.Api.Lib.ProjectUtill.ComputeHash(string.Format("bthebottle{0}{1}c0JYRnlJTHpaMEdKVmkwQTJqdy9Ydz09", ViewBag.Moid, ViewBag.timestmap)))" />
+
+
+        @*<input type="button" onclick="formSubmit();" />*@
+    </form>
+    <script>
+        on_web();
+    </script>
+</body>
+</html>

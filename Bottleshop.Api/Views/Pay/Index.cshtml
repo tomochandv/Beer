@@ -1,0 +1,170 @@
+﻿@{
+    ViewBag.Title = "Pay";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header">
+                <h1>Membership Payment <small>맴버십 결제</small></h1>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <ul>
+                        <li>맴버십은 월 20,000원 정기결제 입니다. </li>
+                        <li>맴버십 철회는 가입일로 7일 이내,  맴버십을 이용하여 한번도 구매하지 않아야 합니다.</li>
+                        <li>신용카드 결제만 가능합니다.(<span style="color:red;">국민, 농협 계열 신용카드는 결제 되지 않습니다.</span>)</li>
+                    </ul>
+                </div>
+                <div class="panel-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">결제방법 </label>
+                            @if (ViewBag.Mobile == "M")
+                            {
+                                <br />
+                                <label style="color:red;">ISP 결제시에는 기본 브라우저를 사용해주세요.(아이폰 : 사파리)</label>
+                            }
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="rdoType" value="C" checked>
+                                    신용카드 (Credit Card)
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="rdoType" value="P">
+                                    프로모션코드 (Promotion Code)
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group form-inline" style="display:none;" id="divPromo">
+                            <label for="exampleInputPassword1">Promotion Code</label>
+                            <input type="text" class="form-control input-lg" id="txtPromo" placeholder="Code" required>
+                            @*<button type="button" class="btn btn-default" id="btnPay">적용(Apply)</button>*@
+                        </div>
+                    </form>
+                </div>
+                <div class="panel-footer">
+                    <button type="button" class="btn btn-default" id="btnPay">결제(Pay)</button>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<form id="form1" name="form1" method="post" action="https://mobile.inicis.com/smart/wcard">
+    <input type="hidden" name="P_GOODS" value="membership" />
+    <input type="hidden" name="P_MID" value="INIpayTest" />
+    <input type="hidden" name="P_AMT" value="100" />
+    <input type="hidden" name="P_OID" value="@ViewBag.Moid" />
+    <input type="hidden" name="P_NOTI" value="@ViewBag.Moid" />
+    <input type="hidden" name="P_EMAIL" value="@ViewBag.EMAIL" />
+    <input type="hidden" name="P_UNAME" value="@ViewBag.NAME" />
+    <input type="hidden" name="P_NEXT_URL" value="@(System.Configuration.ConfigurationManager.AppSettings["Domain"] + "/Pay/MobileResult")" />
+    <input type="hidden" name="inipaymobile_type" value="web" />
+    <input type="hidden" name="P_OFFER_PERIOD" value="M2" />
+    <input type="hidden" name="P_CHARSET" value="utf8" />
+    @*<input type="button" onclick="formSubmit();" />*@
+</form>
+
+
+@{
+    var data = Guid.NewGuid().ToString().Replace("-", "");
+    var count = data.Length;
+}
+
+@section script{
+    <script type="text/javascript">
+        $(function () {
+            $("[name='rdoType']").click(function () {
+                if ($("[name='rdoType']:checked").val() == "P") {
+                    $("#divPromo").slideDown();
+                }
+                else {
+                    $("#divPromo").slideUp();
+                }
+            });
+            $("#btnPay").click(function () {
+                var type = $("[name='rdoType']:checked").val();
+                if (type == 'C') {
+                    if ('@ViewBag.mobile' == "M") {
+                        location.href = "@Url.Action("Mobile")";
+
+                    }
+                    else {
+                        location.href = "@Url.Action("Desk")";
+                    }
+                }
+                else {
+                    var data = Common.Ajax("@Url.Action("PromotionPayment")", { code: $("#txtPromo").val() });
+                    if (data != "Y") {
+                        BootstrapDialog.show({
+                            title: 'Alert',
+                            message: data,
+                            buttons: [{
+                                label: 'Close',
+                                action: function (dialog) {
+                                    dialog.close();
+                                }
+                            }]
+                        });
+                    }
+                    else {
+                        BootstrapDialog.show({
+                            title: '감사합니다',
+                            message: '감사합니다. 결제가 되었습니다. 많은 이용 부탁드립니다.',
+                            buttons: [{
+                                label: 'Close',
+                                action: function (dialog) {
+                                    dialog.close();
+                                }
+                            },
+                            {
+                                label: '상품보러가기',
+                                action: function (dialog) {
+                                    location.href = '@Url.Action("Index","Product")';
+                                }
+                            }
+                            ]
+                        });
+                    }
+                }
+            });
+        });
+
+        function EndBill() {
+            @*var tx = Common.Ajax("@Url.Action("Index", "Tx")");
+            var data = Common.Ajax("@Url.Action("TxModule")", {result : tx});
+            if (data == "S") {
+                location.href = "@Url.Action("MyInfo","User")"
+            }
+            else {
+                alert('결제');
+                $("#btnPay").show();
+            }
+            if (tx == 'S')
+            {
+
+            }
+            else {
+
+            }*@
+
+            var data = Common.Ajax("@Url.Action("TxModule")");
+            if (data == "S") {
+                location.href = "@Url.Action("MyInfo","User")"
+            }
+            else {
+                alert('결제');
+                $("#btnPay").show();
+            }
+
+        }
+    </script>
+}

@@ -1,0 +1,99 @@
+﻿@model List<Bottleshop.Api.Models.Order>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Order History</h3>
+            <form name="form1">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">상태</div>
+                        <div class="panel-body">
+                            <ul>
+                                <li>주문완료 : 고객님이 상품 주문을 하시고 the bottleshop 에서 확인을 하지 않은 상태.</li>
+                                <li>준비중 : 고객님이 상품 주문을 하시고 the bottleshop 에서 확인중인 상태.</li>
+                                <li>재고없음 : 상품의 재고가 없는 경우.</li>
+                                <li>준비완료 : 고객님의 상품을 the bottleshop 에서 준비하여 상점으로 찾으러 오시면 되는 상태.</li>
+                                <li>판매완료 : 고객님이 상품을 the bottleshop 상점에서 구매하신 상태.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width: 10%; text-align: center;">주문번호</th>
+                                <th style="width: 10%; text-align: center;">주문일</th>
+                                <th style="text-align:center;">금액</th>
+                                <th style="width: 10%; text-align: center;">상태</th>
+                                <th style="text-align: center;">상품명</th>
+                                <th style="text-align: center;">가격</th>
+                                <th style="text-align: center;">수량</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Count > 0)
+                            {
+                                foreach (var data in Model)
+                                {
+                                    foreach (var data1 in data.Product)
+                                    {
+                                        <tr>
+                                            <td style="text-align: center;">@data.Id.ToString()</td>
+                                            <td style="text-align: center;">@data.OrderDate.ToString("yyyy.MM.dd") </td>
+                                            <td style="text-align: center;">@string.Format("{0:###,###}", data.TotalAmount)</td>
+                                            <td style="text-align: center;">
+                                                @if (data.OrderStatus == 0)
+                                                {
+                                                    <span>주문완료</span>
+                                                }
+                                                else if (data.OrderStatus == 1)
+                                                {
+                                                    <span>준비중</span>
+                                                }
+                                                else if (data.OrderStatus == 4)
+                                                {
+                                                    <span>재고없음</span>
+                                                }
+                                                else if (data.OrderStatus == 2)
+                                                {
+                                                    <span>준비완료</span>
+                                                }
+                                                else if (data.OrderStatus == 3)
+                                                {
+                                                    <span>판매완료</span>
+                                                }
+                                            </td>
+                                            <td>@data1.Product.ProductName</td>
+                                            <td>@string.Format("{0:###,###}", data1.Price)</td>
+                                            <td>@string.Format("{0:###,###}", data1.Qty)</td>
+                                        </tr>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="7">No data.</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section script{
+    <script type="text/javascript">
+        $(function () {
+            $('table').rowspan(0);
+            $('table').rowspan(1);
+            $('table').rowspan(2);
+            $('table').rowspan(3);
+            $('table').rowspan(4);
+        });
+    </script>
+}

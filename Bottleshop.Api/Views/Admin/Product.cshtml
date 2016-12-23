@@ -1,0 +1,248 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model Bottleshop.Api.Lib.MongoPagingResult<Bottleshop.Api.Models.Product>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label for="txtName">상품명</label>
+                        <input type="text" class="form-control" id="txtName">
+                    </div>
+                    <div class="form-group">
+                        <label for="selCate">카테고리</label>
+                        <select id="selCate" class="form-control">
+                            <option value="0">전체</option>
+                            <option value="1">Wine</option>
+                            <option value="2">Beer</option>
+                            <option value="3">Whisky</option>
+                            <option value="6">Spirit</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="selStatus">상태</label>
+                        <select id="selStatus" class="form-control">
+                            <option value="">전체</option>
+                            <option value="Y">판매상품</option>
+                            <option value="N">미판매상품</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-default btn-sm" id="txtSearch">
+                        <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Search
+                    </button>
+                </form>
+            </div>
+            <div class="panel-footer">
+                <button type="button" class="btn btn-default btn-sm" id="btnExcelDown">
+                    <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span> Excel Down
+                </button>
+                <button type="button" class="btn btn-default btn-sm" id="btnExcel">
+                    <span class="glyphicon glyphicon-floppy-open" aria-hidden="true"></span> Excel Upload
+                </button>
+                <button type="button" class="btn btn-default btn-sm btn-success" id="btnUpdate">
+                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> 수정
+                </button>
+                <button type="button" class="btn btn-default btn-sm btn-warning" id="btnCancle" style="display:none;">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> 취소
+                </button>
+                <button type="button" class="btn btn-default btn-sm btn-primary" id="txtUpdate">
+                    <span class="glyphicon glyphicon-saved" aria-hidden="true"></span> 저장
+                </button>
+                <button type="button" class="btn btn-default btn-sm btn-warning" id="btnAdd">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 추가
+                </button>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="col-md-12">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th style="text-align:center; width:80px;">판매상품<br /><input type="checkbox" id="ckAll" /></th>
+                    <th style="text-align:center; width:5%;">ID</th>
+                    <th style="text-align: center; width: 5%;">카테고리</th>
+                    <th style="text-align:center; width:auto;">상품명</th>
+                    <th style="text-align: center; width: 5%;">구분</th>
+                    <th style="text-align: center; width: 5%;">수량</th>
+                    <th style="text-align: center; width: 5%;">용량</th>
+                    <th style="text-align: center; width: 10%;">수입사</th>
+                    <th style="text-align: center; width: 5%;">공급가</th>
+                    <th style="text-align: center; width: 5%;">회원판매가</th>
+                    <th style="text-align: center; width: 5%;">일반가</th>
+                    <th style="text-align: center; width: 5%;">판매수량</th>
+                    <th style="text-align: center; width: 5%;">매장재고</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count > 0)
+                {
+                    foreach (var data in Model.Result)
+                    {
+                        <tr>
+                            <td style="text-align:center;"><input type="checkbox" name="ckSale" value="@data.Id" @(data.IsSale == true ? "checked" : "") /></td>
+                            <td>@data.Id</td>
+                            <td>
+                                @Bottleshop.Api.Lib.ProjectUtill.GetCategoryName(data.CategoryId)
+                                <select name="selEC" style="display:none;">
+                                    <option value="1" @(Bottleshop.Api.Lib.ProjectUtill.GetCategoryName(data.CategoryId).ToLower().Contains("wine") ? "selected" : "")>Wine</option>
+                                    <option value="2" @(Bottleshop.Api.Lib.ProjectUtill.GetCategoryName(data.CategoryId).ToLower().Contains("beer") ? "selected" : "")>Beer</option>
+                                    <option value="3" @(Bottleshop.Api.Lib.ProjectUtill.GetCategoryName(data.CategoryId).ToLower().Contains("whisky") ? "selected" : "")>Whisky</option>
+                                    <option value="6" @(Bottleshop.Api.Lib.ProjectUtill.GetCategoryName(data.CategoryId).ToLower().Contains("spirit") ? "selected" : "")>Spirit</option>
+                                </select>
+                            </td>
+                            <td>@data.ProductName</td>
+                            <td>@data.ProductGubun</td>
+                            <td>@data.ProductQty</td>
+                            <td>@data.ProductLiter</td>
+                            <td>@data.ProductCompany</td>
+                            <td>@string.Format("{0:###,###}", data.ProductPurchsePrice)</td>
+                            <td>
+                                @string.Format("{0:###,###}", data.ProductSaleMemberPrice)
+                                <input type="text" name="txtPrice" value="@data.ProductSaleMemberPrice" style="display:none;" />
+                            </td>
+                            <td>
+                                @string.Format("{0:###,###}", data.ProductSaleNormalPrice)
+                                <input type="text" name="txtPrice1" value="@data.ProductSaleNormalPrice" style="display:none;" />
+                            </td>
+                            <td>
+                                @string.Format("{0:###,###}", data.ProductSaleQty)
+                                <input type="text" name="txtQty" value="@data.ProductSaleQty" style="display:none;" />
+                            </td>
+                            <td>
+                                @string.Format("{0:###,###}", data.Inqty)
+                                <input type="text" name="txtInqty" value="@data.Inqty" style="display:none;" />
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+
+    </div>
+    <div class="col-md-12" style="text-align:center;">
+        <div id="page-selection"></div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" style="display:none;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">New message</h4>
+            </div>
+            <div class="modal-body">
+                <form id="form1" enctype="multipart/form-data" method="post" action="@Url.Action("ExcelImport")">
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">Excel:</label>
+                        <input type="file" name="file1">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="btnsubmit">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section script{
+    <script type="text/javascript">
+        $(function () {
+            $("#navbar > ul > li").removeClass("active");
+            $("#navbar > ul > li").eq(1).addClass("active");
+
+            $("#selCate").val('@ViewBag.bc_idx');
+            $("#txtName").val('@ViewBag.pr_name');
+            $("#selStatus").val('@ViewBag.isSale');
+
+            $("#btnExcel").click(function () {
+                $('#exampleModal').modal('toggle');
+            });
+            $("#btnsubmit").click(function () {
+                $("#form1").submit();
+            });
+            $('#page-selection').bootpag({
+                page:@ViewBag.page,
+                firstLastUse: true,
+                first: '←',
+                last: '→',
+                maxVisible: 10,
+                total: @ViewBag.Pages
+                }).on("page", function (event, num) {
+                    var url = "@Url.Action("Product")?page=" + num;
+                    url += "&bc_idx=" + $("#selCate").val();
+                    url += "&pr_name=" + $("#txtName").val();
+                    url += "&isSale=" + $("#selStatus").val();
+                    location.href = url;
+                });
+
+            $("#txtSearch").click(function () {
+                var url = "@Url.Action("Product")?page=1";
+                url += "&bc_idx=" + $("#selCate").val();
+                url += "&pr_name=" + $("#txtName").val();
+                url += "&isSale=" + $("#selStatus").val();
+                location.href = url;
+            });
+            $("#ckAll").click(function(){
+                if($("#ckAll:checked").length > 0){
+                    $("[name='ckSale']").prop("checked", "checked");
+                }
+                else{
+                    $("[name='ckSale']").removeProp("checked");
+                }
+            });
+            $("#txtUpdate").click(function(){
+                var paramName = new Array();
+                var paramValue = new Array();
+                var paramPrice = new Array();
+                var paramQty = new Array();
+                var paramCat = new Array();
+                var paramNoPrice = new Array();
+                var paramInqty = new Array();
+                $("[name='ckSale']").each(function(index){
+                    paramName.push($(this).val());
+                    paramValue.push($(this).prop("checked") == true ? "Y" : "N");
+                    paramPrice.push($(this).parent().parent().children().eq(9).find("[name='txtPrice']").val());
+                    paramNoPrice.push($(this).parent().parent().children().eq(10).find("[name='txtPrice1']").val());
+                    paramQty.push($(this).parent().parent().children().eq(11).find("[name='txtQty']").val());
+                    paramCat.push($(this).parent().parent().children().eq(2).find("[name='selEC']").val());
+                    paramInqty.push($(this).parent().parent().children().eq(12).find("[name='txtInqty']").val());
+                });
+                console.log(paramInqty);
+                var data = $.ajax({
+                    url :"@Url.Action("SaleUpdate")",
+                    data:{name :  JSON.stringify(paramName), value :  JSON.stringify(paramValue),
+                        price :  JSON.stringify(paramPrice), qty :  JSON.stringify(paramQty), cat: JSON.stringify(paramCat), price1 :  JSON.stringify(paramNoPrice), inqty : JSON.stringify(paramInqty)},
+                    type: 'POST',
+                    success: function (data) {
+                        console.log(data);
+                        location.href = '@Html.Raw(Request.Url.PathAndQuery)';
+                    },
+                    error: function (e) {
+                        console.log(e);
+                        alert('error');
+                    }
+                });
+            });
+            $("#btnExcelDown").click(function(){
+                window.open("@Url.Action("Down")");
+            });
+            $("#btnUpdate").click(function(){
+                $("[name='selEC'] ,[name='txtPrice'] , [name='txtQty'], #btnCancle,  [name='txtPrice1'],  [name='txtInqty']").toggle();
+            });
+            $("#btnCancle").click(function(){
+                $("[name='selEC'] ,[name='txtPrice'] , [name='txtQty'], #btnCancle,  [name='txtPrice1'],  [name='txtInqty']").toggle();
+            });
+            $("#btnAdd").click(function(){
+                location.href= '@Url.Action("ProcuctAddView")';
+            });
+        });
+    </script>
+}

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
@@ -57,6 +58,18 @@ namespace Bottleshop.Api.Lib
             long count = 0;
             var collection = database.GetCollection<T>(collectionName);
             var result = collection.UpdateMany(filter, update);
+            if (result.IsModifiedCountAvailable)
+            {
+                count = result.ModifiedCount;
+            }
+            return count;
+        }
+
+        public static long ReplaceOne<T>(FilterDefinition<T> filter, T instance, string collectionName) where T : class
+        {
+            long count = 0;
+            var collection = database.GetCollection<T>(collectionName);
+            var result = collection.ReplaceOne(filter, instance, new UpdateOptions { IsUpsert = true });
             if (result.IsModifiedCountAvailable)
             {
                 count = result.ModifiedCount;

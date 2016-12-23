@@ -10,39 +10,47 @@ using MongoDB.Driver;
 
 namespace Bottleshop.Api.Controllers
 {
-    public class ProductController : BaseController
+    public class AdminController : AdminBaseController
     {
         //
-        // GET: /Product/
+        // GET: /Admin/
 
-        public ActionResult Index(int bc_idx = 2, string pr_name = "", int page = 1)
+        public ActionResult Index()
         {
-            int rows = 10;
+            return View();
+        }
+
+        public ActionResult Product(int bc_idx = 0, string pr_name = "", int page = 1, string isSale = "")
+        {
+            int rows = 20;
             int sidx = ((page - 1) * rows);
             ViewBag.page = page;
             ViewBag.bc_idx = bc_idx;
             ViewBag.pr_name = pr_name;
+            ViewBag.isSale = isSale;
             ViewBag.bc_name = ProjectUtill.GetCategoryName(bc_idx);
 
             var filter = FilterDefinition<Product>.Empty;
-            if(pr_name != "")
+            if (bc_idx != 0)
             {
-                filter = Builders<Product>.Filter.Eq("IsSale", true) & Builders<Product>.Filter.Eq("CategoryId", bc_idx) & Builders<Product>.Filter.Regex("ProductName", new BsonRegularExpression(pr_name, "i"));
+                filter = filter & Builders<Product>.Filter.Eq("bc_idx", DataType.Int(bc_idx));
             }
-            else
+            if (pr_name != "")
             {
-                filter = Builders<Product>.Filter.Eq("IsSale", true) & Builders<Product>.Filter.Eq("CategoryId", bc_idx);
+                filter = filter & Builders<Product>.Filter.Eq("ProductName", pr_name);
+            }
+            if (isSale != "")
+            {
+                filter = filter & Builders<Product>.Filter.Eq("IsSale", isSale == "Y" ? true: false);
             }
 
             var sort = Builders<Product>.Sort.Ascending("ProductName");
             MongoPagingResult<Product> result = MongodbHelper.FindPaging<Product>(filter, sort, "Product", sidx, rows);
 
-            double dd = double.Parse(result.Count.ToString()) /  double.Parse(rows.ToString());
+            double dd = double.Parse(result.Count.ToString()) / double.Parse(rows.ToString());
             ViewBag.Pages = Math.Ceiling(dd);
             return View(result);
         }
-
-
 
     }
 }

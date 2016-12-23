@@ -1,0 +1,99 @@
+﻿@{Layout = null;}
+@model Bottleshop.Api.Models.Member
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+@*<html lang="en">*@
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>The Bottle Shop</title>
+    <!-- Chrome, Safari, IE -->
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <!-- Firefox, Opera (Chrome and Safari say thanks but no thanks) -->
+    <link rel="icon" href="/img/favicon.png">
+    <!-- Bootstrap Core CSS -->
+    <link href="~/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- 이니시스 표준결제 js -->
+    <script type="text/javascript" src="https://stdpay.inicis.com/stdjs/INIStdPay.js" charset="UTF-8"></script>
+    <script type="text/javascript">
+        function send() {
+            INIStdPay.pay('SendPayForm_id');
+        }
+
+    </script>
+
+</head>
+@{
+    // TimeStamp 생성
+    string timeTemp = "" + DateTime.UtcNow.Subtract(DateTime.MinValue.AddYears(1969)).TotalMilliseconds;
+    string[] artime = timeTemp.Split('.');
+    string signKey = "cnl4dktVbk5YcnYxeGdOT0JCM0RIZz09";
+    string oid = "bthebottle" + artime[0];
+    string price = "20000";
+    string signiture = Bottleshop.Api.Lib.ProjectUtill.ComputeHash(string.Format("oid={0}&price={1}&timestamp={2}",oid,  price, artime[0]));
+}
+<body>
+    <div class="container">
+        <div class="page-header">
+            <h1>The Bottlshop Membership 결제</h1>
+        </div>
+        <form id="SendPayForm_id">
+            <div class="form-group">
+                <label for="goodname">상품명</label>
+                <input type="text" class="form-control" name="goodname" value="더바틀샵 맴버쉽" readonly="readonly">
+            </div>
+            <div class="form-group">
+                <label for="price">상품가격</label>
+                <input type="text" class="form-control" name="price" value="@price" readonly="readonly">
+            </div>
+            <div class="form-group">
+                <label for="buyername">구매자 성명</label>
+                <input type="text" class="form-control" name="buyername" value="@Model.Name" readonly="readonly">
+            </div>
+            <div class="form-group">
+                <label for="buyertel">구매자 연락처</label>
+                <input type="text" class="form-control" name="buyertel" value="@Model.Tell" readonly="readonly">
+            </div>
+            <div class="form-group">
+                <label for="buyeremail">구매자 이메일</label>
+                <input type="text" class="form-control" name="buyeremail" value="@Model.Email" readonly="readonly">
+            </div>
+            <button type="button" class="btn btn-primary" id="btnPay">결제(Pay)</button>
+            <button type="button" class="btn btn-danger" id="btnCancle">취소(Cancle)</button>
+
+            <input type="hidden" name="mid" value="bthebottle">
+            <input type="hidden" name="currency" value="WON">
+            <input type="hidden" name="version" value="1.0">
+            <input type="hidden" name="offerPeriod" value="M2" />
+            <input type="hidden" name="acceptmethod" value="BILLAUTH(card)" />
+            <input type="hidden" name="billPrint_msg" value="고객님의 매월 결제일은 @DateTime.Now.ToString("dd") 입니다." />
+    
+            <input type="hidden" name="timestamp" value="@artime[0]" />
+            <input type="hidden" name="oid" value="@oid" />
+            <input type="hidden" name="mKey" value="@Bottleshop.Api.Lib.ProjectUtill.ComputeHash(signKey)" />
+            <input type="hidden" name="returnUrl" value="@(System.Configuration.ConfigurationManager.AppSettings["Domain"] + "/Pay/DeskTopReturn")" />
+            <input type="hidden" name="closeUrl" value="@System.Configuration.ConfigurationManager.AppSettings["Domain"]/Pay/Desk">
+            <input type="hidden" name="popupUrl" value="@System.Configuration.ConfigurationManager.AppSettings["Domain"]/popup.php">
+            <input type="hidden" name="gopaymethod" value="">
+            <input type="hidden" name="signature" value="@signiture">
+        </form>
+    </div>
+
+    <script src="~/vendor/jquery/jquery.min.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="~/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#btnPay").click(function () {
+                send();
+            });
+            $("#btnCancle").click(function () {
+                location.href = "@Url.Action("Index")";
+            });
+        });
+    </script>
+</body>
+</html>
