@@ -306,32 +306,41 @@ namespace Bottleshop.Api.Controllers
         public JsonResult CancleBill(string tid, string uid)
         {
             string message = string.Empty;
-            TxBillingCancle cancle = new TxBillingCancle(tid);
-            var filter_payinfo = Builders<MemberPayInfo>.Filter.Eq("Uid", uid);
-            var memberPayInfo = MongodbHelper.FindOne<MemberPayInfo>(filter_payinfo, "MemberPayInfo");
-            if(memberPayInfo != null && memberPayInfo.billList.Count > 0)
+            try
             {
-                foreach(var data in memberPayInfo.billList)
+                TxBillingCancle cancle = new TxBillingCancle(tid);
+                var filter_payinfo = Builders<MemberPayInfo>.Filter.Eq("Uid", uid);
+                var memberPayInfo = MongodbHelper.FindOne<MemberPayInfo>(filter_payinfo, "MemberPayInfo");
+                if (memberPayInfo != null && memberPayInfo.billList.Count > 0)
                 {
-                    data.Use = false;
+                    foreach (var data in memberPayInfo.billList)
+                    {
+                        data.Use = false;
+                    }
                 }
+
+                MemberBillingInfo billInfo = new MemberBillingInfo();
+                billInfo.BillingKey = "";
+                billInfo.BillType = "C";
+                billInfo.InDate = DateTime.Now;
+                billInfo.InicisId = tid;
+                billInfo.PgauthDate = cancle.pgauthdate;
+                billInfo.PgauthTime = cancle.pgauthtime;
+                billInfo.ResultMsg = cancle.resultmsg;
+                billInfo.ResultCode = cancle.resultcode;
+                billInfo.Use = false;
+
+                memberPayInfo.billList.Add(billInfo);
+                memberPayInfo.BillingUse = false;
+                memberPayInfo.IsAuth = false;
+                MongodbHelper.ReplaceOne<MemberPayInfo>(filter_payinfo, memberPayInfo, "MemberPayInfo");
+                message = "성공";
             }
-
-            MemberBillingInfo billInfo = new MemberBillingInfo();
-            billInfo.BillingKey = "";
-            billInfo.BillType = "C";
-            billInfo.InDate = DateTime.Now;
-            billInfo.InicisId = tid;
-            billInfo.PgauthDate = cancle.pgauthdate;
-            billInfo.PgauthTime = cancle.pgauthtime;
-            billInfo.ResultMsg = cancle.resultmsg;
-            billInfo.ResultCode = cancle.resultcode;
-            billInfo.Use = false;
-
-            memberPayInfo.billList.Add(billInfo);
-            memberPayInfo.BillingUse = false;
-            memberPayInfo.IsAuth = false;
-            MongodbHelper.ReplaceOne<MemberPayInfo>(filter_payinfo, memberPayInfo, "MemberPayInfo");
+            catch(Exception ex)
+            {
+                message = "error";
+                new Log().Error(ex);
+            }
             return Json(message);
         }
 

@@ -17,7 +17,7 @@ namespace Bottleshop.Api.Lib
             if (userInCookie != null)
             {
                 AUser();
-                if(AUser().Uid != "tomochan")
+                if(AUser().Uid != "admin")
                 {
                     context.Result = new RedirectResult(@Url.Action("Login", "Home"));
                 }

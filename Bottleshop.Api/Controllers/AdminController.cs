@@ -254,12 +254,13 @@ namespace Bottleshop.Api.Controllers
         #endregion 
         #endregion
 
+        #region Memeber
         public ActionResult Member(string name = "", string id = "", int page = 1)
         {
             int rows = 20;
             int sidx = ((page - 1) * rows);
             var filter = FilterDefinition<Member>.Empty;
-            if(name != "")
+            if (name != "")
             {
                 filter = filter & Builders<Member>.Filter.Regex("Name", new BsonRegularExpression(name, "i"));
             }
@@ -284,6 +285,12 @@ namespace Bottleshop.Api.Controllers
             var collection = MongodbHelper.FindOne<MemberPayInfo>(filter, "MemberPayInfo");
             return View(collection);
         }
+        
+        #endregion
 
+        public ActionResult Promotion()
+        {
+            return View();
+        }
     }
 }
