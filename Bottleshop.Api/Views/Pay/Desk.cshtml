@@ -75,8 +75,8 @@
             <input type="hidden" name="oid" value="@oid" />
             <input type="hidden" name="mKey" value="@Bottleshop.Api.Lib.ProjectUtill.ComputeHash(signKey)" />
             <input type="hidden" name="returnUrl" value="@(System.Configuration.ConfigurationManager.AppSettings["Domain"] + "/Pay/DeskTopReturn")" />
-            <input type="hidden" name="closeUrl" value="@System.Configuration.ConfigurationManager.AppSettings["Domain"]/Pay/Desk">
-            <input type="hidden" name="popupUrl" value="@System.Configuration.ConfigurationManager.AppSettings["Domain"]/popup.php">
+            <input type="hidden" name="closeUrl" value="@System.Configuration.ConfigurationManager.AppSettings["Domain"]/Pay">
+            <input type="hidden" name="popupUrl" value="@System.Configuration.ConfigurationManager.AppSettings["Domain"]/">
             <input type="hidden" name="gopaymethod" value="">
             <input type="hidden" name="signature" value="@signiture">
         </form>

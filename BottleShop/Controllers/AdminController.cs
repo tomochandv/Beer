@@ -56,7 +56,7 @@ namespace BottleShop.Controllers
         }
         public ActionResult ProductList(int bc_idx = 0, string pr_name = "", int page = 1, string isSale = "")
         {
-            int rows = 20;
+            int rows = 500;
             int sidx = ((page - 1) * rows) + 1;
             int eidx = page*rows;
             DataSet ds = new Dac_Product().ProductSelect(bc_idx, pr_name, sidx, eidx, isSale);
