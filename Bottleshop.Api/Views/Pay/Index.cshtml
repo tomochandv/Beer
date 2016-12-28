@@ -138,33 +138,5 @@
             });
         });
 
-        function EndBill() {
-            @*var tx = Common.Ajax("@Url.Action("Index", "Tx")");
-            var data = Common.Ajax("@Url.Action("TxModule")", {result : tx});
-            if (data == "S") {
-                location.href = "@Url.Action("MyInfo","User")"
-            }
-            else {
-                alert('결제');
-                $("#btnPay").show();
-            }
-            if (tx == 'S')
-            {
-
-            }
-            else {
-
-            }*@
-
-            var data = Common.Ajax("@Url.Action("TxModule")");
-            if (data == "S") {
-                location.href = "@Url.Action("MyInfo","User")"
-            }
-            else {
-                alert('결제');
-                $("#btnPay").show();
-            }
-
-        }
     </script>
 }

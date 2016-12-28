@@ -210,7 +210,6 @@ namespace Bottleshop.Api.Controllers
                     var memberPayInfo = MongodbHelper.FindOne<MemberPayInfo>(filter_payinfo, "MemberPayInfo");
 
                     List<MemberBillingInfo> list_memberBillInfo = new List<MemberBillingInfo>();
-
                     MemberBillingInfo billInfo = new MemberBillingInfo();
                     billInfo.BillingKey = "PROMOTION";
                     billInfo.InicisId = code;
@@ -240,6 +239,14 @@ namespace Bottleshop.Api.Controllers
                     {
                         memberPayInfo.BillingUse = false;
                         memberPayInfo.IsAuth = true;
+                        if (memberPayInfo.billList.Count > 0)
+                        {
+                            foreach (var datas in memberPayInfo.billList)
+                            {
+                                datas.Use = false;
+                            }
+                        }
+
                         memberPayInfo.billList.Add(billInfo);
                         MongodbHelper.ReplaceOne<MemberPayInfo>(filter_payinfo, memberPayInfo, "MemberPayInfo");
                     }
@@ -247,6 +254,8 @@ namespace Bottleshop.Api.Controllers
                     var filter_promotion = Builders<Promotion>.Filter.Eq("Id",promotion.Id);
                     var update_promotion = Builders<Promotion>.Update.Set("Use", true).Set("Uid", AUser().Uid).Set("UseDate", DateTime.Now);
                     MongodbHelper.Update<Promotion>(filter, update_promotion, "Promotion");
+
+                    message = "Y";
                 }
                 else
                 {

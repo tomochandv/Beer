@@ -19,6 +19,7 @@ namespace Bottleshop.Api.Models
         /// A : 어드민, U : 일반사용자
         /// </summary>
         public string  MemberType { get; set; }
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime CreateDate { get; set; }
 
     }

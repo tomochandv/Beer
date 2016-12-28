@@ -94,12 +94,13 @@ namespace Bottleshop.Api.Controllers
                 order.Product = listProductOrder;
                 order.TotalAmount = totalAmount;
                 order.Uid = AUser().Uid;
-                order.OrderDate = DateTime.Now;
+                order.OrderDate = DateTime.Now.ToLocalTime();
+                
 
                 MongodbHelper.InsertOneModel<Order>(order, "Order");
                 MongodbHelper.Delete<Cart>(Builders<Cart>.Filter.Eq("Uid", AUser().Uid), "Cart");
             }
-            return Redirect(Url.Action("Info", "My"));
+            return Redirect(Url.Action("Order", "My"));
         }
 
     }

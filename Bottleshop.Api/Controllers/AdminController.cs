@@ -254,12 +254,13 @@ namespace Bottleshop.Api.Controllers
         #endregion 
         #endregion
 
+        #region Member
         public ActionResult Member(string name = "", string id = "", int page = 1)
         {
             int rows = 20;
             int sidx = ((page - 1) * rows);
             var filter = FilterDefinition<Member>.Empty;
-            if(name != "")
+            if (name != "")
             {
                 filter = filter & Builders<Member>.Filter.Regex("Name", new BsonRegularExpression(name, "i"));
             }
@@ -284,6 +285,180 @@ namespace Bottleshop.Api.Controllers
             var collection = MongodbHelper.FindOne<MemberPayInfo>(filter, "MemberPayInfo");
             return View(collection);
         }
+        
+        #endregion
 
+        #region Promotion
+        public ActionResult Promotion(int page = 1, string poro_code = "", string use = "", string useid = "", string usedate = "")
+        {
+            int rows = 20;
+            int sidx = ((page - 1) * rows);
+            var filter = FilterDefinition<Promotion>.Empty;
+            if (poro_code != "")
+            {
+                filter = filter & Builders<Promotion>.Filter.Regex("PromotionCode", new BsonRegularExpression(poro_code, "i"));
+            }
+            if (use != "")
+            {
+                filter = filter & Builders<Promotion>.Filter.Eq("Use", use == "Y" ? true : false);
+            }
+            if (useid != "")
+            {
+                filter = filter & Builders<Promotion>.Filter.Regex("Uid", new BsonRegularExpression(useid, "i"));
+            }
+            if (usedate != "")
+            {
+                filter = filter & Builders<Promotion>.Filter.Eq("UseDate", DataType.Datetime(usedate));
+            }
+            var sort = Builders<Promotion>.Sort.Ascending("PromotionCode");
+            MongoPagingResult<Promotion> result = MongodbHelper.FindPaging<Promotion>(filter, sort, "Promotion", sidx, rows);
+
+            double dd = double.Parse(result.Count.ToString()) / double.Parse(rows.ToString());
+            ViewBag.Pages = Math.Ceiling(dd);
+            ViewBag.poro_code = poro_code;
+            ViewBag.use = use;
+            ViewBag.useid = useid;
+            ViewBag.usedate = usedate;
+            ViewBag.page = page;
+
+            return View(result);
+        }
+
+        public ActionResult CreatePromotion()
+        {
+            return View();
+        }
+
+        public JsonResult AddPromotion(int count = 0)
+        {
+            int rows = 0;
+            if (count > 0)
+            {
+                List<Promotion> list = new List<Promotion>();
+                for (int i = 1; i <= count; i++)
+                {
+                    string code = string.Format("BOTTLE{0}", Guid.NewGuid().ToString("N"));
+                    Promotion promotion = new Promotion();
+                    promotion.PromotionCode = code;
+                    promotion.Send = false;
+                    promotion.Uid = "";
+                    promotion.Use = false;
+                    promotion.UseDate = DateTime.Now;
+                    list.Add(promotion);
+                    rows++;
+                }
+                MongodbHelper.InsertManyModel<Promotion>(list, "Promotion");
+            }
+            return Json(rows);
+        }
+
+        public JsonResult SendPromotion(string poro_code = "")
+        {
+            var filter = Builders<Promotion>.Filter.Eq("PromotionCode", poro_code);
+            var update = Builders<Promotion>.Update.Set("Send", true);
+            long result = MongodbHelper.Update<Promotion>(filter, update, "Promotion");
+            return Json(result);
+        } 
+        #endregion
+
+        public ActionResult Order(int page = 1, string name = "", string id = "", string orderid = "")
+        {
+            int rows = 20;
+            int sidx = ((page - 1) * rows);
+            var filter = FilterDefinition<Order>.Empty;
+            if (name != "")
+            {
+                filter = filter & Builders<Order>.Filter.Regex("PromotionCode", new BsonRegularExpression(name, "i"));
+            }
+            if (orderid != "")
+            {
+                filter = filter & Builders<Order>.Filter.Regex("Uid", new BsonRegularExpression(orderid, "i"));
+            }
+            if (id != "")
+            {
+                filter = filter & Builders<Order>.Filter.Regex("Uid", new BsonRegularExpression(id, "i"));
+            }
+            var sort = Builders<Order>.Sort.Descending("OrderDate");
+            MongoPagingResult<Order> result = MongodbHelper.FindPaging<Order>(filter, sort, "Order", sidx, rows);
+
+            double dd = double.Parse(result.Count.ToString()) / double.Parse(rows.ToString());
+            ViewBag.Pages = Math.Ceiling(dd);
+            ViewBag.page = page;
+            ViewBag.name = name;
+            ViewBag.id = id;
+            ViewBag.orderid = orderid;
+
+            var filter1 = FilterDefinition<Member>.Empty;
+            ViewBag.Members = MongodbHelper.Find<Member>(filter1, "Member");
+
+            return View(result);
+        }
+
+        public JsonResult OrderStatusChange(string id = "", string status = "0")
+        {
+            long result = 0;
+            if (id != "")
+            {
+                var filter = Builders<Order>.Filter.Eq("Id", ObjectId.Parse(id));
+                var update = Builders<Order>.Update.Set("OrderStatus", DataType.Int(status));
+                result= MongodbHelper.Update<Order>(filter, update, "Order");
+            }
+            return Json(result);
+        }
+
+        public JsonResult OrderStatusAllChange(string id = "", string status = "2")
+        {
+            long result = 0;
+            if (id != "")
+            {
+                string[] arror_idx = id.Split(',');
+                for (int i = 0; i < arror_idx.Length; i++)
+                {
+                    var filter = Builders<Order>.Filter.Eq("Id", ObjectId.Parse(arror_idx[i]));
+                    var update = Builders<Order>.Update.Set("OrderStatus", DataType.Int(status));
+                    result += MongodbHelper.Update<Order>(filter, update, "Order");
+                }
+            }
+            return Json(result);
+        }
+
+        public JsonResult OrderList()
+        {
+            List<string> OrderId = new List<string>();
+            List<TodayOrder> today = new List<TodayOrder>();
+            List<TodayOrder> result = new List<TodayOrder>();
+            var filter = Builders<Order>.Filter.Eq("OrderStatus", 0);
+            var sort = Builders<Order>.Sort.Descending("OrderDate");
+            var collection = MongodbHelper.FindSort<Order>(filter, sort, "Order");
+
+            if(collection.Count > 0)
+            {
+               foreach(var data in collection)
+               {
+                   OrderId.Add(data.Id.ToString());
+                   foreach(var data1 in data.Product)
+                   {
+                       today.Add(new TodayOrder(data1.Product, data1.Qty, null));
+                   }
+               }
+
+               var groups = today.GroupBy(d => d.Product.Id)
+                               .Select(
+                                 g => new
+                                 {
+                                     Key = g.Key,
+                                     Count = g.Sum(s => s.Qty)
+                                 });
+               foreach (var data in groups)
+               {
+                   var filter1 = Builders<Product>.Filter.Eq("Id", data.Key);
+                   var collection1 = MongodbHelper.FindOne<Product>(filter1, "Product");
+                   result.Add(new TodayOrder(collection1, data.Count, OrderId));
+               }
+                
+            }
+
+            return Json(result);
+        }
     }
 }

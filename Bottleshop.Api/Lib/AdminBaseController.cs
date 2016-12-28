@@ -19,12 +19,12 @@ namespace Bottleshop.Api.Lib
                 AUser();
                 if(AUser().Uid != "tomochan")
                 {
-                    context.Result = new RedirectResult(@Url.Action("Login", "Home"));
+                    context.Result = new RedirectResult(@Url.Action("Login", "Account"));
                 }
             }
             else
             {
-                context.Result = new RedirectResult(@Url.Action("Login", "Home"));
+                context.Result = new RedirectResult(@Url.Action("Login", "Account"));
             }
         }
 

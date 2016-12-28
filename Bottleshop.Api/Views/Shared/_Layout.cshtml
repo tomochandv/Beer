@@ -127,7 +127,6 @@
         <!-- /.container -->
     </nav>
     <!-- Page Header -->
-
     <!-- Set your background image for this header on the line below. -->
     <header id="himg" class="intro-header" style="background-image: url('/img/home-bg.jpg'); margin-bottom:0;">
         <div class="container">
@@ -142,6 +141,11 @@
             </div>
         </div>
     </header>
+
+    <div class="alert alert-info alert-dismissible" role="alert" style="z-index:99999; display:none;" id="divNError">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Network Error!</strong> Something Wrong. Try Again.<span id="spanNetError"><br /></span>
+    </div>
 
     <div id="divBody" style="margin:0 0 0 0;">
         @RenderBody()
@@ -190,7 +194,7 @@
     <script src="~/Scripts/bootstrap-dialog.min.js"></script>
     <!-- Contact Form JavaScript -->
     <script src="~/Scripts/jqBootstrapValidation.js"></script>
-    <script src="~/Scripts/contact_me.js"></script>
+    <script src="@Url.Content("~/Scripts/contact_me.js")?v=@DateTime.Now.ToString("yyyyMMddhhmmss")"></script>
     <!-- Theme JavaScript -->
     <script src="~/Scripts/clean-blog.min.js"></script>
     <script src="@Url.Content("~/Scripts/jquery.bootpag.min.js")"></script>

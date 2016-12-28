@@ -167,6 +167,7 @@
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\ProductOrder.cs" />
     <Compile Include="Models\Promotion.cs" />
+    <Compile Include="Models\TodayOrder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\NoticeController.cs" />
   </ItemGroup>
@@ -289,6 +290,9 @@
     <Content Include="Views\Admin\uploadPartial.cshtml" />
     <Content Include="Views\Admin\Member.cshtml" />
     <Content Include="Views\Admin\ViewPay.cshtml" />
+    <Content Include="Views\Admin\Promotion.cshtml" />
+    <Content Include="Views\Admin\CreatePromotion.cshtml" />
+    <Content Include="Views\Admin\Order.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

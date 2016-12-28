@@ -40,9 +40,8 @@
                     <li><a href="@Url.Action("Product")">상품관리</a></li>
                     <li><a href="@Url.Action("Order")">주문관리</a></li>
                     <li><a href="@Url.Action("Member")">회원관리</a></li>
-                    <li><a href="@Url.Action("Bill1")">Billing관리</a></li>
-                    <li><a href="@Url.Action("Promo")">프로모션관리</a></li>
-                    <li><a href="@Url.Action("NoticeList")">공지사항</a></li>
+                    <li><a href="@Url.Action("Promotion")">프로모션관리</a></li>
+                    <li><a href="@Url.Action("Notice")">공지사항</a></li>
                     <li><a href="@Url.Action("Popup")">팝업</a></li>
                 </ul>
             </div><!--/.nav-collapse -->
@@ -50,6 +49,10 @@
     </nav>
 
     <div class="container" style="margin-top:100px;">
+        <div class="alert alert-info alert-dismissible" role="alert" style="z-index:99999; display:none;" id="divNError">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <strong>Network Error!</strong> Something Wrong. Try Again.<br /><span id="spanNetError"></span>
+        </div>
         @RenderBody()
     </div>
 
@@ -59,7 +62,7 @@
     <script src="@Url.Content("~/vendor/bootstrap/js/bootstrap.min.js")"></script>
     <script src="@Url.Content("~/Scripts/jquery.bootpag.min.js")"></script>
     <script src="@Url.Content("~/Scripts/bootstrap-dialog.min.js")"></script>
-    <script src="@Url.Content("~/Scripts/contact_me.js")"></script>
+    <script src="@Url.Content("~/Scripts/contact_me.js")?v=@DateTime.Now.ToString("yyyyMMddhhmmss")"></script>
     <script src="@Url.Content("~/Scripts/jquery.mask.min.js")"></script>
     <script type="text/javascript">
         $.datepicker.setDefaults({

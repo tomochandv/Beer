@@ -1,5 +1,6 @@
 ﻿using System;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace Bottleshop.Api.Models
 {
@@ -18,6 +19,7 @@ namespace Bottleshop.Api.Models
         public float ProductSaleNormalPrice { get; set; }
         public int ProductSaleQty { get; set; }
         public bool IsSale { get; set; }
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime InDate { get; set; }
         public int Inqty { get; set; }
 

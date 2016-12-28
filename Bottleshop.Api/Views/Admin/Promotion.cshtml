@@ -3,7 +3,7 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-@model List<BottleShop.PromoModel>
+@model Bottleshop.Api.Lib.MongoPagingResult<Bottleshop.Api.Models.Promotion> 
 
 <div class="row">
     <div class="col-md-12">
@@ -47,11 +47,8 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th style="text-align:center;">No.</th>
                     <th style="text-align:center;">Code</th>
                     <th style="text-align:center;">사용여부</th>
-                    <th style="text-align:center;">생성자</th>
-                    <th style="text-align:center;">생성일</th>
                     <th style="text-align:center;">사용자</th>
                     <th style="text-align:center;">사용일</th>
                     <th style="text-align:center;">발급</th>
@@ -60,18 +57,15 @@
             <tbody>
                 @if (Model != null && Model.Count > 0)
                 {
-                    foreach (var data in Model)
+                    foreach (var data in Model.Result)
                     {
                         <tr>
-                            <td>@data.ROWNUM</td>
-                            <td>@data.PORO_CODE</td>
-                            <td>@data.ISUSE</td>
-                            <td>@data.CUSER</td>
-                            <td>@data.CDATE.ToString("yyyy-MM-dd hh:mm:ss")</td>
-                            <td>@data.USEID</td>
-                            <td>@data.USEDATE.ToString("yyyy-MM-dd hh:mm:ss")</td>
+                            <td>@data.PromotionCode</td>
+                            <td>@(data.Use == true ? "사용" : "미사용")</td>
+                            <td>@data.Uid</td>
+                            <td>@data.UseDate.ToString("yyyy-MM-dd hh:mm:ss")</td>
                             <td>
-                                @if (data.SEND == "Y")
+                                @if (data.Send == true)
                                 {
                                     <button type="button" class="btn btn-danger btn-sm" disabled="disabled">
                                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> 발급불가
@@ -79,7 +73,7 @@
                                 }
                                 else
                                 {
-                                    <button type="button" class="btn btn-info btn-sm" id="btnSend" data="@data.PORO_CODE">
+                                    <button type="button" class="btn btn-info btn-sm" id="btnSend" data="@data.PromotionCode">
                                         <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> 발급가능
                                     </button>
                                 }
@@ -101,7 +95,7 @@
     <script type="text/javascript">
         $(function () {
             $("#navbar > ul > li").removeClass("active");
-            $("#navbar > ul > li").eq(5).addClass("active");
+            $("#navbar > ul > li").eq(4).addClass("active");
 
             $('#page-selection').bootpag({
                 page:@ViewBag.page,
@@ -111,7 +105,7 @@
                 maxVisible: 10,
                 total: @ViewBag.Pages
                 }).on("page", function (event, num) {
-                    var url = "@Url.Action("Promo")?page=" + num;
+                    var url = "@Url.Action("Promotion")?page=" + num;
                     url += "&poro_code=" + $("#txtCode").val();
                     url += "&use=" + $("#selUse").val();
                     url += "&useid=" + $("#txtName").val();
@@ -120,7 +114,7 @@
                 });
 
             $("#txtSearch").click(function () {
-                var url = "@Url.Action("Promo")?page=1";
+                var url = "@Url.Action("Promotion")?page=1";
                 url += "&poro_code=" + $("#txtCode").val();
                 url += "&use=" + $("#selUse").val();
                 url += "&useid=" + $("#txtName").val();
@@ -138,7 +132,7 @@
                 });
             });
             $("#btnSend").click(function(){
-                var data = Common.Ajax("@Url.Action("SendPromo")", {poro_code:$(this).attr("data") });
+                var data = Common.Ajax("@Url.Action("SendPromotion")", {poro_code:$(this).attr("data") });
                 if (data > 0) {
                     $("#txtSearch").click();
                 }
