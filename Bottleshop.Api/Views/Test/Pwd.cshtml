@@ -1,0 +1,28 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Pwd</title>
+</head>
+<body>
+    <div>
+        Enc Word : <form method="post" action=""><input type="text" name="pwd" id="pwd" /> <button id="btnPwd">Encription</button></form><br />
+        <textarea id="txtArea" cols="50" rows="5">@ViewBag.pwd</textarea>
+    </div>
+    <div>
+        Des Word : <form method="post" action=""><input type="text" name="des" id="des" /> <button id="des">Description</button></form><br />
+        <textarea id="txtArea" cols="50" rows="5">@ViewBag.des</textarea>
+    </div>
+    <div>
+    </div>
+    <script src="~/Scripts/jquery-3.0.0.min.js"></script>
+    <script type="text/javascript">
+
+    </script>
+</body>
+</html>

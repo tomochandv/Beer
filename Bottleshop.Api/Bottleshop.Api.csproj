@@ -134,6 +134,7 @@
   <ItemGroup>
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\ApiTxController.cs" />
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\ExcelController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -293,6 +294,7 @@
     <Content Include="Views\Admin\Promotion.cshtml" />
     <Content Include="Views\Admin\CreatePromotion.cshtml" />
     <Content Include="Views\Admin\Order.cshtml" />
+    <Content Include="Views\Test\Pwd.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

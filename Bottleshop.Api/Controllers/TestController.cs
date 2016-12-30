@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using Bottleshop.Api.Lib;
 using Bottleshop.Api.Models;
+using BottleShop.Api.Lib;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -72,7 +75,12 @@ namespace Bottleshop.Api.Controllers
             return Json(count, JsonRequestBehavior.AllowGet);
         }
 
-        
-
+        public ActionResult Pwd(string pwd, string des)
+        {
+            ViewBag.pwd = new Security().Encription(pwd);
+            ViewBag.des = new Security().Description(des);
+            return View();
+        }
     }
 }
+

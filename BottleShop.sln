@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbBackup", "DbBackup\DbBack
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bottleshop.Api", "Bottleshop.Api\Bottleshop.Api.csproj", "{F6D91CD3-0240-41FD-ADAD-658D80EC0821}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bottleshop.Api.Billing", "Bottleshop.Api.Billing\Bottleshop.Api.Billing.csproj", "{52CF0CB7-31A1-4D6F-AEF2-C683E990F600}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{F6D91CD3-0240-41FD-ADAD-658D80EC0821}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6D91CD3-0240-41FD-ADAD-658D80EC0821}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6D91CD3-0240-41FD-ADAD-658D80EC0821}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52CF0CB7-31A1-4D6F-AEF2-C683E990F600}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52CF0CB7-31A1-4D6F-AEF2-C683E990F600}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52CF0CB7-31A1-4D6F-AEF2-C683E990F600}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52CF0CB7-31A1-4D6F-AEF2-C683E990F600}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

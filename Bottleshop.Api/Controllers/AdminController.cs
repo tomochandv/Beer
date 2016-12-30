@@ -361,6 +361,7 @@ namespace Bottleshop.Api.Controllers
         } 
         #endregion
 
+        #region Order
         public ActionResult Order(int page = 1, string name = "", string id = "", string orderid = "")
         {
             int rows = 20;
@@ -401,7 +402,7 @@ namespace Bottleshop.Api.Controllers
             {
                 var filter = Builders<Order>.Filter.Eq("Id", ObjectId.Parse(id));
                 var update = Builders<Order>.Update.Set("OrderStatus", DataType.Int(status));
-                result= MongodbHelper.Update<Order>(filter, update, "Order");
+                result = MongodbHelper.Update<Order>(filter, update, "Order");
             }
             return Json(result);
         }
@@ -431,34 +432,35 @@ namespace Bottleshop.Api.Controllers
             var sort = Builders<Order>.Sort.Descending("OrderDate");
             var collection = MongodbHelper.FindSort<Order>(filter, sort, "Order");
 
-            if(collection.Count > 0)
+            if (collection.Count > 0)
             {
-               foreach(var data in collection)
-               {
-                   OrderId.Add(data.Id.ToString());
-                   foreach(var data1 in data.Product)
-                   {
-                       today.Add(new TodayOrder(data1.Product, data1.Qty, null));
-                   }
-               }
+                foreach (var data in collection)
+                {
+                    OrderId.Add(data.Id.ToString());
+                    foreach (var data1 in data.Product)
+                    {
+                        today.Add(new TodayOrder(data1.Product, data1.Qty, null));
+                    }
+                }
 
-               var groups = today.GroupBy(d => d.Product.Id)
-                               .Select(
-                                 g => new
-                                 {
-                                     Key = g.Key,
-                                     Count = g.Sum(s => s.Qty)
-                                 });
-               foreach (var data in groups)
-               {
-                   var filter1 = Builders<Product>.Filter.Eq("Id", data.Key);
-                   var collection1 = MongodbHelper.FindOne<Product>(filter1, "Product");
-                   result.Add(new TodayOrder(collection1, data.Count, OrderId));
-               }
-                
+                var groups = today.GroupBy(d => d.Product.Id)
+                                .Select(
+                                  g => new
+                                  {
+                                      Key = g.Key,
+                                      Count = g.Sum(s => s.Qty)
+                                  });
+                foreach (var data in groups)
+                {
+                    var filter1 = Builders<Product>.Filter.Eq("Id", data.Key);
+                    var collection1 = MongodbHelper.FindOne<Product>(filter1, "Product");
+                    result.Add(new TodayOrder(collection1, data.Count, OrderId));
+                }
+
             }
 
             return Json(result);
-        }
+        } 
+        #endregion
     }
 }

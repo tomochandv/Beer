@@ -1,0 +1,11 @@
+E:\BOTTLSHOP\Beer\Bottleshop.Api.Billing\bin\Debug\Bottleshop.Api.Billing.exe.config
+E:\BOTTLSHOP\Beer\Bottleshop.Api.Billing\bin\Debug\Bottleshop.Api.Billing.exe
+E:\BOTTLSHOP\Beer\Bottleshop.Api.Billing\bin\Debug\Bottleshop.Api.Billing.pdb
+E:\BOTTLSHOP\Beer\Bottleshop.Api.Billing\obj\Debug\Bottleshop.Api.Billing.csprojResolveAssemblyReference.cache
+E:\BOTTLSHOP\Beer\Bottleshop.Api.Billing\obj\Debug\Bottleshop.Api.Billing.Form1.resources
+E:\BOTTLSHOP\Beer\Bottleshop.Api.Billing\obj\Debug\Bottleshop.Api.Billing.Properties.Resources.resources
+E:\BOTTLSHOP\Beer\Bottleshop.Api.Billing\obj\Debug\Bottleshop.Api.Billing.csproj.GenerateResource.Cache
+E:\BOTTLSHOP\Beer\Bottleshop.Api.Billing\obj\Debug\Bottleshop.Api.Billing.exe
+E:\BOTTLSHOP\Beer\Bottleshop.Api.Billing\obj\Debug\Bottleshop.Api.Billing.pdb
+E:\BOTTLSHOP\Beer\Bottleshop.Api.Billing\bin\Debug\Newtonsoft.Json.dll
+E:\BOTTLSHOP\Beer\Bottleshop.Api.Billing\bin\Debug\Newtonsoft.Json.xml
