@@ -9,3 +9,5 @@
 /Bottleshop.Api/Logs
 /Bottleshop.Api/obj
 /Bottleshop.Api/bin
+/Bottleshop.Api.Billing/obj
+/Bottleshop.Api.Billing/bin
